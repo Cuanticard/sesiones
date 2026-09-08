@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
 <title>Antes de tu sesion - CUANTICA</title>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -243,7 +244,7 @@
                 onclick="testigoFotoSacar()">Sacar esta foto y elegir otra</button>
       </div>
       <p class="nota">Si tu telefono no la puede achicar, te lo digo ahi
-         mismo y te paso a donde mandarmela. El estudio sale igual.</p><p class="nota">Tu foto se usa solo para tu estudio. No se comparte ni se publica.</p></div><div class="instructivo" id="t_ins_muestra_postal" data-via="muestra_postal"><h4>Muestra de uñas por correo</h4><ol><li>Lavate bien las manos y secalas. Sin esmalte: si tenes, sacalo antes.</li><li>Cortate las uñas de las dos manos. Con los recortes de 6 a 8 uñas alcanza; no hace falta que sean grandes.</li><li>Ponelos en una bolsita ziploc chica, o envueltos en papel de cocina limpio adentro de un sobre.</li><li>Con birome, escribi en la bolsita o en un papelito adentro tu nombre completo y tu fecha de nacimiento.</li><li>Mandalo por Correo Argentino (carta simple o encomienda) a la direccion de aca abajo.</li><li>Cuando lo despaches, avisame asi lo espero. Cuando me llegue, te confirmo y agendo tu estudio.</li></ol><div class="direccion"><span class="direccion-rotulo">Mandalo a:</span><br>Jose Maria Basgall<br>Carbo 275<br>Crespo<br>Entre Rios<br>CP 3116<br>Argentina</div><p class="nota">Esta opcion es solo dentro de Argentina: desde afuera el sobre no llega. La muestra se usa una sola vez para tu estudio y se descarta despues. Tarda unos dias en llegar: mientras tanto mandame el formulario igual, no esperes.</p></div>
+         mismo y te paso a donde mandarmela. El estudio sale igual.</p><p class="nota">Tu foto se usa solo para tu estudio. No se comparte ni se publica.</p></div><div class="instructivo" id="t_ins_muestra_postal" data-via="muestra_postal"><h4>Muestra de uñas por correo</h4><ol><li>Lavate bien las manos y secalas. Sin esmalte: si tenes, sacalo antes.</li><li>Cortate las uñas de las dos manos. Con los recortes de 6 a 8 uñas alcanza; no hace falta que sean grandes.</li><li>Ponelos en una bolsita ziploc chica, o envueltos en papel de cocina limpio adentro de un sobre.</li><li>Con birome, escribi en la bolsita o en un papelito adentro tu nombre completo y tu fecha de nacimiento.</li><li>Mandalo por Correo Argentino (carta simple o encomienda) a la direccion de aca abajo.</li><li>Cuando lo despaches, avisame asi lo espero. Cuando me llegue, te confirmo y agendo tu estudio.</li></ol><div class="direccion"><span class="direccion-rotulo">Mandalo a:</span><br>Carbo 275<br>Crespo<br>Entre Rios<br>CP 3116<br>Argentina</div><p class="nota">Esta opcion es solo dentro de Argentina: desde afuera el sobre no llega. La muestra se usa una sola vez para tu estudio y se descarta despues. Tarda unos dias en llegar: mientras tanto mandame el formulario igual, no esperes.</p></div>
   </section>
 
     <div class="parte">
@@ -1480,11 +1481,22 @@ recolectar = function () {
 try { window.setTimeout(comprobanteAplicar, 0); } catch (e) { /* noop */ }
 
 // --- A DONDE MANDARLA (solo ficha web) ------------------------------------
-var _descargarDeSiempre = descargar;
-descargar = function () {
-  _descargarDeSiempre();
-  try { setTimeout(mostrarBotonesEnvio, 350); } catch (e) {}
-};
+// La funcion que descarga el archivo se llama guardar() -- es la que llama
+// el boton verde. La primera version de este bloque envolvia a `descargar`,
+// que no existe en NINGUNA parte de la pagina, y el ReferenceError (fuera
+// de todo try) cortaba el script ENTERO al cargar: sin restaurar() la
+// paciente que volvia veia la ficha en blanco, sin armarPasos() salia el
+// scroll largo del incidente del 26/08, y los botones jamas aparecian
+// (auditoria 2026-09-08). Por eso ahora va adentro de try: si la funcion
+// cambiara de nombre, se pierden SOLO los botones de devolucion y el resto
+// de la ficha sigue vivo. El test lo EJECUTA con node, no mira strings.
+try {
+  var _guardarDeSiempre = guardar;
+  guardar = function () {
+    _guardarDeSiempre();
+    try { setTimeout(mostrarBotonesEnvio, 350); } catch (e) {}
+  };
+} catch (e) {}
 
 function mostrarBotonesEnvio() {
   try {

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /tu-ficha-k9m4x7.html
+Sitemap: https://sesiones.cuantica-card.com/sitemap.xml

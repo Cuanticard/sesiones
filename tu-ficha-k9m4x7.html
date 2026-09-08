@@ -1,0 +1,1571 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Antes de tu sesion - CUANTICA</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; background: #003C38; color: #EAE3D2;
+         font-family: Georgia, 'Times New Roman', serif; line-height: 1.55;
+         -webkit-text-size-adjust: 100%; }
+  .hoja { max-width: 720px; margin: 0 auto; padding: 26px 18px 120px; }
+  header { border-bottom: 2px solid #C47A35; padding-bottom: 18px;
+           margin-bottom: 22px; }
+  h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: .04em; }
+  .marca { color: #3CE7E1; font-size: 12px; letter-spacing: .3em;
+           text-transform: uppercase; }
+  .intro { background: rgba(0,0,0,.22); border-left: 3px solid #C47A35;
+           padding: 14px 16px; margin-bottom: 22px; font-size: 15px; }
+  .intro p { margin: 0 0 8px; }
+  .intro p:last-child { margin-bottom: 0; }
+  .parte { margin: 34px 0 0; padding: 12px 14px; border-radius: 12px;
+           background: rgba(0,0,0,.18); border: 1px solid rgba(60,231,225,.18); }
+  .parte h3 { margin: 0 0 4px; font-size: 17px; color: #C47A35;
+              letter-spacing: .02em; }
+  .parte p { margin: 0; font-size: 14px; opacity: .8; }
+  h2 { font-size: 19px; color: #3CE7E1; margin: 28px 0 4px;
+       border-bottom: 1px solid rgba(60,231,225,.25); padding-bottom: 6px; }
+  .nota, .consigna { font-size: 13px; margin: 6px 0 12px; }
+  .nota { opacity: .75; }
+  .consigna { color: #C47A35; font-style: italic; }
+  .campo { margin: 20px 0; }
+  .etiqueta { display: block; font-weight: bold; margin-bottom: 4px;
+              font-size: 17px; }
+  .ayuda { font-size: 14px; opacity: .78; margin: 0 0 8px; }
+  input[type=text], input[type=number], input[type=date], textarea, select {
+    width: 100%; padding: 12px 12px; font-size: 16px; font-family: inherit;
+    background: rgba(0,0,0,.3); color: #EAE3D2;
+    border: 1px solid #006B64; border-radius: 10px; }
+  input[type=date] { color-scheme: dark; }
+  textarea { resize: vertical; }
+  input:focus, textarea:focus, select:focus {
+    outline: none; border-color: #3CE7E1; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips .chip { display: inline-flex; align-items: center; gap: 7px;
+                 padding: 10px 14px; border: 1px solid #006B64;
+                 border-radius: 999px; font-size: 15px; cursor: pointer; }
+  .checkbox-solo label { display: flex; align-items: center; gap: 12px;
+                         cursor: pointer; font-size: 17px; padding: 12px 0; }
+  /* Las dos casillas sueltas salian de 13x13 px: en un celular eso no se
+     toca, se erra. Van al mismo tamanio que las demas. */
+  .checkbox-solo input { width: 24px; height: 24px; flex-shrink: 0;
+                         accent-color: #3CE7E1; }
+  /* LA AGENDA (#62): la grilla de horas ocupadas. Sin JavaScript: son
+     casillas comunes, lo unico propio es este CSS. */
+  .chips.grilla-horaria { display: grid; gap: 5px 6px;
+    align-items: center; max-width: 430px; margin-top: 4px; }
+  .gh-dia { font-size: 11px; letter-spacing: .06em; text-align: center;
+    text-transform: uppercase; opacity: .75; padding-bottom: 2px; }
+  .gh-hora { font-size: 12px; text-align: right; opacity: .7;
+    padding-right: 4px; font-variant-numeric: tabular-nums; }
+  .gh-celda { position: relative; display: block; cursor: pointer;
+    -webkit-tap-highlight-color: transparent; }
+  .gh-celda input { position: absolute; opacity: 0; width: 0; height: 0;
+    margin: 0; }
+  .gh-marca { display: block; height: 38px; border-radius: 6px;
+    border: 1px solid #006B64; background: rgba(0,0,0,.18);
+    transition: background .12s ease; }
+  .gh-celda:hover .gh-marca { border-color: #3CE7E1; }
+  .gh-celda input:checked + .gh-marca { background: #C47A35;
+    border-color: #C47A35; }
+  .gh-celda input:focus-visible + .gh-marca { outline: 2px solid #3CE7E1;
+    outline-offset: 1px; }
+  .rango { display: flex; align-items: center; gap: 12px; }
+  .rango input { flex: 1; accent-color: #3CE7E1; height: 28px; }
+  output { min-width: 30px; text-align: center; font-weight: bold;
+           color: #3CE7E1; font-size: 17px; }
+  .pregunta { margin: 20px 0; }
+  .enunciado { font-weight: bold; font-size: 15px; margin: 0 0 8px; }
+  .num { color: #3CE7E1; }
+  .opciones { display: flex; flex-direction: column; gap: 8px; }
+  .opciones.cortas { flex-direction: row; gap: 10px; }
+  .opciones.cortas .chip { min-width: 104px; justify-content: center; }
+  .opciones .chip { display: flex; align-items: flex-start; gap: 10px;
+                    padding: 11px 13px; border: 1px solid #006B64;
+                    border-radius: 12px; font-size: 15px; cursor: pointer; }
+  .chip input { margin-top: 3px; accent-color: #3CE7E1;
+                width: 18px; height: 18px; flex-shrink: 0; }
+  /* "Esta no aplica": mismo chip pero punteado, para que se lea como una
+     salida y no como una opcion mas del biotipo. Y las filas cortas
+     (si / no / esta no aplica) pueden doblar renglon en un celular. */
+  .opciones .chip-na { border-style: dashed; opacity: .85; }
+  .opciones.cortas { flex-wrap: wrap; }
+  .numero { width: 140px; }
+  .acciones { position: fixed; left: 0; right: 0; bottom: 0;
+              background: #003C38; border-top: 2px solid #C47A35;
+              padding: 12px 16px 14px; z-index: 5; }
+  .acciones .adentro { max-width: 720px; margin: 0 auto; }
+  button { font-family: inherit; font-size: 16px; padding: 13px 20px;
+           border-radius: 10px; border: none; cursor: pointer;
+           margin: 0 8px 8px 0; }
+  .primario { background: #006B64; color: #fff; font-weight: bold; }
+  .secundario { background: transparent; color: #C47A35;
+                border: 1px solid #C47A35; }
+  .chico { font-size: 13px; padding: 7px 12px; }
+  .barra { height: 6px; border-radius: 999px; background: rgba(0,0,0,.35);
+           overflow: hidden; margin-bottom: 8px; }
+  .barra i { display: block; height: 100%; width: 0;
+             background: #3CE7E1; transition: width .25s; }
+  #progreso { font-size: 13px; color: #3CE7E1; margin: 0 0 8px; }
+  .cierre { font-size: 13px; line-height: 1.45; margin: 0 0 10px;
+            color: rgba(234,227,210,.85); }
+  #estado { font-size: 14px; margin-top: 8px; min-height: 20px;
+            color: #3CE7E1; }
+  #copia { width: 100%; height: 120px; margin-top: 10px; display: none;
+           font-family: monospace; font-size: 12px; }
+  #retomado { display: none; background: rgba(60,231,225,.1);
+              border: 1px solid rgba(60,231,225,.35); border-radius: 10px;
+              padding: 10px 12px; font-size: 14px; margin-bottom: 16px; }
+  @media (max-width: 560px) {
+    .hoja { padding: 20px 14px 132px; }
+    h1 { font-size: 23px; }
+    .acciones button { width: 100%; margin-right: 0; }
+    .opciones.cortas .chip { flex: 1; }
+  }
+
+  .igual-igual { background: rgba(60,231,225,.10);
+    border: 1px solid rgba(60,231,225,.40); border-radius: 12px;
+    padding: 14px 16px; margin: 14px 0 20px; font-size: 16px; }
+  .igual-igual p { margin: 0 0 8px; }
+  .igual-igual p:last-child { margin-bottom: 0; }
+  /* "las tres" / "las dos". Por defecto se ve la de tres, que es la que
+     va con las tres opciones dibujadas: si el JavaScript no corre, lo
+     que dice el texto y lo que hay en pantalla siguen coincidiendo. */
+  .cuenta-dos { display: none; }
+  html.afuera .cuenta-tres { display: none; }
+  html.afuera .cuenta-dos { display: block; }
+  .via .via-resumen { display: block; font-size: 13px; opacity: .78;
+    margin-top: 3px; }
+  .via.apagada { display: none; }
+  .instructivo { display: none; margin: 18px 0 0; padding: 14px 16px;
+    border-radius: 12px; background: rgba(0,0,0,.22);
+    border: 1px solid rgba(196,122,53,.45); }
+  .instructivo.puesto { display: block; }
+  .instructivo h4 { margin: 0 0 8px; font-size: 16px; color: #C47A35;
+    letter-spacing: .02em; }
+  .instructivo ol { padding-left: 20px; margin: 0; }
+  .instructivo li { margin: 8px 0; font-size: 15px; }
+  .direccion { background: rgba(0,0,0,.32); border: 1px solid #006B64;
+    border-radius: 10px; padding: 12px 14px; margin: 12px 0 4px;
+    font-size: 17px; line-height: 1.5; }
+  .direccion-rotulo { font-size: 13px; opacity: .75;
+    text-transform: uppercase; letter-spacing: .12em; }
+  .foto-caja { margin: 14px 0 4px; }
+  .boton-archivo { display: inline-block; background: #006B64; color: #fff;
+    font-weight: bold; font-size: 16px; padding: 13px 20px;
+    border-radius: 10px; cursor: pointer; }
+  #t_foto_archivo { position: absolute; width: 1px; height: 1px;
+    opacity: 0; overflow: hidden; }
+  .foto-estado { font-size: 14px; margin-top: 10px; min-height: 18px;
+    color: #3CE7E1; }
+  #t_foto_previa { display: none; max-width: 180px; border-radius: 10px;
+    margin-top: 10px; border: 1px solid #006B64; }
+  #t_foto_sacar { display: none; margin-top: 10px; }
+  .hace-falta { font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: #C47A35; margin-left: 8px;
+    vertical-align: middle; }
+  .aviso { font-size: 14px; margin: 6px 0 0; color: #E8A05B;
+    min-height: 0; }
+  .aviso:empty { display: none; }
+  .eco { font-size: 14px; margin: 6px 0 0; color: #3CE7E1; }
+  .eco:empty { display: none; }
+  .campo.mal input, .campo.mal select { border-color: #E8A05B; }
+
+</style>
+</head>
+<body>
+<div class="hoja">
+  <header>
+    <div class="marca">CUANTICA</div>
+    <h1>Antes de tu sesion</h1>
+  </header>
+
+  <div class="intro" id="introduccion">
+    <p>Hola, son <strong>cuatro partes</strong>, casi todo de tocar una
+       opcion. Se va de a un paso por vez: contesta y apreta
+       <strong>Siguiente</strong>.</p>
+    <p>Lo que no sepas o no quieras contestar, dejalo vacio y lo charlamos.
+       No hay respuestas correctas.</p>
+    <p><strong>No hace falta que lo hagas de una.</strong> Lo que vas
+       poniendo queda guardado en este mismo telefono: podes cerrarlo,
+       seguir manana y no perdes nada. Reci&eacute;n al final, con el boton
+       verde, se descarga el archivo que me tenes que mandar.</p>
+    <p>Tus respuestas quedan en tu telefono hasta que vos me mandes el
+       archivo: este formulario no se conecta a internet.</p>
+  </div>
+
+  <div id="retomado">Retomaste donde habias dejado: esta todo lo que ya
+     habias completado.</div>
+
+  <form id="f" onsubmit="return false">
+    <div class="parte">
+      <h3>Primero, tus datos</h3>
+      <p>Tu nombre y tu fecha de nacimiento son las dos cosas que necesito
+         si o si: con eso solo ya puedo hacer tu estudio. El mail y el
+         WhatsApp son por donde te llega despues.</p>
+    </div>
+    <section><div class="campo"><label class="etiqueta" for="c_nombre">Tu nombre y apellido <span class="hace-falta">hace falta</span></label><p class="ayuda">Nombre y apellido completos, como figuran en tu documento.</p><input type="text" id="c_nombre" name="c_nombre"><p class="aviso" id="av_c_nombre"></p><p class="eco" id="ok_c_nombre"></p></div><div class="campo"><label class="etiqueta" for="c_fecha_nacimiento">Tu fecha de nacimiento <span class="hace-falta">hace falta</span></label><p class="ayuda">Con tu nombre completo y esta fecha ya puedo hacer tu estudio.</p><input type="date" id="c_fecha_nacimiento" name="c_fecha_nacimiento"><p class="aviso" id="av_c_fecha_nacimiento"></p><p class="eco" id="ok_c_fecha_nacimiento"></p></div><div class="campo"><label class="etiqueta" for="c_email">Tu email <span class="hace-falta">hace falta</span></label><p class="ayuda">Ahi te llega tu informe cuando este listo.</p><input type="text" id="c_email" name="c_email"><p class="aviso" id="av_c_email"></p><p class="eco" id="ok_c_email"></p></div><div class="campo"><label class="etiqueta" for="c_whatsapp">Tu WhatsApp <span class="hace-falta">hace falta</span></label><p class="ayuda">Con codigo de pais. Ejemplo: +54 9 11 1234-5678</p><input type="text" id="c_whatsapp" name="c_whatsapp"><p class="aviso" id="av_c_whatsapp"></p><p class="eco" id="ok_c_whatsapp"></p></div><div class="campo"><label class="etiqueta" for="c_pais">En que pais vivis <span class="hace-falta">hace falta</span></label><p class="ayuda">Con esto te armamos el plan de comidas con las frutas y verduras que de verdad se consiguen donde vivis, y en la temporada que estas atravesando. Si tu pais no esta en la lista, dejalo sin responder y lo vemos en la sesion.</p><select id="c_pais" name="c_pais"><option value="">(sin responder)</option><option value="Argentina">Argentina</option><option value="Bolivia">Bolivia</option><option value="Brasil">Brasil</option><option value="Canada">Canadá</option><option value="Chile">Chile</option><option value="Colombia">Colombia</option><option value="Costa Rica">Costa Rica</option><option value="Cuba">Cuba</option><option value="Ecuador">Ecuador</option><option value="El Salvador">El Salvador</option><option value="Espana">España</option><option value="Estados Unidos">Estados Unidos</option><option value="Guatemala">Guatemala</option><option value="Honduras">Honduras</option><option value="Mexico">México</option><option value="Nicaragua">Nicaragua</option><option value="Panama">Panamá</option><option value="Paraguay">Paraguay</option><option value="Peru">Perú</option><option value="Puerto Rico">Puerto Rico</option><option value="Republica Dominicana">República Dominicana</option><option value="Uruguay">Uruguay</option><option value="Venezuela">Venezuela</option><option value="Australia">Australia</option><option value="Nueva Zelanda">Nueva Zelanda</option><option value="Sudafrica">Sudáfrica</option></select><p class="aviso" id="av_c_pais"></p><p class="eco" id="ok_c_pais"></p></div><div class="campo"><label class="etiqueta" for="c_ciudad">En que ciudad</label><p class="ayuda">Ejemplo: La Plata</p><input type="text" id="c_ciudad" name="c_ciudad"></div><div class="campo" id="campo_comprobante"><label class="etiqueta" for="w_comprobante">Comprobante de pago</label><p class="ayuda">Se completa solo con el numero de tu pago. Si quedo vacio, escribi el numero de operacion que te dio Mercado Pago o PayPal (esta en el mail del pago).</p><input type="text" id="w_comprobante" name="w_comprobante"><input type="hidden" id="w_comprobante_prov" name="w_comprobante_prov"><p class="ayuda" id="w_comprobante_estado"></p></div></section>
+
+    <div class="parte">
+      <h3>Enseguida, tu testigo</h3>
+      <p class="cuenta-tres">Un testigo es algo tuyo que me sirve para
+         sintonizar tu estudio. Es tocar una opcion, nada mas: las tres
+         valen exactamente lo mismo.</p>
+      <p class="cuenta-dos">Un testigo es algo tuyo que me sirve para
+         sintonizar tu estudio. Es tocar una opcion, nada mas: las dos
+         valen exactamente lo mismo.</p>
+    </div>
+    <section id="paso-testigo">
+    <h2>Como me mandas tu testigo</h2>
+    <div class="igual-igual">
+      <p class="cuenta-tres"><strong>Las tres formas valen exactamente lo mismo.</strong>
+         Tu estudio sale igual de completo y de preciso por cualquiera de las tres. No cambia nada segun como me mandes el testigo: ni el detalle, ni lo que se puede leer, ni el informe que te llega despues. No hay una opcion mejor que otra, hay una que te queda mas comoda. Elegi esa.</p>
+      <p class="cuenta-dos"><strong>Las dos formas valen exactamente lo mismo.</strong>
+         Tu estudio sale igual de completo y de preciso por cualquiera de las dos. No cambia nada segun como me mandes el testigo: ni el detalle, ni lo que se puede leer, ni el informe que te llega despues. No hay una opcion mejor que otra, hay una que te queda mas comoda. Elegi esa.</p>
+      <p>Elijas la que elijas, tu nombre y tu fecha de nacimiento me los diste arriba y con eso ya puedo trabajar.</p>
+    </div>
+    <div class="campo">
+      <label class="etiqueta">Elegi con cual te quedas</label>
+      <p class="ayuda" id="t_ayuda_pais">Las de abajo son las que llegan
+         hasta donde vivis.</p>
+      <p class="aviso" id="t_aviso_pais"></p>
+      <div class="opciones" id="t_opciones"><label class="chip via" data-via="nombre_fecha" data-solo-ar="0"><input type="radio" name="t_via" value="nombre_fecha" checked><span><strong>Nombre y fecha de nacimiento</strong><span class="via-resumen">Ya me los diste en el paso anterior. No tenes que mandar nada mas.</span></span></label><label class="chip via" data-via="foto_datos" data-solo-ar="0"><input type="radio" name="t_via" value="foto_datos"><span><strong>Foto</strong><span class="via-resumen">Una foto tuya de ahora. La elegis aca abajo y viaja adentro de este mismo archivo.</span></span></label><label class="chip via" data-via="muestra_postal" data-solo-ar="1"><input type="radio" name="t_via" value="muestra_postal"><span><strong>Muestra de uñas por correo</strong><span class="via-resumen">Los recortes de tus uñas, en un sobre por Correo Argentino.</span></span></label></div>
+    </div>
+    <div class="instructivo" id="t_ins_nombre_fecha" data-via="nombre_fecha"><h4>Nombre y fecha de nacimiento</h4><ol><li>Ya esta hecho. Tu nombre completo y tu fecha de nacimiento los escribiste en el paso anterior, y de ahi los tomo.</li><li>No tenes que mandar nada mas: ni foto, ni sobre, ni correo.</li><li>Lo unico: fijate que el nombre este completo, con apellido, como figura en tu documento, y que la fecha sea la tuya. Con eso alcanza.</li></ol><p class="nota">Esta es la que uso mas y la que menos trabajo te da. Si te quedas con esta, ya terminaste.</p></div><div class="instructivo" id="t_ins_foto_datos" data-via="foto_datos"><h4>Foto</h4><ol><li>Que sea de ahora. Una de hace anios no me sirve: necesito como estas hoy.</li><li>De frente, mirando a la camara, con buena luz. Sin lentes oscuros, sin gorra y sin filtros.</li><li>Que salgas vos nada mas. Si hay mas gente en la foto, sacate una aparte.</li><li>Una selfie del celular alcanza y sobra: no hace falta nada especial ni que la saque un fotografo.</li><li>Elegila con el boton de aca abajo. Se achica sola en tu telefono y viaja adentro de este mismo archivo, junto con tu nombre y tu fecha: no tenes que mandarla aparte ni acordarte de nada mas.</li><li>Si el telefono no te deja adjuntarla, mandamela por WhatsApp al +54 9 343 451-8981 y listo, no pasa nada.</li></ol>
+      <div class="foto-caja">
+        <label class="boton-archivo" for="t_foto_archivo">Elegir la foto</label>
+        <input type="file" id="t_foto_archivo" accept="image/*"
+               onchange="testigoFotoElegida(this)">
+        <div id="t_foto_estado" class="foto-estado"></div>
+        <img id="t_foto_previa" alt="">
+        <button type="button" class="secundario chico" id="t_foto_sacar"
+                onclick="testigoFotoSacar()">Sacar esta foto y elegir otra</button>
+      </div>
+      <p class="nota">Si tu telefono no la puede achicar, te lo digo ahi
+         mismo y te paso a donde mandarmela. El estudio sale igual.</p><p class="nota">Tu foto se usa solo para tu estudio. No se comparte ni se publica.</p></div><div class="instructivo" id="t_ins_muestra_postal" data-via="muestra_postal"><h4>Muestra de uñas por correo</h4><ol><li>Lavate bien las manos y secalas. Sin esmalte: si tenes, sacalo antes.</li><li>Cortate las uñas de las dos manos. Con los recortes de 6 a 8 uñas alcanza; no hace falta que sean grandes.</li><li>Ponelos en una bolsita ziploc chica, o envueltos en papel de cocina limpio adentro de un sobre.</li><li>Con birome, escribi en la bolsita o en un papelito adentro tu nombre completo y tu fecha de nacimiento.</li><li>Mandalo por Correo Argentino (carta simple o encomienda) a la direccion de aca abajo.</li><li>Cuando lo despaches, avisame asi lo espero. Cuando me llegue, te confirmo y agendo tu estudio.</li></ol><div class="direccion"><span class="direccion-rotulo">Mandalo a:</span><br>Jose Maria Basgall<br>Carbo 275<br>Crespo<br>Entre Rios<br>CP 3116<br>Argentina</div><p class="nota">Esta opcion es solo dentro de Argentina: desde afuera el sobre no llega. La muestra se usa una sola vez para tu estudio y se descarta despues. Tarda unos dias en llegar: mientras tanto mandame el formulario igual, no esperes.</p></div>
+  </section>
+
+    <div class="parte">
+      <h3>Despues, tu historia</h3>
+      <p>Que te trae, como venis y que te paso antes.</p>
+    </div>
+    <section><h2>Para empezar</h2><div class="campo"><label class="etiqueta" for="a_edad">Edad</label><p class="ayuda">En anios. Ejemplo: 44</p><input type="number" id="a_edad" name="a_edad" min="0"></div><div class="campo"><label class="etiqueta" for="a_sexo">Sexo</label><select id="a_sexo" name="a_sexo"><option value="">(elegir)</option><option value="F">Femenino</option><option value="M">Masculino</option><option value="otro">Otro</option></select></div><div class="campo"><label class="etiqueta" for="a_peso_kg">Peso aproximado (kg)</label><p class="ayuda">Ejemplo: 78. Si no sabes exacto, aproximado esta bien. Sirve para ajustar las cantidades del plan de alimentacion y el agua del dia.</p><input type="number" id="a_peso_kg" name="a_peso_kg" min="0"></div><div class="campo"><label class="etiqueta" for="a_altura_cm">Altura (cm)</label><p class="ayuda">Ejemplo: 175</p><input type="number" id="a_altura_cm" name="a_altura_cm" min="0"></div><div class="campo"><label class="etiqueta" for="a_ocupacion">A que te dedicas</label><p class="ayuda">Ejemplo: docente / camionero / trabajo en casa con dos chicos</p><input type="text" id="a_ocupacion" name="a_ocupacion"></div></section><section><h2>Que te trae</h2><div class="campo"><label class="etiqueta" for="a_motivo_consulta">Contame con tus palabras que te pasa</label><p class="ayuda">Escribi como se lo contarias a alguien de confianza. Ejemplo: &#x27;hace como un anio que me levanto cansado aunque duerma bien, y despues de comer me hincho mucho. Empezo despues de una mudanza pesada.&#x27;</p><textarea id="a_motivo_consulta" name="a_motivo_consulta" rows="4"></textarea></div><div class="campo"><span class="etiqueta">Marca lo que sentis seguido</span><div class="chips" data-campo="a_sintomas_actuales"><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="cansancio"> Cansancio</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="digestion"> Digestion pesada</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="sueno"> Duermo mal</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="dolor"> Dolores</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="animo"> Animo bajo</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="piel"> Piel</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="hormonal"> Hormonal</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="articulaciones"> Articulaciones</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="respiracion"> Respiracion</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="ojos"> Vista</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="cabeza"> Dolor de cabeza</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="peso"> Peso</label></div></div><div class="campo"><label class="etiqueta" for="a_sintomas_otros">Algo mas que no este arriba</label><p class="ayuda">Ejemplo: zumbido en el oido derecho</p><input type="text" id="a_sintomas_otros" name="a_sintomas_otros"></div><div class="campo"><label class="etiqueta" for="a_duracion_sintomas">Desde cuando</label><p class="ayuda">Ejemplo: 3 meses / desde el embarazo / hace anios</p><input type="text" id="a_duracion_sintomas" name="a_duracion_sintomas"></div><div class="campo"><label class="etiqueta" for="a_intensidad_1_10">Cuanto te molesta, del 1 al 10</label><p class="ayuda">1 = casi no lo noto. 10 = me condiciona el dia.</p><div class="rango"><input type="range" id="a_intensidad_1_10" name="a_intensidad_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div></section><section><h2>Como venis estos dias</h2><div class="campo"><label class="etiqueta" for="a_energia_1_10">Tu energia, del 1 al 10</label><p class="ayuda">1 = arrastrandome. 10 = a full.</p><div class="rango"><input type="range" id="a_energia_1_10" name="a_energia_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div><div class="campo"><label class="etiqueta" for="a_durmio_bien_anoche">Como venis durmiendo</label><select id="a_durmio_bien_anoche" name="a_durmio_bien_anoche"><option value="">(elegir)</option><option value="si">Bien</option><option value="regular">Mas o menos</option><option value="no">Mal</option></select></div><div class="campo"><label class="etiqueta" for="a_estres_1_10">Tu nivel de estres, del 1 al 10</label><div class="rango"><input type="range" id="a_estres_1_10" name="a_estres_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div><div class="campo"><label class="etiqueta" for="a_situacion_vida">Esta pasando algo importante en tu vida</label><p class="ayuda">Mudanza, duelo, cambio de trabajo, separacion, un proyecto nuevo. Lo que sientas que pesa. Si preferis no escribirlo, dejalo vacio y lo charlamos.</p><textarea id="a_situacion_vida" name="a_situacion_vida" rows="3"></textarea></div></section><section><h2>Antecedentes</h2><div class="campo"><label class="etiqueta" for="a_medicacion_detalle">Medicacion o suplementos que tomes</label><p class="ayuda">Nombre y para que, si lo sabes. Ejemplo: &#x27;levotiroxina 50 para la tiroides, magnesio a la noche&#x27;. Esto es importante: hay cosas que no se combinan.</p><textarea id="a_medicacion_detalle" name="a_medicacion_detalle" rows="3"></textarea></div><div class="campo"><label class="etiqueta" for="a_medicacion_desde">Hace cuanto la tomas</label><p class="ayuda">Mas o menos esta bien: &#x27;hace 3 meses&#x27;, &#x27;desde el 2019&#x27;, &#x27;hace mucho tiempo&#x27;.</p><input type="text" id="a_medicacion_desde" name="a_medicacion_desde"></div><div class="campo"><span class="etiqueta">Te diagnosticaron alguna de estas</span><div class="chips" data-campo="a_diagnosticos_previos"><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="diabetes"> Diabetes</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="hipertension"> Presion alta</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="tiroides"> Tiroides</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="autoinmune"> Autoinmune</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="cardio"> Corazon</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="renal"> Rinion</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="hepatica"> Higado</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="asma"> Asma</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="oncologico"> Oncologico</label></div></div><div class="campo"><label class="etiqueta" for="a_cirugias_previas">Cirugias que te hayan hecho</label><p class="ayuda">Ejemplo: vesicula 2019, cesarea 2015</p><input type="text" id="a_cirugias_previas" name="a_cirugias_previas"></div><div class="campo"><label class="etiqueta" for="a_antecedentes_familiares">Cosas que se repiten en tu familia</label><p class="ayuda">Ejemplo: diabetes por parte de madre, tiroides mi hermana</p><input type="text" id="a_antecedentes_familiares" name="a_antecedentes_familiares"></div></section><section><h2>Como comes y te movés</h2><div class="campo"><label class="etiqueta" for="a_alimentacion">Tu alimentacion</label><select id="a_alimentacion" name="a_alimentacion"><option value="">(elegir)</option><option value="omnivoro">De todo</option><option value="vegetariano">Vegetariana</option><option value="vegano">Vegana</option><option value="sin_gluten">Sin gluten</option><option value="otro">Otra</option></select></div><div class="campo"><span class="etiqueta">Sos alergica o alergico a alguno de estos</span><p class="ayuda">Marca lo que te haga reaccion. Esto manda sobre todo lo demas: lo que marques aca no te lo vamos a recomendar aunque el equipo lo de bien.</p><div class="chips" data-campo="a_alergias"><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="lacteos"> Lacteos (leche, queso)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="gluten"> Gluten (trigo, TACC)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="frutos_secos"> Frutos secos (nueces, almendras)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="mani"> Mani</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="mariscos"> Mariscos y crustaceos</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="pescado"> Pescado</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="huevo"> Huevo</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="soja"> Soja</label></div></div><div class="campo"><label class="etiqueta" for="a_alergias_otras">Alguna otra alergia</label><p class="ayuda">Cortito, solo el alimento. Ejemplo: kiwi, frutilla</p><input type="text" id="a_alergias_otras" name="a_alergias_otras"></div><div class="campo"><span class="etiqueta">Algo que no te caiga bien</span><p class="ayuda">No es alergia: es lo que te hincha, te cae pesado o te descompone.</p><div class="chips" data-campo="a_intolerancias"><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="lactosa"> Lactosa</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="gluten"> Gluten / TACC</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="fructosa"> Fructosa / azucares</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="histamina"> Histamina (fermentados, embutidos)</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="cafeina"> Cafeina (cafe, energizantes)</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="picantes"> Picantes</label></div></div><div class="campo"><label class="etiqueta" for="a_intolerancias_otras">Algo mas que no te caiga bien</label><p class="ayuda">Cortito. Ejemplo: cebolla cruda</p><input type="text" id="a_intolerancias_otras" name="a_intolerancias_otras"></div><div class="campo"><label class="etiqueta" for="a_actividad_fisica">Actividad fisica</label><select id="a_actividad_fisica" name="a_actividad_fisica"><option value="">(elegir)</option><option value="sedentario">Poca o nada</option><option value="moderada">2-3 veces por semana</option><option value="diaria">Casi todos los dias</option></select></div><div class="campo"><label class="etiqueta" for="a_hora_despertar">A que hora te levantas</label><p class="ayuda">Un dia normal, no el domingo. Ejemplo: 6:30</p><input type="text" id="a_hora_despertar" name="a_hora_despertar"></div><div class="campo"><label class="etiqueta" for="a_hora_acostarse">A que hora te acostas</label><p class="ayuda">Asi la cena no te queda pegada a la cama. Ejemplo: 23</p><input type="text" id="a_hora_acostarse" name="a_hora_acostarse"></div><div class="campo"><span class="etiqueta">Tus horas ocupadas</span><p class="ayuda">Tocá las horas en que NO podés parar a comer tranquila: trabajo, viaje, clases, la actividad de los chicos. Con eso el plan corre las comidas para esquivarlas, y las que no se pueden correr te las deja para llevar. Lo que no toques queda como hora libre.</p><div class="chips grilla-horaria" data-campo="a_agenda_ocupada" style="grid-template-columns: 2.6em repeat(3, 1fr)"><span class="gh-esq"></span><span class="gh-dia">Lun a vie</span><span class="gh-dia">Sabado</span><span class="gh-dia">Domingo</span><span class="gh-hora">6</span><label class="gh-celda" title="sem 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-06"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-06"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-06"><span class="gh-marca"></span></label><span class="gh-hora">7</span><label class="gh-celda" title="sem 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-07"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-07"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-07"><span class="gh-marca"></span></label><span class="gh-hora">8</span><label class="gh-celda" title="sem 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-08"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-08"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-08"><span class="gh-marca"></span></label><span class="gh-hora">9</span><label class="gh-celda" title="sem 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-09"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-09"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-09"><span class="gh-marca"></span></label><span class="gh-hora">10</span><label class="gh-celda" title="sem 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-10"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-10"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-10"><span class="gh-marca"></span></label><span class="gh-hora">11</span><label class="gh-celda" title="sem 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-11"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-11"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-11"><span class="gh-marca"></span></label><span class="gh-hora">12</span><label class="gh-celda" title="sem 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-12"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-12"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-12"><span class="gh-marca"></span></label><span class="gh-hora">13</span><label class="gh-celda" title="sem 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-13"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-13"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-13"><span class="gh-marca"></span></label><span class="gh-hora">14</span><label class="gh-celda" title="sem 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-14"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-14"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-14"><span class="gh-marca"></span></label><span class="gh-hora">15</span><label class="gh-celda" title="sem 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-15"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-15"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-15"><span class="gh-marca"></span></label><span class="gh-hora">16</span><label class="gh-celda" title="sem 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-16"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-16"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-16"><span class="gh-marca"></span></label><span class="gh-hora">17</span><label class="gh-celda" title="sem 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-17"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-17"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-17"><span class="gh-marca"></span></label><span class="gh-hora">18</span><label class="gh-celda" title="sem 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-18"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-18"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-18"><span class="gh-marca"></span></label><span class="gh-hora">19</span><label class="gh-celda" title="sem 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-19"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-19"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-19"><span class="gh-marca"></span></label><span class="gh-hora">20</span><label class="gh-celda" title="sem 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-20"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-20"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-20"><span class="gh-marca"></span></label><span class="gh-hora">21</span><label class="gh-celda" title="sem 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-21"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-21"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-21"><span class="gh-marca"></span></label><span class="gh-hora">22</span><label class="gh-celda" title="sem 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-22"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-22"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-22"><span class="gh-marca"></span></label><span class="gh-hora">23</span><label class="gh-celda" title="sem 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-23"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-23"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-23"><span class="gh-marca"></span></label></div></div></section><section><h2>Solo si corresponde</h2><p class="nota">Si no aplica a tu caso, salteate este bloque entero.</p><div class="campo"><label class="etiqueta" for="a_ciclo">Ciclo menstrual</label><select id="a_ciclo" name="a_ciclo"><option value="">(no aplica)</option><option value="menstruando">Menstruo</option><option value="no_menstruando">No menstruo</option><option value="menopausia">Menopausia</option><option value="embarazo">Embarazo</option><option value="lactancia">Lactancia</option></select></div><div class="campo checkbox-solo"><label><input type="checkbox" id="a_buscando_embarazo" name="a_buscando_embarazo"> Estas buscando embarazo</label></div><div class="campo"><label class="etiqueta" for="a_anticoncepcion">Anticoncepcion</label><p class="ayuda">Ejemplo: DIU / pastillas / ninguna</p><input type="text" id="a_anticoncepcion" name="a_anticoncepcion"></div><div class="campo checkbox-solo"><label><input type="checkbox" id="a_sintomas_urinarios" name="a_sintomas_urinarios"> Molestias urinarias o de prostata</label></div></section>
+
+    <div class="parte">
+      <h3>Y por ultimo, tu tipo de cuerpo y energia</h3>
+      <p>Son de marcar una opcion, la que mas se parezca a vos. No lo
+         pienses de mas: la primera que te suene cierta suele ser la
+         correcta. Si en alguna pregunta ninguna opcion va con vos, marca
+         "Esta no aplica" y segui (y si te arrepentis, tocala de nuevo y
+         se destilda). Con esto el plan te queda a tu medida.</p>
+    </div>
+    <section><h2>Primera parte: tu cuerpo, como fue casi siempre</h2><p class="consigna">Pensa en como fuiste LA MAYOR PARTE DE TU VIDA, no solo en este momento.</p><div class="pregunta"><p class="enunciado"><span class="num">1.</span> Tu cuerpo, la mayor parte de tu vida</p><div class="opciones"><label class="chip"><input type="radio" name="d_contextura" value="vata"><span>Delgado, liviano, de huesos finos; siempre me costo subir de peso</span></label><label class="chip"><input type="radio" name="d_contextura" value="pitta"><span>Mediano, atletico; mi peso se mantiene solo</span></label><label class="chip"><input type="radio" name="d_contextura" value="kapha"><span>Grande, solido; subo de peso facil y bajarlo me cuesta mucho</span></label><label class="chip chip-na"><input type="radio" name="d_contextura" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">2.</span> Tu piel</p><div class="opciones"><label class="chip"><input type="radio" name="d_piel" value="pitta"><span>Calida, sensible; se enrojece o brota facil</span></label><label class="chip"><input type="radio" name="d_piel" value="kapha"><span>Gruesa, suave, humeda; tirando a grasa</span></label><label class="chip"><input type="radio" name="d_piel" value="vata"><span>Seca, fina, fria; se agrieta facil</span></label><label class="chip chip-na"><input type="radio" name="d_piel" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">3.</span> Tu pelo</p><div class="opciones"><label class="chip"><input type="radio" name="d_pelo" value="kapha"><span>Abundante, grueso, fuerte y con brillo</span></label><label class="chip"><input type="radio" name="d_pelo" value="vata"><span>Seco, fino, quebradizo, se enreda</span></label><label class="chip"><input type="radio" name="d_pelo" value="pitta"><span>Lacio o ralo; encanecio o empezo a caerse temprano</span></label><label class="chip chip-na"><input type="radio" name="d_pelo" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">4.</span> Tus ojos</p><div class="opciones"><label class="chip"><input type="radio" name="d_ojos" value="vata"><span>Chicos e inquietos; se me resecan</span></label><label class="chip"><input type="radio" name="d_ojos" value="pitta"><span>Medianos y penetrantes; se me enrojecen facil</span></label><label class="chip"><input type="radio" name="d_ojos" value="kapha"><span>Grandes y humedos, de mirada tranquila</span></label><label class="chip chip-na"><input type="radio" name="d_ojos" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">5.</span> Tus articulaciones</p><div class="opciones"><label class="chip"><input type="radio" name="d_articulaciones" value="kapha"><span>Firmes y bien cubiertas, no se me notan</span></label><label class="chip"><input type="radio" name="d_articulaciones" value="vata"><span>Marcadas, y me crujen</span></label><label class="chip"><input type="radio" name="d_articulaciones" value="pitta"><span>Sueltas y flexibles, mas bien tibias</span></label><label class="chip chip-na"><input type="radio" name="d_articulaciones" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">6.</span> Como transpiras</p><div class="opciones"><label class="chip"><input type="radio" name="d_transpiracion" value="kapha"><span>Moderado pero constante, sobre todo con humedad</span></label><label class="chip"><input type="radio" name="d_transpiracion" value="vata"><span>Poco, casi nada, incluso haciendo ejercicio</span></label><label class="chip"><input type="radio" name="d_transpiracion" value="pitta"><span>Mucho y enseguida; me acaloro facil</span></label><label class="chip chip-na"><input type="radio" name="d_transpiracion" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">7.</span> El clima que peor te sienta</p><div class="opciones"><label class="chip"><input type="radio" name="d_clima" value="vata"><span>El frio seco y el viento</span></label><label class="chip"><input type="radio" name="d_clima" value="pitta"><span>El calor fuerte y el sol del mediodia</span></label><label class="chip"><input type="radio" name="d_clima" value="kapha"><span>El frio humedo y los dias grises</span></label><label class="chip chip-na"><input type="radio" name="d_clima" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">8.</span> Tu forma de dormir de siempre</p><div class="opciones"><label class="chip"><input type="radio" name="d_sueno" value="pitta"><span>Profundo pero corto; con poco me alcanza</span></label><label class="chip"><input type="radio" name="d_sueno" value="kapha"><span>Largo y pesado; me cuesta arrancar a la maniana</span></label><label class="chip"><input type="radio" name="d_sueno" value="vata"><span>Liviano y cortado; me despierto facil</span></label><label class="chip chip-na"><input type="radio" name="d_sueno" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">9.</span> Tu energia tipica</p><div class="opciones"><label class="chip"><input type="radio" name="d_energia" value="kapha"><span>Lenta para arrancar, pero aguanto mas que todos</span></label><label class="chip"><input type="radio" name="d_energia" value="vata"><span>En rafagas: arranco a full y me apago de golpe</span></label><label class="chip"><input type="radio" name="d_energia" value="pitta"><span>Sostenida e intensa mientras tengo un objetivo</span></label><label class="chip chip-na"><input type="radio" name="d_energia" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div></section><section><h2>Segunda parte: tu digestion de siempre</h2><p class="consigna">Pensa en como fuiste LA MAYOR PARTE DE TU VIDA, no solo en este momento.</p><div class="pregunta"><p class="enunciado"><span class="num">10.</span> Tu hambre</p><div class="opciones"><label class="chip"><input type="radio" name="d_apetito" value="vata"><span>Cambia dia a dia: a veces mucha, a veces me olvido de comer</span></label><label class="chip"><input type="radio" name="d_apetito" value="pitta"><span>Fuerte y puntual: si no como, me pongo de mal humor</span></label><label class="chip"><input type="radio" name="d_apetito" value="kapha"><span>Tranquila: puedo saltear una comida sin problema</span></label><label class="chip chip-na"><input type="radio" name="d_apetito" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">11.</span> Despues de comer, lo tipico en vos</p><div class="opciones"><label class="chip"><input type="radio" name="d_digestion" value="pitta"><span>Acidez o ardor si me paso o como apurado</span></label><label class="chip"><input type="radio" name="d_digestion" value="kapha"><span>Pesadez y ganas de dormir; digiero lento</span></label><label class="chip"><input type="radio" name="d_digestion" value="vata"><span>Gases, panza hinchada o intestino irregular</span></label><label class="chip chip-na"><input type="radio" name="d_digestion" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">12.</span> Como digeriste la MAYOR PARTE DE TU VIDA</p><div class="opciones"><label class="chip"><input type="radio" name="d_fuego_siempre" value="irregular"><span>Irregular: un dia digiero cualquier cosa y otro dia nada me cae bien</span></label><label class="chip"><input type="radio" name="d_fuego_siempre" value="fuerte"><span>Muy fuerte: digiero rapido y si no como a horario me descompongo</span></label><label class="chip"><input type="radio" name="d_fuego_siempre" value="lento"><span>Lento: la comida me queda dando vueltas y me da sueno</span></label><label class="chip"><input type="radio" name="d_fuego_siempre" value="parejo"><span>Parejo: hambre a horario y digiero bien casi siempre</span></label><label class="chip chip-na"><input type="radio" name="d_fuego_siempre" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">13.</span> Si tomas algo que suelta el intestino (una ciruela, un cafe, leche), que te pasa</p><div class="opciones"><label class="chip"><input type="radio" name="d_intestino" value="duro"><span>Nada, no me hace efecto</span></label><label class="chip"><input type="radio" name="d_intestino" value="blando"><span>Enseguida tengo que ir al bano</span></label><label class="chip"><input type="radio" name="d_intestino" value="medio"><span>Me hace un poco, lo justo</span></label><label class="chip chip-na"><input type="radio" name="d_intestino" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div></section><section><h2>Tercera parte: tu cabeza y tu manera de ser</h2><p class="consigna">Pensa en como fuiste LA MAYOR PARTE DE TU VIDA, no solo en este momento.</p><div class="pregunta"><p class="enunciado"><span class="num">14.</span> Cuando algo te estresa, lo primero que aparece</p><div class="opciones"><label class="chip"><input type="radio" name="d_temperamento" value="vata"><span>Ansiedad, preocupacion, mil ideas a la vez</span></label><label class="chip"><input type="radio" name="d_temperamento" value="pitta"><span>Enojo, impaciencia, critica</span></label><label class="chip"><input type="radio" name="d_temperamento" value="kapha"><span>Me cierro, me quedo quieto, evito el tema</span></label><label class="chip chip-na"><input type="radio" name="d_temperamento" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">15.</span> Tu memoria</p><div class="opciones"><label class="chip"><input type="radio" name="d_memoria" value="pitta"><span>Precisa: retengo lo que me importa y lo uso</span></label><label class="chip"><input type="radio" name="d_memoria" value="kapha"><span>Me cuesta memorizar, pero lo que aprendo no se me va mas</span></label><label class="chip"><input type="radio" name="d_memoria" value="vata"><span>Aprendo rapido y me olvido rapido</span></label><label class="chip chip-na"><input type="radio" name="d_memoria" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">16.</span> Tu forma de hablar</p><div class="opciones"><label class="chip"><input type="radio" name="d_habla" value="kapha"><span>Pausada, tranquila; hablo poco y pienso antes</span></label><label class="chip"><input type="radio" name="d_habla" value="vata"><span>Rapida, salto de un tema a otro, hablo mucho</span></label><label class="chip"><input type="radio" name="d_habla" value="pitta"><span>Directa, clara, convincente; a veces filosa</span></label><label class="chip chip-na"><input type="radio" name="d_habla" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">17.</span> Cuando tenes que decidir algo</p><div class="opciones"><label class="chip"><input type="radio" name="d_decision" value="vata"><span>Decido rapido y despues cambio de idea</span></label><label class="chip"><input type="radio" name="d_decision" value="pitta"><span>Decido rapido y no me muevo de ahi</span></label><label class="chip"><input type="radio" name="d_decision" value="kapha"><span>Me tomo mi tiempo, pero lo que decido queda</span></label><label class="chip chip-na"><input type="radio" name="d_decision" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">18.</span> Tu cabeza en un dia comun</p><div class="opciones"><label class="chip"><input type="radio" name="d_mente_cabeza" value="claridad"><span>Clara y tranquila; puedo estar sin hacer nada y estoy bien</span></label><label class="chip"><input type="radio" name="d_mente_cabeza" value="agitacion"><span>Acelerada: siempre hay algo que resolver o ganar</span></label><label class="chip"><input type="radio" name="d_mente_cabeza" value="inercia"><span>Espesa, sin ganas; me cuesta enfocar</span></label><label class="chip chip-na"><input type="radio" name="d_mente_cabeza" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">19.</span> Cuando tenes un rato libre de verdad</p><div class="opciones"><label class="chip"><input type="radio" name="d_mente_libre" value="agitacion"><span>Necesito estar haciendo algo; engancho pantalla o trabajo</span></label><label class="chip"><input type="radio" name="d_mente_libre" value="inercia"><span>Me tiro a dormir o dejo pasar el rato sin ganas de nada</span></label><label class="chip"><input type="radio" name="d_mente_libre" value="claridad"><span>Leo, camino o no hago nada, y lo disfruto</span></label><label class="chip chip-na"><input type="radio" name="d_mente_libre" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">20.</span> Cuando algo te sale mal</p><div class="opciones"><label class="chip"><input type="radio" name="d_mente_reaccion" value="claridad"><span>Lo miro, veo que puedo hacer y sigo</span></label><label class="chip"><input type="radio" name="d_mente_reaccion" value="agitacion"><span>Me enciendo, me pongo a resolver o a discutir</span></label><label class="chip"><input type="radio" name="d_mente_reaccion" value="inercia"><span>Me bajonea y lo dejo ahi</span></label><label class="chip chip-na"><input type="radio" name="d_mente_reaccion" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div></section><section><h2>Cuarta parte: como venis estos meses</h2><p class="consigna">Y ahora pensa SOLO en los ultimos 2-3 meses.</p><div class="pregunta"><p class="enunciado"><span class="num">21.</span> Estos meses, tu panza</p><div class="opciones"><label class="chip"><input type="radio" name="d_v_digestion" value="vata"><span>Hinchada, con gases o intestino irregular</span></label><label class="chip"><input type="radio" name="d_v_digestion" value="pitta"><span>Con acidez, ardor o descomposturas</span></label><label class="chip"><input type="radio" name="d_v_digestion" value="kapha"><span>Pesada y lenta, sin mucha hambre</span></label><label class="chip chip-na"><input type="radio" name="d_v_digestion" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">22.</span> Estos meses, tu descanso</p><div class="opciones"><label class="chip"><input type="radio" name="d_v_descanso" value="pitta"><span>Duermo poco, con calor o suenos muy intensos</span></label><label class="chip"><input type="radio" name="d_v_descanso" value="kapha"><span>Duermo de mas y me levanto igual de cansado</span></label><label class="chip"><input type="radio" name="d_v_descanso" value="vata"><span>Me cuesta dormirme o me despierto a la madrugada</span></label><label class="chip chip-na"><input type="radio" name="d_v_descanso" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">23.</span> Estos meses, tu animo</p><div class="opciones"><label class="chip"><input type="radio" name="d_v_animo" value="kapha"><span>Apagado, desganado, sin iniciativa</span></label><label class="chip"><input type="radio" name="d_v_animo" value="vata"><span>Ansioso, disperso, con la cabeza a mil</span></label><label class="chip"><input type="radio" name="d_v_animo" value="pitta"><span>Irritable, exigente, todo me molesta</span></label><label class="chip chip-na"><input type="radio" name="d_v_animo" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">24.</span> Estos meses, tu energia</p><div class="opciones"><label class="chip"><input type="radio" name="d_v_energia" value="vata"><span>Picos y bajones, me agoto de golpe</span></label><label class="chip"><input type="radio" name="d_v_energia" value="pitta"><span>Me exijo de mas y termino quemado</span></label><label class="chip"><input type="radio" name="d_v_energia" value="kapha"><span>Todo cuesta el doble, ando a media maquina</span></label><label class="chip chip-na"><input type="radio" name="d_v_energia" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">25.</span> Y estos ultimos 2-3 meses, como venis digiriendo</p><div class="opciones"><label class="chip"><input type="radio" name="d_fuego_ahora" value="irregular"><span>Irregular, cambia de un dia para el otro</span></label><label class="chip"><input type="radio" name="d_fuego_ahora" value="fuerte"><span>Con mucha hambre y ardor</span></label><label class="chip"><input type="radio" name="d_fuego_ahora" value="lento"><span>Lento y pesado, sin hambre</span></label><label class="chip"><input type="radio" name="d_fuego_ahora" value="parejo"><span>Parejo, como siempre</span></label><label class="chip chip-na"><input type="radio" name="d_fuego_ahora" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div></section><section><h2>Quinta parte: unas de si o no</h2><p class="consigna">Estas son de SI o NO, y son sobre como venis ahora. Contesta lo que sientas, sin pensarlo mucho.</p><div class="pregunta"><p class="enunciado"><span class="num">26.</span> Sentis el cuerpo tapado o congestionado, sin estar resfriado</p><div class="opciones cortas"><label class="chip"><input type="radio" name="d_senal_tapado" value="si"><span>Si</span></label><label class="chip"><input type="radio" name="d_senal_tapado" value="no"><span>No</span></label><label class="chip chip-na"><input type="radio" name="d_senal_tapado" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">27.</span> Perdiste fuerza sin haber cambiado nada</p><div class="opciones cortas"><label class="chip"><input type="radio" name="d_senal_fuerza" value="si"><span>Si</span></label><label class="chip"><input type="radio" name="d_senal_fuerza" value="no"><span>No</span></label><label class="chip chip-na"><input type="radio" name="d_senal_fuerza" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">28.</span> Te sentis pesado, sobre todo al levantarte</p><div class="opciones cortas"><label class="chip"><input type="radio" name="d_senal_pesadez" value="si"><span>Si</span></label><label class="chip"><input type="radio" name="d_senal_pesadez" value="no"><span>No</span></label><label class="chip chip-na"><input type="radio" name="d_senal_pesadez" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">29.</span> Se te queda el aire atascado: hinchazon, gases que no salen</p><div class="opciones cortas"><label class="chip"><input type="radio" name="d_senal_gases" value="si"><span>Si</span></label><label class="chip"><input type="radio" name="d_senal_gases" value="no"><span>No</span></label><label class="chip chip-na"><input type="radio" name="d_senal_gases" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">30.</span> Pereza o desgano: no te sale arrancar</p><div class="opciones cortas"><label class="chip"><input type="radio" name="d_senal_pereza" value="si"><span>Si</span></label><label class="chip"><input type="radio" name="d_senal_pereza" value="no"><span>No</span></label><label class="chip chip-na"><input type="radio" name="d_senal_pereza" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">31.</span> La comida te queda dando vueltas, con eructos con gusto a lo que comiste</p><div class="opciones cortas"><label class="chip"><input type="radio" name="d_senal_digestion_lenta" value="si"><span>Si</span></label><label class="chip"><input type="radio" name="d_senal_digestion_lenta" value="no"><span>No</span></label><label class="chip chip-na"><input type="radio" name="d_senal_digestion_lenta" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">32.</span> Salivacion de mas o gusto raro en la boca</p><div class="opciones cortas"><label class="chip"><input type="radio" name="d_senal_saliva" value="si"><span>Si</span></label><label class="chip"><input type="radio" name="d_senal_saliva" value="no"><span>No</span></label><label class="chip chip-na"><input type="radio" name="d_senal_saliva" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">33.</span> Vas de cuerpo pegajoso, cuesta limpiar o queda flotando</p><div class="opciones cortas"><label class="chip"><input type="radio" name="d_senal_heces" value="si"><span>Si</span></label><label class="chip"><input type="radio" name="d_senal_heces" value="no"><span>No</span></label><label class="chip chip-na"><input type="radio" name="d_senal_heces" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">34.</span> Se te fue el gusto por la comida</p><div class="opciones cortas"><label class="chip"><input type="radio" name="d_senal_gusto" value="si"><span>Si</span></label><label class="chip"><input type="radio" name="d_senal_gusto" value="no"><span>No</span></label><label class="chip chip-na"><input type="radio" name="d_senal_gusto" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">35.</span> Cansancio sin haber hecho esfuerzo</p><div class="opciones cortas"><label class="chip"><input type="radio" name="d_senal_cansancio" value="si"><span>Si</span></label><label class="chip"><input type="radio" name="d_senal_cansancio" value="no"><span>No</span></label><label class="chip chip-na"><input type="radio" name="d_senal_cansancio" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">36.</span> Al levantarte, la lengua tiene una capa blanca o de otro color</p><div class="opciones cortas"><label class="chip"><input type="radio" name="d_senal_lengua" value="si"><span>Si</span></label><label class="chip"><input type="radio" name="d_senal_lengua" value="no"><span>No</span></label><label class="chip chip-na"><input type="radio" name="d_senal_lengua" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div><div class="pregunta"><p class="enunciado"><span class="num">37.</span> Aliento cargado a la maniana, antes de lavarte los dientes</p><div class="opciones cortas"><label class="chip"><input type="radio" name="d_senal_aliento" value="si"><span>Si</span></label><label class="chip"><input type="radio" name="d_senal_aliento" value="no"><span>No</span></label><label class="chip chip-na"><input type="radio" name="d_senal_aliento" value="no_aplica" data-na="1"><span>Esta no aplica</span></label></div></div></section>
+  </form>
+</div>
+
+<div class="acciones">
+  <div class="adentro">
+    <div class="barra"><i id="barra"></i></div>
+    <div id="progreso">Contestaste 0 preguntas de 75</div>
+    <div id="navegacion" style="display:none">
+      <button class="primario" id="btnSiguiente" onclick="irPaso(1)">Siguiente</button>
+      <button class="secundario chico" id="btnVolver" onclick="irPaso(-1)">Volver</button>
+    </div>
+    <div id="finales">
+      <p class="cierre">Llegaste al final. Lo que dejaste en blanco queda
+         asi: ninguna pregunta es obligatoria, y lo que falte lo charlamos
+         en la sesion.</p>
+      <button class="primario" onclick="guardar()">Guardar y mandar</button>
+      <button class="secundario chico" onclick="copiar()">No pude descargar: copiar el texto</button>
+      <button class="secundario chico" onclick="borrar()">Empezar de cero</button>
+    </div>
+    <div id="estado"></div>
+    <textarea id="copia" readonly></textarea>
+  </div>
+</div>
+
+<script>
+var META = {"patient_id": null, "paciente": "", "origen": "ficha_web_v1", "version": 1};
+var TOTAL = 75;
+var CLAVE = 'bioanalyst_formulario_nuevo';
+
+function form() { return document.getElementById('f'); }
+
+function caja(nombre) {
+  if (nombre.indexOf('c_') === 0) return ['contacto', nombre.slice(2)];
+  if (nombre.indexOf('a_') === 0) return ['anamnesis', nombre.slice(2)];
+  if (nombre.indexOf('d_') === 0) return ['dosha', nombre.slice(2)];
+  return null;
+}
+
+function recolectar() {
+  var out = { contacto: {}, anamnesis: {}, dosha: {} };
+  var f = form();
+  var nodos = f.querySelectorAll('input[name], textarea[name], select[name]');
+  for (var i = 0; i < nodos.length; i++) {
+    var n = nodos[i];
+    var b = caja(n.name);
+    if (!b) continue;
+    var d = out[b[0]], k = b[1];
+    if (n.type === 'radio') {
+      if (n.checked) d[k] = n.value;
+    } else if (n.type === 'checkbox') {
+      if (n.checked) d[k] = true;
+    } else if (n.type === 'range') {
+      // El deslizador arranca en 5: solo viaja si el paciente lo movio.
+      if (n.getAttribute('data-tocado') === '1') d[k] = Number(n.value);
+    } else {
+      var v = (n.value || '').trim();
+      if (v !== '') d[k] = (n.type === 'number') ? Number(v) : v;
+    }
+  }
+  var grupos = f.querySelectorAll('.chips[data-campo]');
+  for (var g = 0; g < grupos.length; g++) {
+    var campo = grupos[g].getAttribute('data-campo');
+    var b2 = caja(campo);
+    if (!b2) continue;
+    var marcados = grupos[g].querySelectorAll('input:checked');
+    var lista = [];
+    for (var m = 0; m < marcados.length; m++) lista.push(marcados[m].value);
+    if (lista.length) out[b2[0]][b2[1]] = lista;
+  }
+  return { meta: META, contacto: out.contacto, anamnesis: out.anamnesis,
+           dosha: out.dosha };
+}
+
+function cuantas(datos) {
+  var n = 0, cajas = ['contacto', 'anamnesis', 'dosha'];
+  for (var i = 0; i < cajas.length; i++) {
+    var d = datos[cajas[i]] || {};
+    for (var k in d) { if (Object.prototype.hasOwnProperty.call(d, k)) n++; }
+  }
+  return n;
+}
+
+// LO QUE YA RESOLVIO, que NO es lo mismo que lo que viaja en el archivo.
+// (incidente 2026-08-26, Silvia: "de la 61 a la 69 no se ven")
+//
+// El contador se quedaba clavado en "61 de 69" y la paciente lo leyo como
+// que le faltaban NUEVE preguntas. No le faltaba ninguna: el formulario
+// dibuja las 69. Lo que pasa es que ocho de ellas no generan dato cuando la
+// respuesta honesta es "nada" o "no":
+//   - los tres deslizadores (dolor, energia, estres) solo viajan si los
+//     movio, porque arrancan en 5 y ese 5 no lo puso ella;
+//   - las dos casillas de si/no (embarazo, sintomas urinarios) en NO;
+//   - los grupos de opciones donde no le aplicaba ninguna;
+//   - la grilla de horarios ocupados, si no tiene ninguno.
+// Dejarlas asi ES contestarlas. Esta funcion las cuenta una vez que la
+// paciente ya paso por el paso donde viven (ahi las vio y decidio). El
+// archivo que se descarga sale exactamente igual que antes: esto solo mira,
+// no toca ni una respuesta.
+function resueltas() {
+  var f = form(), n = 0, i, radios = {};
+  var nodos = f.querySelectorAll('input[name], textarea[name], select[name]');
+  for (i = 0; i < nodos.length; i++) {
+    var x = nodos[i];
+    if (!caja(x.name)) continue;
+    if (x.type === 'radio') {
+      if (x.checked) radios[x.name] = 1;
+      else if (!(x.name in radios)) radios[x.name] = 0;
+    } else if (x.type === 'checkbox') {
+      if (x.checked || x.getAttribute('data-visto') === '1') n++;
+    } else if (x.type === 'range') {
+      if (x.getAttribute('data-tocado') === '1' ||
+          x.getAttribute('data-visto') === '1') n++;
+    } else if ((x.value || '').trim() !== '') {
+      n++;
+    }
+  }
+  for (var k in radios) {
+    if (Object.prototype.hasOwnProperty.call(radios, k) && radios[k]) n++;
+  }
+  var grupos = f.querySelectorAll('.chips[data-campo]');
+  for (i = 0; i < grupos.length; i++) {
+    if (!caja(grupos[i].getAttribute('data-campo') || '')) continue;
+    if (grupos[i].querySelector('input:checked') ||
+        grupos[i].getAttribute('data-visto') === '1') n++;
+  }
+  return n;
+}
+
+function actualizarProgreso() {
+  try {
+    var n = resueltas();
+    if (n > TOTAL) n = TOTAL;
+    // "preguntas" va SIEMPRE escrito: sin esa palabra, "61 de 69" se lee
+    // como si fueran los numeros de las preguntas que faltan.
+    var cuenta = (n >= TOTAL)
+      ? ('listo: contestaste las ' + TOTAL + ' preguntas')
+      : (n + ' preguntas de ' + TOTAL);
+    var texto = 'Contestaste ' + cuenta;
+    if (PASOS.length) {
+      var t = PASOS[paso].titulo || '';
+      texto = 'Paso ' + (paso + 1) + ' de ' + PASOS.length +
+              (t ? ' - ' + t : '') + '  |  ' + cuenta;
+    }
+    document.getElementById('progreso').textContent = texto;
+    var pct = TOTAL > 0 ? Math.min(100, Math.round((n * 100) / TOTAL)) : 0;
+    document.getElementById('barra').style.width = pct + '%';
+  } catch (e) { /* el progreso nunca puede romper el formulario */ }
+}
+
+// --- DE A UN PASO POR VEZ -------------------------------------------------
+// El formulario entero medía 18 pantallas de celular de scroll continuo, con
+// el boton verde de "Guardar y mandar" a la vista desde la PRIMERA. Una
+// paciente cargo su nombre y su mail, vio el boton y lo apreto: el archivo
+// salio con dos datos y nadie le aviso de nada (26/08).
+//
+// Esto lo parte en pasos cortos: se ve una seccion por vez y el boton de
+// mandar aparece SOLO en el ultimo. Es una mejora PROGRESIVA a proposito: el
+// HTML sale con todo visible, y este bloque es el que esconde. Si algo de
+// aca falla (celular viejo, JavaScript apagado), el formulario queda
+// exactamente como era antes: un scroll largo, pero entero y usable.
+var PASOS = [], paso = 0;
+
+function armarPasos() {
+  var f = form(), hijos = [], i;
+  for (i = 0; i < f.children.length; i++) hijos.push(f.children[i]);
+  var colgados = [];
+  for (i = 0; i < hijos.length; i++) {
+    var el = hijos[i];
+    if (el.tagName === 'SECTION') {
+      var h2 = el.querySelector('h2');
+      var h3 = colgados.length ? colgados[0].querySelector('h3') : null;
+      PASOS.push({ nodos: colgados.concat([el]),
+                   titulo: (h2 ? h2.textContent : (h3 ? h3.textContent : '')) });
+      colgados = [];
+    } else {
+      colgados.push(el);
+    }
+  }
+  // Lo que quedo colgando al final se pega al ultimo paso: nada se pierde.
+  if (colgados.length && PASOS.length) {
+    PASOS[PASOS.length - 1].nodos =
+      PASOS[PASOS.length - 1].nodos.concat(colgados);
+  }
+  // Con menos de tres secciones no vale la pena partirlo.
+  if (PASOS.length < 3) { PASOS = []; return false; }
+  return true;
+}
+
+// Marca como VISTOS los campos de los pasos que ya quedaron atras. Es lo
+// que le permite al contador saber que "no marque nada" tambien es una
+// respuesta (ver resueltas()). Solo pone una marca: nunca borra ni escribe
+// una respuesta, y nunca se saca una vez puesta (volver atras no descuenta).
+function marcarVistos(hasta) {
+  for (var i = 0; i < hasta && i < PASOS.length; i++) {
+    for (var j = 0; j < PASOS[i].nodos.length; j++) {
+      var nd = PASOS[i].nodos[j];
+      if (!nd || !nd.querySelectorAll) continue;
+      var c = nd.querySelectorAll(
+        'input, select, textarea, .chips[data-campo]');
+      for (var k = 0; k < c.length; k++) c[k].setAttribute('data-visto', '1');
+    }
+  }
+}
+
+function mostrarPaso(n) {
+  if (!PASOS.length) return;
+  if (n < 0) n = 0;
+  if (n > PASOS.length - 1) n = PASOS.length - 1;
+  paso = n;
+  // En el ultimo paso ya vio TODO el formulario, asi que se marca entero.
+  try {
+    marcarVistos(paso === PASOS.length - 1 ? PASOS.length : paso);
+  } catch (e) { /* el progreso nunca corta el formulario */ }
+  for (var i = 0; i < PASOS.length; i++) {
+    var visto = (i === paso) ? '' : 'none';
+    for (var j = 0; j < PASOS[i].nodos.length; j++) {
+      PASOS[i].nodos[j].style.display = visto;
+    }
+  }
+  var intro = document.getElementById('introduccion');
+  if (intro) intro.style.display = (paso === 0) ? '' : 'none';
+  var ultimo = (paso === PASOS.length - 1);
+  document.getElementById('navegacion').style.display = '';
+  document.getElementById('finales').style.display = ultimo ? '' : 'none';
+  document.getElementById('btnSiguiente').style.display = ultimo ? 'none' : '';
+  document.getElementById('btnVolver').style.display = (paso === 0) ? 'none' : '';
+  document.getElementById('estado').textContent = '';
+  actualizarProgreso();
+  try { window.scrollTo(0, 0); } catch (e) { /* noop */ }
+}
+
+function irPaso(delta) {
+  // El unico freno del formulario, y frena UNA sola vez: si en el paso de
+  // los datos falta algo o esta mal escrito, "Siguiente" muestra el aviso
+  // en vez de avanzar. Apretandolo de nuevo, pasa igual. Volver atras
+  // nunca frena nada. Si `puedeAvanzar` no esta o se rompe, avanza como
+  // siempre: nadie puede quedar encerrado en la primera pantalla.
+  try {
+    if (delta > 0 && typeof puedeAvanzar === 'function'
+        && puedeAvanzar(paso) === false) return;
+  } catch (e) { /* ante la duda, se avanza */ }
+  try { mostrarPaso(paso + delta); } catch (e) { /* noop */ }
+}
+
+// El paso donde vive un campo, para poder llevarla ahi cuando falta algo.
+function pasoDelPrefijo(pref) {
+  for (var i = 0; i < PASOS.length; i++) {
+    for (var j = 0; j < PASOS[i].nodos.length; j++) {
+      if (PASOS[i].nodos[j].querySelector &&
+          PASOS[i].nodos[j].querySelector('[name^="' + pref + '"]')) return i;
+    }
+  }
+  return -1;
+}
+
+// --- Guardado en el propio dispositivo (puede cerrar y seguir despues) ---
+
+function instantanea() {
+  var estado = { campos: {}, chips: {}, rangos: [] };
+  var f = form();
+  var nodos = f.querySelectorAll('input[name], textarea[name], select[name]');
+  for (var i = 0; i < nodos.length; i++) {
+    var n = nodos[i];
+    if (!n.name) continue;
+    if (n.type === 'radio') {
+      if (n.checked) estado.campos[n.name] = n.value;
+    } else if (n.type === 'checkbox') {
+      if (n.hasAttribute('data-grupo')) continue;
+      estado.campos[n.name] = !!n.checked;
+    } else {
+      estado.campos[n.name] = n.value;
+      if (n.type === 'range' && n.getAttribute('data-tocado') === '1') {
+        estado.rangos.push(n.name);
+      }
+    }
+  }
+  var grupos = f.querySelectorAll('.chips[data-campo]');
+  for (var g = 0; g < grupos.length; g++) {
+    var campo = grupos[g].getAttribute('data-campo');
+    var marcados = grupos[g].querySelectorAll('input:checked');
+    var lista = [];
+    for (var m = 0; m < marcados.length; m++) lista.push(marcados[m].value);
+    estado.chips[campo] = lista;
+  }
+  return estado;
+}
+
+function guardarLocal() {
+  try {
+    window.localStorage.setItem(CLAVE, JSON.stringify(instantanea()));
+  } catch (e) { /* sin espacio o en modo privado: se sigue igual */ }
+}
+
+function restaurar() {
+  var crudo = null;
+  try { crudo = window.localStorage.getItem(CLAVE); } catch (e) { return false; }
+  if (!crudo) return false;
+  var estado;
+  try { estado = JSON.parse(crudo); } catch (e) { return false; }
+  if (!estado || typeof estado !== 'object') return false;
+  var algo = false;
+  var f = form();
+  var campos = estado.campos || {};
+  for (var nombre in campos) {
+    if (!Object.prototype.hasOwnProperty.call(campos, nombre)) continue;
+    var valor = campos[nombre];
+    var nodos = f.querySelectorAll('[name="' + nombre + '"]');
+    for (var i = 0; i < nodos.length; i++) {
+      var n = nodos[i];
+      if (n.type === 'radio') {
+        if (n.value === valor) {
+          n.checked = true; algo = true;
+          // Un "Esta no aplica" retomado se destilda al PRIMER toque,
+          // igual que si lo acabara de marcar.
+          if (n.getAttribute('data-na') === '1') {
+            n.setAttribute('data-puesta', '1');
+          }
+        }
+      } else if (n.type === 'checkbox') {
+        if (valor === true) { n.checked = true; algo = true; }
+      } else if (typeof valor === 'string' && valor !== '') {
+        n.value = valor;
+        if (n.type === 'range') {
+          if (n.nextElementSibling) n.nextElementSibling.textContent = valor;
+        } else { algo = true; }
+      }
+    }
+  }
+  var rangos = estado.rangos || [];
+  for (var r = 0; r < rangos.length; r++) {
+    var nr = f.querySelector('[name="' + rangos[r] + '"]');
+    if (nr) { nr.setAttribute('data-tocado', '1'); algo = true; }
+  }
+  var chips = estado.chips || {};
+  for (var campo in chips) {
+    if (!Object.prototype.hasOwnProperty.call(chips, campo)) continue;
+    var grupo = f.querySelector('.chips[data-campo="' + campo + '"]');
+    if (!grupo) continue;
+    var vals = chips[campo] || [];
+    for (var v = 0; v < vals.length; v++) {
+      var op = grupo.querySelector('input[value="' + vals[v] + '"]');
+      if (op) { op.checked = true; algo = true; }
+    }
+  }
+  return algo;
+}
+
+function borrar() {
+  // POR QUE NO ALCANZA CON removeItem + reload (2026-09-07). Jose probo el
+  // formulario y dijo "el boton empezar de cero no anda". Son DOS cosas, y
+  // las dos pasan justo cuando el archivo se abre con doble clic desde el
+  // Escritorio, que es como lo usan las pacientes:
+  //
+  //   1. En una pagina abierta como archivo (file://), el navegador BLOQUEA
+  //      el guardado local con SecurityError. O sea que no habia nada
+  //      guardado que borrar: lo que se ve en pantalla esta solo en los
+  //      campos.
+  //   2. Y `reload()` en Chrome RESTAURA los valores de los campos. Se
+  //      recargaba y todo volvia a aparecer, asi que parecia que el boton
+  //      no hacia nada.
+  //
+  // Por eso ahora se vacian los campos a mano -- que es lo unico que de
+  // verdad tiene el dato -- y recien despues se recarga, y con `replace`,
+  // que no restaura nada.
+  if (!window.confirm('Se borra todo lo que completaste hasta ahora. '
+                      + 'Seguro?')) return;
+  try { window.localStorage.removeItem(CLAVE); } catch (e) { /* noop */ }
+  try {
+    var campos = document.querySelectorAll('input, textarea, select');
+    for (var i = 0; i < campos.length; i++) {
+      var c = campos[i];
+      if (c.type === 'checkbox' || c.type === 'radio') { c.checked = false; }
+      else { c.value = ''; }
+    }
+  } catch (e) { /* noop */ }
+  try {
+    window.location.replace(window.location.href.split('#')[0]);
+  } catch (e) {
+    window.location.reload();
+  }
+}
+
+var guardadoPendiente = null;
+function alTocar(ev) {
+  if (ev && ev.target && ev.target.type === 'range') {
+    ev.target.setAttribute('data-tocado', '1');
+  }
+  // La seccion del testigo y la revision de los datos se enganchan aca,
+  // adentro de su propio try: si algo de eso falla, el formulario sigue
+  // guardando y contestandose igual que siempre.
+  try {
+    if (typeof testigoAlTocar === 'function') testigoAlTocar(ev);
+  } catch (e) { /* noop */ }
+  actualizarProgreso();
+  if (guardadoPendiente) window.clearTimeout(guardadoPendiente);
+  guardadoPendiente = window.setTimeout(guardarLocal, 400);
+}
+document.addEventListener('input', alTocar);
+document.addEventListener('change', alTocar);
+
+// "ESTA NO APLICA" SE PUEDE DESTILDAR (2026-09-07, el caso de Sergio:
+// llenaba el formulario para su hija y en las preguntas 22 a 24 del tipo
+// de cuerpo "varias no aplicaban, y no da la opcion de no elegir"). Un
+// radio comun no se puede desmarcar; este si: tocarlo de nuevo lo saca y
+// la pregunta vuelve a quedar sin contestar. La marca data-puesta
+// recuerda que el toque anterior fue de este chip; elegir una opcion
+// comun del mismo grupo la borra, asi el proximo toque al chip lo TILDA
+// (y no lo destilda por error). Al destildar se llama a alTocar, que es
+// quien actualiza el contador y programa el guardado local, igual que
+// cualquier otro toque. Todo adentro de try: si algo falla, queda un
+// radio comun y el formulario sigue andando.
+document.addEventListener('click', function (ev) {
+  try {
+    var t = ev.target;
+    if (!t || t.type !== 'radio' || t.getAttribute('data-na') !== '1') return;
+    if (t.getAttribute('data-puesta') === '1') {
+      t.checked = false;
+      t.removeAttribute('data-puesta');
+      alTocar(ev);
+    } else {
+      t.setAttribute('data-puesta', '1');
+    }
+  } catch (e) { /* nunca rompe el formulario */ }
+});
+document.addEventListener('change', function (ev) {
+  try {
+    var t = ev.target;
+    if (!t || t.type !== 'radio' || t.getAttribute('data-na') === '1') return;
+    var g = document.getElementsByName(t.name);
+    for (var i = 0; i < g.length; i++) {
+      if (g[i].getAttribute && g[i].getAttribute('data-na') === '1') {
+        g[i].removeAttribute('data-puesta');
+      }
+    }
+  } catch (e) { /* noop */ }
+});
+
+function nombreArchivo() {
+  var d = new Date();
+  var f = d.getFullYear() + '-' +
+          ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+          ('0' + d.getDate()).slice(-2);
+  // EL HUECO QUE NADIE RELLENABA (2026-09-07). Decia 'formulario' y esa
+  // marca de plantilla aparecia UNA sola vez en todo el modulo: nadie la
+  // reemplazaba nunca. La paciente descargaba
+  // 'formulario_formulario_2026-09-07.json' y Jose lo recibia asi.
+  // Ahora sale con el nombre de quien lo completa, sacado del propio
+  // formulario; si todavia no lo escribio, queda solo la fecha.
+  var quien = '';
+  try {
+    var campo = document.getElementById('c_nombre');
+    quien = campo && campo.value ? campo.value : '';
+    quien = quien.normalize('NFD').replace(/[̀-ͯ]/g, '');
+    quien = quien.replace(/[^A-Za-z0-9]+/g, '_')
+                 .replace(/^_+|_+$/g, '').slice(0, 40);
+  } catch (e) { quien = ''; }
+  return 'formulario_' + (quien ? quien + '_' : '') + f + '.json';
+}
+
+// Que parte GRANDE quedo entera sin contestar. No mira campo por campo (no
+// hay ninguno obligatorio y asi tiene que seguir siendo): mira si una de las
+// tres partes vino en blanco, que es lo que de verdad arruina la sesion.
+function partesEnBlanco(datos) {
+  var falta = [];
+  try {
+    if (!datos.contacto || !cuantasDe(datos.contacto)) {
+      falta.push({ que: 'tus datos (nombre y como escribirte)', pref: 'c_' });
+    }
+    if (!datos.anamnesis || !cuantasDe(datos.anamnesis)) {
+      falta.push({ que: 'la parte 2, tu historia: que te pasa, que tomas, '
+                        + 'como dormis', pref: 'a_' });
+    }
+    // El biotipo son 37 preguntas de tocar una opcion. Con menos de 5
+    // contestadas no alcanza para calcular nada.
+    if (!datos.dosha || cuantasDe(datos.dosha) < 5) {
+      falta.push({ que: 'la parte 3, las preguntas de tu tipo de cuerpo',
+                   pref: 'd_' });
+    }
+  } catch (e) { return []; }
+  return falta;
+}
+
+function cuantasDe(d) {
+  var n = 0;
+  for (var k in d) { if (Object.prototype.hasOwnProperty.call(d, k)) n++; }
+  return n;
+}
+
+// Le pega al archivo la via del testigo y, si la eligio, la foto. ADITIVO:
+// si esto devuelve vacio o se rompe, el .json sale identico al de antes y
+// el backend lo lee igual.
+function conTestigo(datos) {
+  try {
+    if (typeof testigoParaElArchivo !== 'function') return datos;
+    var extra = testigoParaElArchivo();
+    for (var k in extra) {
+      if (Object.prototype.hasOwnProperty.call(extra, k)) datos[k] = extra[k];
+    }
+  } catch (e) { /* el archivo se manda igual */ }
+  return datos;
+}
+
+function guardar() {
+  var datos = conTestigo(recolectar());
+  var n = cuantas(datos);
+  if (n === 0) {
+    document.getElementById('estado').textContent =
+      'Todavia no completaste nada. Contesta al menos algo y volve a probar.';
+    return;
+  }
+  // LOS DATOS DE CONTACTO. Sin mail y sin WhatsApp no hay devolucion
+  // posible, y sin nombre y fecha de nacimiento no hay estudio. Se avisa
+  // fuerte, pero se manda igual si insiste (mismo trato que las partes en
+  // blanco de mas abajo).
+  try {
+    var faltanDatos = (typeof revisarContacto === 'function')
+      ? revisarContacto(true) : [];
+    if (faltanDatos.length) {
+      var t2 = 'Antes de mandarlo, mira esto:\n\n- '
+        + faltanDatos.join('\n- ') + '\n\n'
+        + 'Aceptar = te llevo al primer paso a corregirlo.\n'
+        + 'Cancelar = lo mando igual, asi como esta.';
+      var ir = true;
+      try { ir = window.confirm(t2); } catch (e) { ir = false; }
+      if (ir) {
+        var d2 = -1;
+        try { d2 = pasoDelPrefijo('c_'); } catch (e) { d2 = -1; }
+        if (d2 >= 0) mostrarPaso(d2);
+        try { revisarContacto(true); } catch (e) { /* noop */ }
+        document.getElementById('estado').textContent =
+          'Corregi lo que esta en naranja y despues volve al boton verde '
+          + 'del final.';
+        return;
+      }
+    }
+  } catch (e) { /* nunca frena el envio */ }
+  // ELIGIO LA FOTO Y NO ADJUNTO NINGUNA. Se iba convencida de haberla
+  // mandado. Mismo trato que todo lo demas: se le dice y, si insiste, el
+  // archivo se manda igual (su estudio sale lo mismo con nombre y fecha).
+  try {
+    if (typeof testigoFaltaLaFoto === 'function' && testigoFaltaLaFoto()) {
+      var t3 = 'Elegiste mandarme una foto, pero todavia no adjuntaste '
+        + 'ninguna.\n\n'
+        + 'Aceptar = te llevo a elegirla.\n'
+        + 'Cancelar = lo mando igual, y tu estudio sale lo mismo con tu '
+        + 'nombre y tu fecha de nacimiento.';
+      var irFoto = true;
+      try { irFoto = window.confirm(t3); } catch (e) { irFoto = false; }
+      if (irFoto) {
+        var d3 = -1;
+        try { d3 = pasoDelPrefijo('t_'); } catch (e) { d3 = -1; }
+        if (d3 >= 0) mostrarPaso(d3);
+        document.getElementById('estado').textContent =
+          'Apreta "Elegir la foto" y despues volve al boton verde del final.';
+        return;
+      }
+    }
+  } catch (e) { /* nunca frena el envio */ }
+  // LA RED: antes esto bajaba el archivo con lo que hubiera, sin decir nada.
+  var falta = partesEnBlanco(datos);
+  if (falta.length) {
+    var lista = [];
+    for (var i = 0; i < falta.length; i++) lista.push(falta[i].que);
+    // OJO: esta plantilla es un string comun de Python (no .format()), asi
+    // que los saltos de linea del JavaScript van con DOBLE barra. Con una
+    // sola, Python los convierte en un salto de linea de verdad, el string
+    // de JavaScript queda abierto y se cae el script ENTERO: la paciente se
+    // queda sin autoguardado, sin avance y sin boton de mandar.
+    var texto = 'Te falta contestar ' + lista.join(', y ') + '.\n\n'
+      + 'Si lo mandas asi, esa parte llega vacia y la vamos a tener que '
+      + 'hacer en la sesion.\n\n'
+      + 'Aceptar = te llevo a lo que falta.\n'
+      + 'Cancelar = lo mando igual, asi como esta.';
+    var seguir = true;
+    try { seguir = window.confirm(texto); } catch (e) { seguir = false; }
+    if (seguir) {
+      var destino = -1;
+      try { destino = pasoDelPrefijo(falta[0].pref); } catch (e) { destino = -1; }
+      if (destino >= 0) { mostrarPaso(destino); }
+      document.getElementById('estado').textContent =
+        'Contesta esta parte y despues volve al boton verde del final.';
+      return;
+    }
+  }
+  guardarLocal();
+  var txt = JSON.stringify(datos, null, 2);
+  try {
+    var blob = new Blob([txt], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = nombreArchivo();
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    document.getElementById('estado').textContent =
+      'Listo: se descargo el archivo ' + a.download + ' con ' + n +
+      ' respuestas' + (datos.foto ? ' y tu foto adentro' : '') +
+      '. Mandamelo y ya esta.';
+  } catch (e) {
+    document.getElementById('estado').textContent =
+      'Tu dispositivo no dejo descargar el archivo. Usa el otro boton para ' +
+      'copiar el texto y pegarmelo en un mensaje.';
+  }
+}
+
+function copiar() {
+  // El plan B: pegar el texto en un mensaje. La FOTO no entra por aca (son
+  // 120.000 letras: no se pega en ningun lado), asi que se saca y se le
+  // dice que la mande aparte. La via elegida SI viaja.
+  var datos = conTestigo(recolectar());
+  var tenia = !!datos.foto;
+  if (tenia) {
+    delete datos.foto;
+    if (datos.testigo) datos.testigo.foto_adjunta = false;
+  }
+  var txt = JSON.stringify(datos);
+  var ta = document.getElementById('copia');
+  ta.style.display = 'block';
+  ta.value = txt;
+  ta.select();
+  var cola = tenia
+    ? ' Tu foto no entra en un mensaje de texto: mandamela aparte, como una'
+      + ' foto normal.'
+    : '';
+  try {
+    document.execCommand('copy');
+    document.getElementById('estado').textContent =
+      'Copiado. Pegalo en un mensaje y mandamelo.' + cola;
+  } catch (e) {
+    document.getElementById('estado').textContent =
+      'Selecciona todo el texto de abajo, copialo y mandamelo.' + cola;
+  }
+}
+
+
+// --- EL TESTIGO: la via, el pais y la foto -------------------------------
+// Toda la seccion vive adentro de try/catch: si algo de aca falla, el
+// formulario sigue andando igual (la persona ve las tres opciones, elige
+// una y manda el archivo).
+var TESTIGO_FOTO = null;
+var TESTIGO_DONDE = 'mandamela por WhatsApp al +54 9 343 451-8981';
+// Hay una foto achicandose AHORA. Ver `testigoFotoElegida`.
+var TESTIGO_ACHICANDO = false;
+
+function testigoPaisEsArgentina() {
+  try {
+    var sel = document.getElementById('c_pais');
+    var v = sel ? (sel.value || '') : '';
+    if (!v) return true;                 // sin responder = Argentina
+    return /^argentin/i.test(v);
+  } catch (e) { return true; }
+}
+
+function testigoViaElegida() {
+  try {
+    var m = document.querySelector('input[name="t_via"]:checked');
+    return m ? m.value : 'nombre_fecha';
+  } catch (e) { return 'nombre_fecha'; }
+}
+
+// Eligio la foto y no adjunto ninguna. Del lado de Jose el aviso ya
+// estaba ("eligio FOTO y el archivo llego sin foto: pedisela"), pero ella
+// se iba convencida de que la habia mandado y el ida y vuelta lo terminaba
+// pagando en WhatsApp. Se le dice antes de que mande, con el mismo trato
+// que el resto del formulario: se avisa, no se traba.
+function testigoFaltaLaFoto() {
+  try {
+    return testigoViaElegida() === 'foto_datos'
+           && !(TESTIGO_FOTO && TESTIGO_FOTO.datos);
+  } catch (e) { return false; }
+}
+
+// Muestra las vias que corresponden al pais elegido y abre el instructivo
+// de la que esta marcada. Se llama sola cada vez que se toca algo.
+function testigoSincronizar() {
+  try {
+    var ar = testigoPaisEsArgentina();
+    // Si esta en Argentina, el aviso de "desde afuera el sobre no llega" ya
+    // no corresponde. Sin esto quedaba colgado: la que se habia equivocado
+    // de pais y volvia a Argentina veia las tres opciones -la del correo
+    // incluida- con un cartel naranja arriba diciendole que esa opcion no
+    // estaba. Se contradecian en la misma pantalla.
+    if (ar) testigoDecirPais('');
+    // "las tres" o "las dos", segun cuantas le quedan de verdad. Se toca
+    // una sola clase en el <html> y cambian las tres frases de una: el
+    // rotulo de la parte, el titulo del recuadro y el cuerpo.
+    try {
+      var raiz = document.documentElement;
+      if (raiz && raiz.classList) {
+        if (ar) raiz.classList.remove('afuera');
+        else raiz.classList.add('afuera');
+      }
+    } catch (e1) { /* la frase de tres queda, y las tres opciones tambien */ }
+    var chips = document.querySelectorAll('#t_opciones .via');
+    var i, c, entra;
+    for (i = 0; i < chips.length; i++) {
+      c = chips[i];
+      entra = ar || c.getAttribute('data-solo-ar') !== '1';
+      c.className = entra ? 'chip via' : 'chip via apagada';
+      // Si se estaba yendo del pais y tenia marcada la de correo, se
+      // vuelve a la de nombre y fecha: mandar un sobre desde afuera no
+      // llega, y quedarse con una opcion invisible marcada es peor.
+      if (!entra) {
+        var r = c.querySelector('input[type="radio"]');
+        if (r && r.checked) {
+          r.checked = false;
+          var d = document.querySelector('input[name="t_via"][value="nombre_fecha"]');
+          if (d) d.checked = true;
+          // El aviso va en la linea de la seccion y NO en la del bloque de
+          // la foto: ese bloque puede estar escondido justo cuando esto
+          // pasa, y entonces el cartel no lo lee nadie.
+          testigoDecirPais('Desde afuera de Argentina el sobre no llega, asi'
+            + ' que esa opcion no esta. Te deje la de nombre y fecha, que'
+            + ' vale exactamente lo mismo.');
+        }
+      }
+    }
+    var ayuda = document.getElementById('t_ayuda_pais');
+    if (ayuda) {
+      ayuda.textContent = ar
+        ? 'Tenes las tres. La primera es la mas comoda y es la que uso mas.'
+        : 'Estas son las dos que llegan hasta donde vivis. Las dos valen igual.';
+    }
+    var via = testigoViaElegida();
+    var bloques = document.querySelectorAll('.instructivo');
+    for (i = 0; i < bloques.length; i++) {
+      bloques[i].className = (bloques[i].getAttribute('data-via') === via)
+        ? 'instructivo puesto' : 'instructivo';
+    }
+  } catch (e) { /* la seccion nunca puede romper el formulario */ }
+}
+
+function testigoDecir(txt) {
+  try {
+    var e = document.getElementById('t_foto_estado');
+    if (e) e.textContent = txt || '';
+  } catch (e2) { /* noop */ }
+}
+
+function testigoDecirPais(txt) {
+  try {
+    var e = document.getElementById('t_aviso_pais');
+    if (e) e.textContent = txt || '';
+  } catch (e2) { /* noop */ }
+}
+
+// --- LA FOTO -------------------------------------------------------------
+// Se achica en el propio telefono ANTES de guardarla: una foto de celular
+// cruda pesa 3,3 MB en el archivo y no entra en ningun lado; a 1000 px y
+// calidad 0,75 queda en unos 90 KB. Se usa readAsDataURL y NUNCA
+// createObjectURL: con blob: el canvas puede quedar marcado como sucio
+// cuando el archivo se abrio con doble clic (file://) y toDataURL tira.
+var TESTIGO_PASOS = [[1000, 0.75], [800, 0.6], [640, 0.5]];
+
+function testigoAchicar(img, max, calidad) {
+  var w = img.width, h = img.height;
+  if (!w || !h) return null;
+  if (w >= h) { if (w > max) { h = Math.round(h * max / w); w = max; } }
+  else { if (h > max) { w = Math.round(w * max / h); h = max; } }
+  var c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  var ctx = c.getContext('2d');
+  if (!ctx) return null;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, w, h);
+  ctx.drawImage(img, 0, 0, w, h);
+  var url = c.toDataURL('image/jpeg', calidad);
+  var coma = url.indexOf(',');
+  if (coma < 0) return null;
+  var b64 = url.slice(coma + 1);
+  return { url: url, datos: b64, ancho: w, alto: h,
+           bytes: Math.round(b64.length * 0.75) };
+}
+
+function testigoFotoFallo() {
+  TESTIGO_FOTO = null;
+  TESTIGO_ACHICANDO = false;
+  try {
+    var p = document.getElementById('t_foto_previa');
+    if (p) { p.style.display = 'none'; p.removeAttribute('src'); }
+    var b = document.getElementById('t_foto_sacar');
+    if (b) b.style.display = 'none';
+  } catch (e) { /* noop */ }
+  testigoDecir('No pude achicar la foto en este telefono. No pasa nada: '
+    + TESTIGO_DONDE + ', junto con el archivo que me mandas al final. Tu '
+    + 'estudio sale exactamente igual.');
+}
+
+function testigoFotoElegida(input) {
+  try {
+    var f = input && input.files && input.files[0];
+    if (!f) return;
+    // YA ESTA ACHICANDO OTRA. Una foto de 12 megapixeles tarda entre 6 y
+    // 16 segundos MEDIDOS, y en un telefono mas. En ese rato ella toca de
+    // nuevo porque parece colgado, y arrancaban dos conversiones a la vez:
+    // la que terminaba ultima pisaba a la otra y la vista previa podia
+    // quedar mostrando una foto distinta de la que viajaba adentro.
+    if (TESTIGO_ACHICANDO) {
+      testigoDecir('Todavia estoy con la foto anterior. Esperame que '
+        + 'termine, no la toques.');
+      return;
+    }
+    TESTIGO_ACHICANDO = true;
+    // NO DECIR "un segundo" CUANDO SON QUINCE. Si el cartel promete un
+    // segundo y pasan diez, ella cree que se colgo: cierra, toca de nuevo,
+    // o lo manda sin foto. Que diga lo que va a pasar de verdad.
+    testigoDecir('Estoy achicando tu foto. En un telefono puede tardar unos '
+      + 'segundos: no cierres ni toques nada, te aviso cuando este.');
+    var lector = new FileReader();
+    lector.onerror = function () { testigoFotoFallo(); };
+    lector.onload = function (ev) {
+      try {
+        var img = new Image();
+        img.onerror = function () { testigoFotoFallo(); };
+        img.onload = function () {
+          try {
+            var r = null, i;
+            for (i = 0; i < TESTIGO_PASOS.length; i++) {
+              r = testigoAchicar(img, TESTIGO_PASOS[i][0], TESTIGO_PASOS[i][1]);
+              if (r && r.bytes <= 600000) break;
+            }
+            if (!r || r.bytes > 900000) { testigoFotoFallo(); return; }
+            TESTIGO_FOTO = { nombre: String(f.name || 'foto.jpg').slice(0, 80),
+                             mime: 'image/jpeg', datos: r.datos,
+                             ancho: r.ancho, alto: r.alto, bytes: r.bytes };
+            var p = document.getElementById('t_foto_previa');
+            if (p) { p.src = r.url; p.style.display = 'block'; }
+            var b = document.getElementById('t_foto_sacar');
+            if (b) b.style.display = 'inline-block';
+            TESTIGO_ACHICANDO = false;
+            testigoDecir('Listo, tu foto quedo adjunta ('
+              + Math.round(r.bytes / 1024) + ' KB). Viaja adentro del '
+              + 'archivo que me mandas al final: no tenes que mandarla aparte.');
+            testigoGuardarFoto();
+          } catch (e) { testigoFotoFallo(); }
+        };
+        img.src = ev.target.result;
+      } catch (e) { testigoFotoFallo(); }
+    };
+    lector.readAsDataURL(f);
+  } catch (e) { testigoFotoFallo(); }
+}
+
+function testigoFotoSacar() {
+  try {
+    TESTIGO_FOTO = null;
+    var inp = document.getElementById('t_foto_archivo');
+    if (inp) inp.value = '';
+    var p = document.getElementById('t_foto_previa');
+    if (p) { p.style.display = 'none'; p.removeAttribute('src'); }
+    var b = document.getElementById('t_foto_sacar');
+    if (b) b.style.display = 'none';
+    testigoDecir('Saque la foto. Podes elegir otra cuando quieras.');
+    try { window.localStorage.removeItem(CLAVE + '_foto'); } catch (e) {}
+  } catch (e) { /* noop */ }
+}
+
+// La foto se guarda APARTE de las respuestas, con su propia llave. Si el
+// telefono se queda sin lugar, lo que se pierde es la foto y no las 75
+// respuestas que ya escribio.
+function testigoGuardarFoto() {
+  try {
+    if (!TESTIGO_FOTO) return;
+    window.localStorage.setItem(CLAVE + '_foto', JSON.stringify(TESTIGO_FOTO));
+  } catch (e) { /* sin lugar: la foto sigue en memoria hasta que mande */ }
+}
+
+function testigoRestaurarFoto() {
+  try {
+    var crudo = window.localStorage.getItem(CLAVE + '_foto');
+    if (!crudo) return;
+    var f = JSON.parse(crudo);
+    if (!f || !f.datos) return;
+    TESTIGO_FOTO = f;
+    var p = document.getElementById('t_foto_previa');
+    if (p) { p.src = 'data:' + (f.mime || 'image/jpeg') + ';base64,' + f.datos;
+             p.style.display = 'block'; }
+    var b = document.getElementById('t_foto_sacar');
+    if (b) b.style.display = 'inline-block';
+    testigoDecir('Tu foto quedo guardada de la vez pasada. Ya esta adjunta.');
+  } catch (e) { /* si no se pudo, elige otra y listo */ }
+}
+
+// Lo que se le agrega al archivo que baja. Aditivo: si esto devuelve
+// vacio, el .json sale exactamente como salia antes.
+function testigoParaElArchivo() {
+  var out = {};
+  try {
+    var via = testigoViaElegida();
+    var ofrecidas = [];
+    var chips = document.querySelectorAll('#t_opciones .via');
+    for (var i = 0; i < chips.length; i++) {
+      if (chips[i].className.indexOf('apagada') < 0) {
+        ofrecidas.push(chips[i].getAttribute('data-via'));
+      }
+    }
+    var sel = document.getElementById('c_pais');
+    out.testigo = { via: via, pais: (sel ? (sel.value || '') : ''),
+                    ofrecidas: ofrecidas,
+                    foto_adjunta: !!(TESTIGO_FOTO && TESTIGO_FOTO.datos) };
+    if (TESTIGO_FOTO && TESTIGO_FOTO.datos) out.foto = TESTIGO_FOTO;
+  } catch (e) { return {}; }
+  return out;
+}
+
+// --- LOS DATOS DE CONTACTO: que esten, y que sean de verdad --------------
+// Jose: "los datos de contacto tambien y verificar que sean asi, con algun
+// confirmador validador, para luego poder hacer las devoluciones". El mail
+// usa el MISMO criterio que el backend (server.py, _EMAIL_RE) y el
+// telefono el mismo que arma el link de WhatsApp (delivery_whatsapp,
+// _clean_phone): si aca pasa, del otro lado tambien.
+//
+// NINGUNO FRENA EL ENVIO. Avisa, marca en naranja y lleva hasta el campo;
+// si la persona insiste, el archivo se manda igual. Un formulario que no
+// se puede terminar es peor que uno con un dato flojo.
+
+// Escribio "+" adelante, o arranco con "00"? Entonces ya declaro el codigo
+// de su pais y los digitos son los que son: no se les toca nada.
+function telInternacional(raw) {
+  try { return /^\s*(\+|00)/.test(String(raw || '')); } catch (e) { return false; }
+}
+
+// LAS REGLAS ARGENTINAS SOLO CORREN PARA ARGENTINOS. Antes corrian para
+// todos, y a cualquier numero de 10 u 11 digitos que no empezara con 54 le
+// pegaban un "549" adelante. Carmen, de Valencia, escribia su numero de
+// verdad (+34 612 34 56 78) y el formulario le contestaba "Te escribo al
+// +54 9 461 234-5678. Esta bien asi?": un numero argentino que no es de
+// nadie. Justo en el confirmador que esta puesto para poder hacerle la
+// devolucion, y justo con la gente de afuera, que es para quien existe
+// todo el filtro por pais. Lo mismo le pasaba a Estados Unidos (+1),
+// Suiza (+41) y Australia (+61).
+function telLimpio(raw) {
+  var d = String(raw || '').replace(/[^0-9]/g, '').replace(/^0+/, '');
+  if (telInternacional(raw) || !testigoPaisEsArgentina()) return d;
+  if (d.length === 12 && d.indexOf('54') !== 0) {
+    for (var k = 2; k <= 4; k++) {
+      if (d.slice(k, k + 2) === '15') { d = d.slice(0, k) + d.slice(k + 2); break; }
+    }
+  }
+  if ((d.length === 10 || d.length === 11) && d.indexOf('54') !== 0) {
+    d = '549' + d.slice(-10);
+  }
+  return d;
+}
+
+// Solo para MOSTRARSELO: el numero que se usa de verdad son los digitos
+// pelados. Buenos Aires lleva caracteristica de 2 (11) y el resto del pais
+// de 3 en la enorme mayoria de los casos; si le erra al espacio no importa,
+// lo que tiene que poder leer es si el numero es el suyo.
+function telLindo(d, raw) {
+  try {
+    if (!d) return '';
+    if (d.indexOf('549') === 0 && d.length === 13) {
+      var r = d.slice(3);
+      var corte = (r.indexOf('11') === 0) ? 2 : 3;
+      var area = r.slice(0, corte), resto = r.slice(corte);
+      var mitad = resto.length - 4;
+      return '+54 9 ' + area + ' ' + resto.slice(0, mitad) + '-'
+             + resto.slice(mitad);
+    }
+    // El "+" se le pone solo si ella misma escribio un codigo de pais.
+    // Ponerselo a un numero local pelado es inventarle uno que no puso.
+    return (telInternacional(raw) ? '+' : '') + d;
+  } catch (e) { return d; }
+}
+
+// Devuelve {mal: '...'} o {bien: '...'} o {} si esta vacio y no hace falta.
+function revisarCampo(clave) {
+  var el = document.getElementById('c_' + clave);
+  if (!el) return {};
+  var v = String(el.value || '').trim();
+  if (clave === 'nombre') {
+    if (!v) return { mal: 'Necesito tu nombre para saber de quien es el estudio.' };
+    if (v.length < 3) return { mal: 'Ese nombre quedo muy corto. Escribilo entero.' };
+    if (v.split(/\s+/).length < 2) {
+      return { mal: 'Poneme tambien tu apellido, como figura en tu documento.' };
+    }
+    return { bien: 'Anotado: ' + v };
+  }
+  if (clave === 'fecha_nacimiento') {
+    if (!v) return { mal: 'Tu fecha de nacimiento es de las dos cosas que necesito si o si.' };
+    var p = v.split('-');
+    var anio = parseInt(p[0], 10);
+    if (!anio || p.length < 3) return { mal: 'Esa fecha no se entiende. Elegila con el calendario.' };
+    var hoy = new Date();
+    if (anio > hoy.getFullYear()) return { mal: 'Esa fecha esta en el futuro. Fijate el ano.' };
+    if (anio < 1900) return { mal: 'Ese ano no puede ser. Fijate que no se te haya ido un digito.' };
+    var d2 = new Date(v + 'T00:00:00');
+    if (d2 && d2.getTime && d2.getTime() > hoy.getTime()) {
+      return { mal: 'Esa fecha esta en el futuro. Fijate el ano.' };
+    }
+    return { bien: 'Anotada: ' + p[2] + '/' + p[1] + '/' + p[0] };
+  }
+  if (clave === 'email') {
+    if (!v) return { mal: 'Sin mail no te puedo mandar el informe cuando este.' };
+    if (/\s/.test(v)) return { mal: 'Ese mail tiene un espacio en el medio. Sacalo.' };
+    if (v.indexOf('@') < 0) return { mal: 'A ese mail le falta el arroba (@).' };
+    var tr = v.split('@');
+    if (tr.length !== 2 || !tr[0]) return { mal: 'Ese mail tiene dos arrobas o le falta lo de adelante.' };
+    if (!tr[1] || tr[1].indexOf('.') < 0) {
+      return { mal: 'Despues del arroba te falta el punto y lo que sigue: gmail.com, hotmail.com, lo que uses.' };
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) {
+      return { mal: 'Ese mail parece que le falta algo. Miralo de nuevo.' };
+    }
+    return { bien: 'Te escribo a: ' + v };
+  }
+  if (clave === 'whatsapp') {
+    if (!v) return { mal: 'Sin WhatsApp no te puedo avisar ni hacerte la devolucion.' };
+    var d = telLimpio(v);
+    if (d.length < 8) return { mal: 'Eso no parece un telefono. Escribi solo los numeros, con la caracteristica.' };
+    if (d.length > 15) return { mal: 'Ese numero tiene de mas. Fijate que no se te haya repetido un digito.' };
+    // Vive afuera y no escribio el codigo de su pais: asi el WhatsApp no
+    // le llega nunca. Se lo pedimos; frenar no frena (Siguiente pasa igual).
+    if (!testigoPaisEsArgentina() && !telInternacional(v)) {
+      return { mal: 'Ponele adelante el codigo de tu pais, con el mas: por ejemplo +34 612 34 56 78. Sin eso no te llega el WhatsApp.' };
+    }
+    return { bien: 'Te escribo al ' + telLindo(d, v) + '. Esta bien asi?' };
+  }
+  if (clave === 'pais') {
+    if (!v) return { mal: 'Decime en que pais vivis: de eso dependen las opciones de aca abajo.' };
+    return { bien: '' };
+  }
+  return {};
+}
+
+var CONTACTO_OBLIGATORIOS = ['nombre', 'fecha_nacimiento', 'email',
+                             'whatsapp', 'pais'];
+
+// Pinta el aviso de UN campo. Devuelve true si esta bien.
+function pintarCampo(clave) {
+  try {
+    var r = revisarCampo(clave);
+    var el = document.getElementById('c_' + clave);
+    if (!el) return true;
+    var caja = el.parentNode;
+    var av = document.getElementById('av_c_' + clave);
+    var eco = document.getElementById('ok_c_' + clave);
+    if (av) av.textContent = r.mal || '';
+    if (eco) eco.textContent = r.mal ? '' : (r.bien || '');
+    if (caja && caja.className !== undefined) {
+      caja.className = r.mal ? 'campo mal' : 'campo';
+    }
+    return !r.mal;
+  } catch (e) { return true; }
+}
+
+function revisarContacto(pintar) {
+  var faltan = [];
+  try {
+    for (var i = 0; i < CONTACTO_OBLIGATORIOS.length; i++) {
+      var k = CONTACTO_OBLIGATORIOS[i];
+      var r = revisarCampo(k);
+      if (pintar) pintarCampo(k);
+      if (r && r.mal) faltan.push(r.mal);
+    }
+  } catch (e) { return []; }
+  return faltan;
+}
+
+// El paso donde vive el contacto. -1 si no se pudo armar por pasos.
+function pasoDelContacto() {
+  try { return pasoDelPrefijo('c_'); } catch (e) { return -1; }
+}
+
+// Cuantas veces apreto Siguiente en el paso del contacto teniendo algo mal.
+// A la SEGUNDA lo dejamos pasar: el aviso queda escrito, pero nadie se
+// queda encerrado en la primera pantalla.
+var insistioContacto = 0;
+
+function puedeAvanzar(desde) {
+  try {
+    var pc = pasoDelContacto();
+    if (pc < 0 || desde !== pc) return true;
+    var faltan = revisarContacto(true);
+    if (!faltan.length) { insistioContacto = 0; return true; }
+    insistioContacto++;
+    if (insistioContacto >= 2) return true;
+    var est = document.getElementById('estado');
+    if (est) {
+      est.textContent = (faltan.length === 1)
+        ? (faltan[0] + '  Si no lo tenes a mano, apreta Siguiente de nuevo y seguimos.')
+        : ('Me faltan ' + faltan.length + ' datos de arriba, mira los avisos '
+           + 'en naranja. Si no los tenes a mano, apreta Siguiente de nuevo '
+           + 'y seguimos.');
+    }
+    try {
+      var primero = document.querySelector('.campo.mal');
+      if (primero && primero.scrollIntoView) primero.scrollIntoView();
+    } catch (e2) { /* noop */ }
+    return false;
+  } catch (e) { return true; }
+}
+
+// Se engancha a lo que ya escucha el formulario entero.
+function testigoAlTocar(ev) {
+  try {
+    var t = ev && ev.target;
+    if (!t) return;
+    // Solo dos cosas mueven la seccion: el pais y la opcion elegida. El
+    // resto del formulario (70 campos que disparan un evento por letra)
+    // no tiene que pagar nada de esto.
+    if (t.name === 't_via' || t.id === 'c_pais') {
+      // El aviso de "esa opcion no llega hasta alla" se borra en cuanto
+      // vuelve a elegir: si no, le queda un cartel colgado que ya no
+      // corresponde a lo que tiene marcado.
+      if (t.name === 't_via') testigoDecirPais('');
+      testigoSincronizar();
+      if (t.name === 't_via') return;
+    }
+    if (t.id && t.id.indexOf('c_') === 0) {
+      var clave = t.id.slice(2);
+      // Solo se re-pinta un campo que YA estaba marcado en rojo, o cuando
+      // termino de escribir: nadie quiere que le griten en la tercera letra.
+      var caja = t.parentNode;
+      if ((caja && String(caja.className).indexOf('mal') >= 0)
+          || ev.type === 'change') {
+        pintarCampo(clave);
+      }
+    }
+  } catch (e) { /* noop */ }
+}
+
+// --- EL COMPROBANTE DE PAGO (solo ficha web) ------------------------------
+var COMPROBANTE_PARAMS = [
+  ['payment_id', 'mercadopago'], ['collection_id', 'mercadopago'],
+  ['tx', 'paypal'], ['txn_id', 'paypal'], ['paymentid', 'paypal'],
+  ['orderid', 'paypal'], ['order_id', 'paypal']];
+var COMPROBANTE_VISTO = null;
+
+function comprobanteLimpiar(v) {
+  return String(v || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 64);
+}
+
+function comprobanteDeLaURL() {
+  try {
+    var q = String(window.location.search || '');
+    var hash = String(window.location.hash || '');
+    if (!q && hash.indexOf('?') >= 0) q = hash.slice(hash.indexOf('?'));
+    if (q.charAt(0) === '?') q = q.slice(1);
+    if (!q) return null;
+    var partes = q.split('&'), mapa = {}, i;
+    for (i = 0; i < partes.length; i++) {
+      var p = partes[i].split('=');
+      if (!p[0]) continue;
+      var k = '', v = '';
+      try {
+        k = decodeURIComponent(p[0]).toLowerCase();
+        v = decodeURIComponent((p[1] || '').replace(/\+/g, ' '));
+      } catch (e) { continue; }
+      if (!(k in mapa)) mapa[k] = v;
+    }
+    for (i = 0; i < COMPROBANTE_PARAMS.length; i++) {
+      var id = comprobanteLimpiar(mapa[COMPROBANTE_PARAMS[i][0]]);
+      // Mercado Pago vuelve con payment_id=null cuando el pago quedo
+      // colgado: 'null' escrito no es un comprobante.
+      if (id && id.toLowerCase() !== 'null') {
+        return { proveedor: COMPROBANTE_PARAMS[i][1], id: id };
+      }
+    }
+  } catch (e) { /* sin URL legible, el campo queda para completar a mano */ }
+  return null;
+}
+
+function comprobanteAplicar() {
+  try {
+    var campo = document.getElementById('w_comprobante');
+    var prov = document.getElementById('w_comprobante_prov');
+    if (!campo) return;
+    COMPROBANTE_VISTO = comprobanteDeLaURL();
+    if (COMPROBANTE_VISTO && !(campo.value || '').trim()) {
+      campo.value = COMPROBANTE_VISTO.id;
+      if (prov) prov.value = COMPROBANTE_VISTO.proveedor;
+      try { guardarLocal(); } catch (e) { /* noop */ }
+    }
+    var estado = document.getElementById('w_comprobante_estado');
+    if (estado && prov && (campo.value || '').trim()) {
+      var nombre = prov.value === 'mercadopago' ? 'Mercado Pago'
+        : (prov.value === 'paypal' ? 'PayPal' : '');
+      estado.textContent = nombre
+        ? 'Lo tome solo de tu pago de ' + nombre + '. Si no es, corregilo.'
+        : '';
+    }
+    campo.addEventListener('input', function () {
+      try {
+        var v = (campo.value || '').trim();
+        if (prov) {
+          prov.value = (COMPROBANTE_VISTO && v === COMPROBANTE_VISTO.id)
+            ? COMPROBANTE_VISTO.proveedor : '';
+        }
+        if (estado) estado.textContent = '';
+      } catch (e) { /* noop */ }
+    });
+  } catch (e) { /* el formulario sigue entero sin el autocompletado */ }
+}
+
+// recolectar() se envuelve, no se toca: si esto falla, el archivo sale
+// igual que siempre (sin comprobante) y todo lo demas intacto.
+var recolectarSinComprobante = recolectar;
+recolectar = function () {
+  var datos = recolectarSinComprobante();
+  try {
+    var campo = document.getElementById('w_comprobante');
+    var prov = document.getElementById('w_comprobante_prov');
+    var id = campo ? comprobanteLimpiar(campo.value) : '';
+    if (id && id.toLowerCase() !== 'null') {
+      datos.contacto = datos.contacto || {};
+      datos.contacto.comprobante = {
+        proveedor: (prov && prov.value) || '', id: id };
+    }
+  } catch (e) { /* sin comprobante, el archivo viaja igual */ }
+  return datos;
+};
+
+// Despues de restaurar() y armarPasos(): lo guardado manda, el
+// autocompletado solo llena lo que este vacio.
+try { window.setTimeout(comprobanteAplicar, 0); } catch (e) { /* noop */ }
+
+// --- A DONDE MANDARLA (solo ficha web) ------------------------------------
+var _descargarDeSiempre = descargar;
+descargar = function () {
+  _descargarDeSiempre();
+  try { setTimeout(mostrarBotonesEnvio, 350); } catch (e) {}
+};
+
+function mostrarBotonesEnvio() {
+  try {
+    var est = document.getElementById('estado');
+    if (!est || est.textContent.indexOf('Listo') !== 0) return;
+    if (document.getElementById('envio-botones')) return;
+    var caja = document.createElement('div');
+    caja.id = 'envio-botones';
+    caja.style.cssText = 'margin-top:14px;display:flex;flex-wrap:wrap;' +
+      'gap:10px;justify-content:center';
+    function boton(texto, href) {
+      var a = document.createElement('a');
+      a.textContent = texto;
+      a.href = href;
+      a.rel = 'noopener';
+      a.style.cssText = 'display:inline-block;padding:13px 22px;' +
+        'border-radius:999px;text-decoration:none;font-weight:700;' +
+        'font-size:15px;background:#006B64;color:#fff';
+      return a;
+    }
+    var wsp = '5493434518981';
+    if (wsp) {
+      caja.appendChild(boton('Mandarla por WhatsApp',
+        'https://wa.me/' + wsp + '?text=' + encodeURIComponent(
+          'Hola Jose! Te mando mi ficha completada: te adjunto el ' +
+          'archivo que se acaba de descargar.')));
+    }
+    var mail = 'tarjetacuantica0@gmail.com';
+    if (mail) {
+      caja.appendChild(boton('Mandarla por mail',
+        'mailto:' + mail + '?subject=' + encodeURIComponent(
+          'Mi ficha completada') + '&body=' + encodeURIComponent(
+          'Te adjunto el archivo que se descargo al terminar la ficha.')));
+    }
+    var ayuda = document.createElement('p');
+    ayuda.style.cssText = 'margin-top:8px;font-size:13px;opacity:.75;' +
+      'text-align:center;width:100%';
+    ayuda.textContent = 'El archivo quedo en tu carpeta de Descargas: ' +
+      'adjuntalo al mensaje con el clip.';
+    caja.appendChild(ayuda);
+    est.parentNode.insertBefore(caja, est.nextSibling);
+    caja.scrollIntoView({behavior: 'smooth', block: 'center'});
+  } catch (e) {}
+}
+
+
+try {
+  if (restaurar()) document.getElementById('retomado').style.display = 'block';
+} catch (e) { /* si no se pudo retomar, el formulario sale en blanco */ }
+
+// La seccion del testigo se acomoda DESPUES de restaurar (asi respeta la
+// opcion que ya habia elegido) y adentro de su propio try. Si esto falla,
+// se ven las tres opciones y elige igual.
+try {
+  if (typeof testigoRestaurarFoto === 'function') testigoRestaurarFoto();
+  if (typeof testigoSincronizar === 'function') testigoSincronizar();
+} catch (e) { /* noop */ }
+
+// Los pasos se arman ULTIMO y adentro de un try: si algo falla, el
+// formulario queda como el de siempre (todo a la vista, boton de mandar
+// abajo) en vez de quedar en blanco. Nunca puede dejar a la paciente sin
+// formulario.
+try {
+  if (armarPasos()) {
+    mostrarPaso(0);
+  } else {
+    document.getElementById('navegacion').style.display = 'none';
+    document.getElementById('finales').style.display = '';
+  }
+} catch (e) {
+  PASOS = [];
+  try {
+    var f0 = form();
+    for (var i0 = 0; i0 < f0.children.length; i0++) {
+      f0.children[i0].style.display = '';
+    }
+    document.getElementById('navegacion').style.display = 'none';
+    document.getElementById('finales').style.display = '';
+  } catch (e2) { /* noop */ }
+}
+actualizarProgreso();
+</script>
+</body>
+</html>

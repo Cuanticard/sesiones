@@ -1476,6 +1476,32 @@ recolectar = function () {
   return datos;
 };
 
+// --- UN BORRADOR POR COMPRADOR --------------------------------------------
+// La clave del guardado local era UNA para todos: dos personas que pagaban
+// desde la misma computadora compartian el borrador (auditoria 2026-09-08).
+// Cada pago vuelve con su numero en la direccion, asi que la clave lo suma:
+// compradores distintos, borradores distintos. Sin numero (visita directa),
+// la clave de siempre. El borrador que ya existia con la clave vieja se
+// MUDA a la nueva -- y se saca de la vieja, asi el proximo comprador de
+// esa computadora arranca de cero en vez de heredarlo. Corre ACA, antes
+// del restaurar() que vive mas abajo en este mismo script.
+try {
+  var _compDeLaURL = comprobanteDeLaURL();
+  if (_compDeLaURL && _compDeLaURL.id) {
+    var _claveConPago = CLAVE + '_' + _compDeLaURL.id;
+    try {
+      if (window.localStorage.getItem(_claveConPago) === null) {
+        var _borradorViejo = window.localStorage.getItem(CLAVE);
+        if (_borradorViejo !== null) {
+          window.localStorage.setItem(_claveConPago, _borradorViejo);
+          window.localStorage.removeItem(CLAVE);
+        }
+      }
+    } catch (e) { /* sin guardado local, la ficha anda igual */ }
+    CLAVE = _claveConPago;
+  }
+} catch (e) { /* la clave queda la de siempre */ }
+
 // Despues de restaurar() y armarPasos(): lo guardado manda, el
 // autocompletado solo llena lo que este vacio.
 try { window.setTimeout(comprobanteAplicar, 0); } catch (e) { /* noop */ }
@@ -1498,11 +1524,32 @@ try {
   };
 } catch (e) {}
 
-function mostrarBotonesEnvio() {
+// El plan B ("No pude descargar: copiar el texto") dejaba a la paciente
+// igual de sola: texto copiado y ni un boton que diga a donde mandarlo
+// (auditoria 2026-09-08). Mismos botones, con el texto de PEGAR.
+try {
+  var _copiarDeSiempre = copiar;
+  copiar = function () {
+    _copiarDeSiempre();
+    try {
+      setTimeout(function () { mostrarBotonesEnvio(true); }, 350);
+    } catch (e) {}
+  };
+} catch (e) {}
+
+function mostrarBotonesEnvio(porCopia) {
   try {
     var est = document.getElementById('estado');
-    if (!est || est.textContent.indexOf('Listo') !== 0) return;
-    if (document.getElementById('envio-botones')) return;
+    if (!est) return;
+    var t = est.textContent || '';
+    if (porCopia) {
+      // 'Copiado...' o 'Selecciona...' (cuando ni copiar dejo): en los
+      // dos casos el texto esta a mano y los botones sirven igual.
+      if (t.indexOf('Copiado') !== 0 && t.indexOf('Selecciona') !== 0) return;
+    } else if (t.indexOf('Listo') !== 0) { return; }
+    // Si probo un camino y despues el otro, quedan los del ultimo.
+    var previa = document.getElementById('envio-botones');
+    if (previa && previa.parentNode) previa.parentNode.removeChild(previa);
     var caja = document.createElement('div');
     caja.id = 'envio-botones';
     caja.style.cssText = 'margin-top:14px;display:flex;flex-wrap:wrap;' +
@@ -1520,22 +1567,27 @@ function mostrarBotonesEnvio() {
     var wsp = '5493434518981';
     if (wsp) {
       caja.appendChild(boton('Mandarla por WhatsApp',
-        'https://wa.me/' + wsp + '?text=' + encodeURIComponent(
-          'Hola Jose! Te mando mi ficha completada: te adjunto el ' +
-          'archivo que se acaba de descargar.')));
+        'https://wa.me/' + wsp + '?text=' + encodeURIComponent(porCopia
+          ? 'Hola Jose! Aca abajo te pego mi ficha completada:'
+          : 'Hola Jose! Te mando mi ficha completada: te adjunto el ' +
+            'archivo que se acaba de descargar.')));
     }
     var mail = 'tarjetacuantica0@gmail.com';
     if (mail) {
       caja.appendChild(boton('Mandarla por mail',
         'mailto:' + mail + '?subject=' + encodeURIComponent(
-          'Mi ficha completada') + '&body=' + encodeURIComponent(
-          'Te adjunto el archivo que se descargo al terminar la ficha.')));
+          'Mi ficha completada') + '&body=' + encodeURIComponent(porCopia
+          ? 'Hola Jose! Aca abajo te pego el texto de mi ficha completada:'
+          : 'Te adjunto el archivo que se descargo al terminar la ficha.')));
     }
     var ayuda = document.createElement('p');
     ayuda.style.cssText = 'margin-top:8px;font-size:13px;opacity:.75;' +
       'text-align:center;width:100%';
-    ayuda.textContent = 'El archivo quedo en tu carpeta de Descargas: ' +
-      'adjuntalo al mensaje con el clip.';
+    ayuda.textContent = porCopia
+      ? 'El texto de tu ficha ya quedo copiado: abri el mensaje, mantene ' +
+        'apretado donde se escribe, toca "Pegar" y mandalo.'
+      : 'El archivo quedo en tu carpeta de Descargas: ' +
+        'adjuntalo al mensaje con el clip.';
     caja.appendChild(ayuda);
     est.parentNode.insertBefore(caja, est.nextSibling);
     caja.scrollIntoView({behavior: 'smooth', block: 'center'});

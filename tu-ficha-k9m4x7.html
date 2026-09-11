@@ -30,6 +30,14 @@
   .nota, .consigna { font-size: 13px; margin: 6px 0 12px; }
   .nota { opacity: .75; }
   .consigna { color: #C47A35; font-style: italic; }
+  /* LA FECHA DE NACIMIENTO, en tres (2026-09-11). Los tres entran en una
+     sola linea aun en el telefono mas angosto: el mes se lleva el lugar que
+     sobra y los dos numeros quedan chicos, que es lo que son. */
+  .fnac { display: flex; gap: 8px; align-items: center; }
+  .fnac-n { width: 4.2em; text-align: center; }
+  .fnac-a { width: 5.6em; text-align: center; }
+  .fnac-m { flex: 1 1 auto; min-width: 0; }
+
   .campo { margin: 20px 0; }
   .etiqueta { display: block; font-weight: bold; margin-bottom: 4px;
               font-size: 17px; }
@@ -216,7 +224,7 @@
          si o si: con eso solo ya puedo hacer tu estudio. El mail y el
          WhatsApp son por donde te llega despues.</p>
     </div>
-    <section><div class="campo"><label class="etiqueta" for="c_nombre">Tu nombre y apellido <span class="hace-falta">hace falta</span></label><p class="ayuda">Nombre y apellido completos, como figuran en tu documento.</p><input type="text" id="c_nombre" name="c_nombre"><p class="aviso" id="av_c_nombre"></p><p class="eco" id="ok_c_nombre"></p></div><div class="campo"><label class="etiqueta" for="c_fecha_nacimiento">Tu fecha de nacimiento <span class="hace-falta">hace falta</span></label><p class="ayuda">Con tu nombre completo y esta fecha ya puedo hacer tu estudio.</p><input type="date" id="c_fecha_nacimiento" name="c_fecha_nacimiento"><p class="aviso" id="av_c_fecha_nacimiento"></p><p class="eco" id="ok_c_fecha_nacimiento"></p></div><div class="campo"><label class="etiqueta" for="c_email">Tu email <span class="hace-falta">hace falta</span></label><p class="ayuda">Ahi te llega tu informe cuando este listo.</p><input type="text" id="c_email" name="c_email"><p class="aviso" id="av_c_email"></p><p class="eco" id="ok_c_email"></p></div><div class="campo"><label class="etiqueta" for="c_whatsapp">Tu WhatsApp <span class="hace-falta">hace falta</span></label><p class="ayuda">Con codigo de pais. Ejemplo: +54 9 11 1234-5678</p><input type="text" id="c_whatsapp" name="c_whatsapp"><p class="aviso" id="av_c_whatsapp"></p><p class="eco" id="ok_c_whatsapp"></p></div><div class="campo"><label class="etiqueta" for="c_pais">En que pais vivis <span class="hace-falta">hace falta</span></label><p class="ayuda">Con esto te armamos el plan de comidas con las frutas y verduras que de verdad se consiguen donde vivis, y en la temporada que estas atravesando. Si tu pais no esta en la lista, dejalo sin responder y lo vemos en la sesion.</p><select id="c_pais" name="c_pais"><option value="">(sin responder)</option><option value="Argentina">Argentina</option><option value="Bolivia">Bolivia</option><option value="Brasil">Brasil</option><option value="Canada">Canadá</option><option value="Chile">Chile</option><option value="Colombia">Colombia</option><option value="Costa Rica">Costa Rica</option><option value="Cuba">Cuba</option><option value="Ecuador">Ecuador</option><option value="El Salvador">El Salvador</option><option value="Espana">España</option><option value="Estados Unidos">Estados Unidos</option><option value="Guatemala">Guatemala</option><option value="Honduras">Honduras</option><option value="Mexico">México</option><option value="Nicaragua">Nicaragua</option><option value="Panama">Panamá</option><option value="Paraguay">Paraguay</option><option value="Peru">Perú</option><option value="Puerto Rico">Puerto Rico</option><option value="Republica Dominicana">República Dominicana</option><option value="Uruguay">Uruguay</option><option value="Venezuela">Venezuela</option><option value="Australia">Australia</option><option value="Nueva Zelanda">Nueva Zelanda</option><option value="Sudafrica">Sudáfrica</option></select><p class="aviso" id="av_c_pais"></p><p class="eco" id="ok_c_pais"></p></div><div class="campo"><label class="etiqueta" for="c_ciudad">En que ciudad</label><p class="ayuda">Ejemplo: La Plata</p><input type="text" id="c_ciudad" name="c_ciudad"></div><div class="campo" id="campo_comprobante"><label class="etiqueta" for="w_comprobante">Comprobante de pago</label><p class="ayuda">Se completa solo con el numero de tu pago. Si quedo vacio, escribi el numero de operacion que te dio Mercado Pago o PayPal (esta en el mail del pago).</p><input type="text" id="w_comprobante" name="w_comprobante"><input type="hidden" id="w_comprobante_prov" name="w_comprobante_prov"><p class="ayuda" id="w_comprobante_estado"></p><div class="foto-caja" id="w_comp_caja"><label class="boton-archivo" for="w_comp_archivo">Adjuntar el comprobante</label><input type="file" id="w_comp_archivo" accept="image/*,application/pdf" onchange="comprobanteArchivoElegido(this)"><p class="ayuda">Es opcional. Si tenes a mano la captura o el PDF de tu pago, adjuntalo y le saco el numero solo. Si no, no pasa nada: segui tranquila.</p><div id="w_comp_estado" class="foto-estado"></div><img id="w_comp_previa" alt=""><button type="button" class="secundario chico" id="w_comp_sacar" onclick="comprobanteArchivoSacar()">Sacar este archivo y elegir otro</button></div></div></section>
+    <section><div class="campo"><label class="etiqueta" for="c_nombre">Tu nombre y apellido <span class="hace-falta">hace falta</span></label><p class="ayuda">Nombre y apellido completos, como figuran en tu documento.</p><input type="text" id="c_nombre" name="c_nombre"><p class="aviso" id="av_c_nombre"></p><p class="eco" id="ok_c_nombre"></p></div><div class="campo"><label class="etiqueta" for="c_fecha_nacimiento">Tu fecha de nacimiento <span class="hace-falta">hace falta</span></label><p class="ayuda">Con tu nombre completo y esta fecha ya puedo hacer tu estudio.</p><div class="fnac"><input type="text" id="c_fecha_nacimiento__dia" class="fnac-n" inputmode="numeric" maxlength="2" placeholder="Dia" aria-label="Dia de nacimiento" autocomplete="bday-day"><select id="c_fecha_nacimiento__mes" class="fnac-m" aria-label="Mes de nacimiento" autocomplete="bday-month"><option value="">Mes</option><option value="01">enero</option><option value="02">febrero</option><option value="03">marzo</option><option value="04">abril</option><option value="05">mayo</option><option value="06">junio</option><option value="07">julio</option><option value="08">agosto</option><option value="09">septiembre</option><option value="10">octubre</option><option value="11">noviembre</option><option value="12">diciembre</option></select><input type="text" id="c_fecha_nacimiento__anio" class="fnac-a" inputmode="numeric" maxlength="4" placeholder="Anio" aria-label="Anio de nacimiento" autocomplete="bday-year"></div><input type="hidden" id="c_fecha_nacimiento" name="c_fecha_nacimiento"><p class="aviso" id="av_c_fecha_nacimiento"></p><p class="eco" id="ok_c_fecha_nacimiento"></p></div><div class="campo"><label class="etiqueta" for="c_email">Tu email <span class="hace-falta">hace falta</span></label><p class="ayuda">Ahi te llega tu informe cuando este listo.</p><input type="text" id="c_email" name="c_email"><p class="aviso" id="av_c_email"></p><p class="eco" id="ok_c_email"></p></div><div class="campo"><label class="etiqueta" for="c_whatsapp">Tu WhatsApp <span class="hace-falta">hace falta</span></label><p class="ayuda">Con codigo de pais. Ejemplo: +54 9 11 1234-5678</p><input type="text" id="c_whatsapp" name="c_whatsapp"><p class="aviso" id="av_c_whatsapp"></p><p class="eco" id="ok_c_whatsapp"></p></div><div class="campo"><label class="etiqueta" for="c_pais">En que pais vivis <span class="hace-falta">hace falta</span></label><p class="ayuda">Con esto te armamos el plan de comidas con las frutas y verduras que de verdad se consiguen donde vivis, y en la temporada que estas atravesando. Si tu pais no esta en la lista, dejalo sin responder y lo vemos en la sesion.</p><select id="c_pais" name="c_pais"><option value="">(sin responder)</option><option value="Argentina">Argentina</option><option value="Bolivia">Bolivia</option><option value="Brasil">Brasil</option><option value="Canada">Canadá</option><option value="Chile">Chile</option><option value="Colombia">Colombia</option><option value="Costa Rica">Costa Rica</option><option value="Cuba">Cuba</option><option value="Ecuador">Ecuador</option><option value="El Salvador">El Salvador</option><option value="Espana">España</option><option value="Estados Unidos">Estados Unidos</option><option value="Guatemala">Guatemala</option><option value="Honduras">Honduras</option><option value="Mexico">México</option><option value="Nicaragua">Nicaragua</option><option value="Panama">Panamá</option><option value="Paraguay">Paraguay</option><option value="Peru">Perú</option><option value="Puerto Rico">Puerto Rico</option><option value="Republica Dominicana">República Dominicana</option><option value="Uruguay">Uruguay</option><option value="Venezuela">Venezuela</option><option value="Australia">Australia</option><option value="Nueva Zelanda">Nueva Zelanda</option><option value="Sudafrica">Sudáfrica</option></select><p class="aviso" id="av_c_pais"></p><p class="eco" id="ok_c_pais"></p></div><div class="campo"><label class="etiqueta" for="c_ciudad">En que ciudad</label><p class="ayuda">Ejemplo: La Plata</p><input type="text" id="c_ciudad" name="c_ciudad"></div><div class="campo" id="campo_comprobante"><label class="etiqueta" for="w_comprobante">Comprobante de pago</label><p class="ayuda">Se completa solo con el numero de tu pago. Si quedo vacio, escribi el numero de operacion que te dio Mercado Pago o PayPal (esta en el mail del pago).</p><input type="text" id="w_comprobante" name="w_comprobante"><input type="hidden" id="w_comprobante_prov" name="w_comprobante_prov"><p class="ayuda" id="w_comprobante_estado"></p><div class="foto-caja" id="w_comp_caja"><label class="boton-archivo" for="w_comp_archivo">Adjuntar el comprobante</label><input type="file" id="w_comp_archivo" accept="image/*,application/pdf" onchange="comprobanteArchivoElegido(this)"><p class="ayuda">Es opcional. Si tenes a mano la captura o el PDF de tu pago, adjuntalo y le saco el numero solo. Si no, no pasa nada: segui tranquila.</p><div id="w_comp_estado" class="foto-estado"></div><img id="w_comp_previa" alt=""><button type="button" class="secundario chico" id="w_comp_sacar" onclick="comprobanteArchivoSacar()">Sacar este archivo y elegir otro</button></div></div></section>
 
     <div class="parte">
       <h3>Enseguida, tu testigo</h3>
@@ -309,6 +317,109 @@ function caja(nombre) {
   if (nombre.indexOf('a_') === 0) return ['anamnesis', nombre.slice(2)];
   if (nombre.indexOf('d_') === 0) return ['dosha', nombre.slice(2)];
   return null;
+}
+
+// ===========================================================================
+// LA FECHA DE NACIMIENTO: tres controles, un solo campo
+// ===========================================================================
+// Los tres de arriba (dia, mes, anio) mantienen al dia el campo oculto
+// `c_fecha_nacimiento` en AAAA-MM-DD, que es lo que lee todo lo demas. Si
+// falta cualquiera de los tres, el campo queda VACIO a proposito: media
+// fecha es peor que ninguna, porque pasaria los controles y llegaria mal.
+function fnacPartes(clave) {
+  try {
+    return {
+      dia: document.getElementById(clave + '__dia'),
+      mes: document.getElementById(clave + '__mes'),
+      anio: document.getElementById(clave + '__anio'),
+      oculto: document.getElementById(clave)
+    };
+  } catch (e) { return null; }
+}
+
+function fnacArmar(clave) {
+  var p = fnacPartes(clave);
+  if (!p || !p.oculto) return;
+  try {
+    var d = (p.dia && p.dia.value || '').replace(/[^0-9]/g, '');
+    var m = (p.mes && p.mes.value || '');
+    var a = (p.anio && p.anio.value || '').replace(/[^0-9]/g, '');
+    if (p.dia && p.dia.value !== d) p.dia.value = d;
+    if (p.anio && p.anio.value !== a) p.anio.value = a;
+    var ok = (d.length >= 1 && m.length === 2 && a.length === 4);
+    if (ok) {
+      var nd = Number(d), na = Number(a);
+      // Se acota a lo posible SIN corregirle nada a la persona: si escribio
+      // 45 de enero o el anio 2400, el campo queda vacio y el aviso de
+      // siempre se lo dice. Adivinar que quiso poner seria peor.
+      if (nd < 1 || nd > 31 || na < 1900 || na > 2100) ok = false;
+    }
+    p.oculto.value = ok
+      ? (a + '-' + m + '-' + (d.length === 1 ? '0' + d : d))
+      : '';
+    // Se avisa como si lo hubiera tocado el propio campo: asi el eco y el
+    // aviso en criollo siguen saliendo igual que cuando era un calendario.
+    try {
+      if (typeof p.oculto.dispatchEvent === 'function') {
+        var ev;
+        try { ev = new Event('change', { bubbles: true }); }
+        catch (e2) {
+          ev = document.createEvent('Event');
+          ev.initEvent('change', true, true);
+        }
+        p.oculto.dispatchEvent(ev);
+      }
+    } catch (e3) { /* noop */ }
+  } catch (e) { /* nunca frena nada */ }
+}
+
+// El camino de vuelta: el borrador guardado (o cualquier cosa que escriba
+// el campo oculto) se reparte en los tres. Sin esto, la que retoma la ficha
+// al dia siguiente veria los tres en blanco y tendria que escribirla otra
+// vez.
+function fnacRepartir(clave) {
+  var p = fnacPartes(clave);
+  if (!p || !p.oculto) return;
+  try {
+    var v = (p.oculto.value || '').trim();
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+    if (!m) return;
+    if (p.anio) p.anio.value = m[1];
+    if (p.mes) p.mes.value = m[2];
+    if (p.dia) p.dia.value = String(Number(m[3]));
+  } catch (e) { /* noop */ }
+}
+
+function fnacEnchufar() {
+  try {
+    var clave = 'c_fecha_nacimiento';
+    var p = fnacPartes(clave);
+    if (!p || !p.oculto) return;
+    fnacRepartir(clave);
+    var cada = [p.dia, p.mes, p.anio];
+    for (var i = 0; i < cada.length; i++) {
+      if (!cada[i]) continue;
+      cada[i].addEventListener('input', function () { fnacArmar(clave); });
+      cada[i].addEventListener('change', function () { fnacArmar(clave); });
+      // Del dia al mes y del mes al anio, solos: cuatro toques en vez de
+      // cuatro toques mas dos de ir a buscar el campo que sigue.
+      cada[i].addEventListener('blur', function () { fnacArmar(clave); });
+    }
+    if (p.dia) {
+      p.dia.addEventListener('input', function () {
+        if ((p.dia.value || '').length === 2 && p.mes) {
+          try { p.mes.focus(); } catch (e) { /* noop */ }
+        }
+      });
+    }
+    if (p.mes) {
+      p.mes.addEventListener('change', function () {
+        if ((p.mes.value || '') && p.anio) {
+          try { p.anio.focus(); } catch (e) { /* noop */ }
+        }
+      });
+    }
+  } catch (e) { /* nunca frena nada */ }
 }
 
 function recolectar() {
@@ -618,6 +729,9 @@ function restaurar() {
     }
   }
   return algo;
+  // El borrador escribio el campo oculto: hay que volver a repartirlo
+  // en los tres controles, o la que retoma la ficha los ve vacios.
+  try { fnacRepartir('c_fecha_nacimiento'); } catch (e) { /* noop */ }
 }
 
 function borrar() {

@@ -2147,14 +2147,21 @@ function mostrarBotonesEnvio(porCopia, porCancelada) {
       };
       return a;
     }
-    var wsp = '5493434518981';
-    if (wsp) {
-      caja.appendChild(boton('Mandarla por WhatsApp',
-        'https://wa.me/' + wsp + '?text=' + encodeURIComponent(porCopia
-          ? 'Hola Jose! Aca abajo te pego mi ficha completada:'
-          : 'Hola Jose! Te mando mi ficha completada: te adjunto el ' +
-            'archivo que se acaba de descargar.')));
-    }
+    // UN SOLO CAMINO, Y ES EL MAIL. Decision de Jose (2026-09-11), y la
+    // razon es de fierro: LA APP SOLO SABE LEER EL MAIL. Lo que entra por
+    // ahi se archiva, se empareja con la paciente y se da de alta sola;
+    // lo que entra por WhatsApp lo tiene que bajar el a mano y guardarlo,
+    // y hasta que no lo haga, para la app no existe. Dos botones de los
+    // cuales el sistema entiende uno no son dos opciones: son una opcion
+    // y una trampa. Sus palabras: "si la app lee solo mail hay que
+    // limitar a este entonces, la automatizacion de la app la puede cazar
+    // directo".
+    //
+    // LO QUE ESTO **NO** CIERRA, y esta dicho aca para que no se crea
+    // cerrado: el camino de un toque usa la hoja de compartir DEL
+    // TELEFONO, que no es nuestra, y ahi la persona puede elegir WhatsApp
+    // igual. Esto saca el atajo, no la posibilidad. El cierre de verdad es
+    // que la pagina la mande sola, que es lo que queda pendiente.
     var mail = 'Tarjetacuantica0@gmail.com';
     if (mail) {
       caja.appendChild(boton('Mandarla por mail',
@@ -2166,14 +2173,17 @@ function mostrarBotonesEnvio(porCopia, porCancelada) {
     var ayuda = document.createElement('p');
     ayuda.style.cssText = 'margin-top:8px;font-size:13px;opacity:.75;' +
       'text-align:center;width:100%';
+    // El texto dice el camino que de verdad hay, que ahora es UNO. Antes
+    // decia "elegi por donde": con un solo boton eso mandaba a buscar una
+    // eleccion que ya no existe.
     ayuda.textContent = porCopia
-      ? 'El texto de tu ficha ya quedo copiado: abri el mensaje, mantene ' +
+      ? 'El texto de tu ficha ya quedo copiado: abri el mail, mantene ' +
         'apretado donde se escribe, toca "Pegar" y mandalo.'
       : (porCancelada
         ? 'Quedo sin mandarse. El archivo esta en tu carpeta de Descargas: ' +
-          'elegi por donde y adjuntalo con el clip.'
+          'abri el mail y adjuntalo con el clip.'
         : 'El archivo quedo en tu carpeta de Descargas: ' +
-          'adjuntalo al mensaje con el clip.');
+          'adjuntalo al mail con el clip.');
     caja.appendChild(ayuda);
     est.parentNode.insertBefore(caja, est.nextSibling);
     caja.scrollIntoView({behavior: 'smooth', block: 'center'});

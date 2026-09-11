@@ -173,6 +173,16 @@
   .eco:empty { display: none; }
   .campo.mal input, .campo.mal select { border-color: #E8A05B; }
 
+  #t_fila_pago { display: none; margin-bottom: 18px; }
+  #t_fila_pago.hace-falta-preguntar { display: block; }
+  #t_fila_pago .opciones.cortas .chip { min-width: 0; }
+
+  #w_comp_archivo { position: absolute; width: 1px; height: 1px;
+    opacity: 0; overflow: hidden; }
+  #w_comp_previa { display: none; max-width: 180px; border-radius: 10px;
+    margin-top: 10px; border: 1px solid #006B64; }
+  #w_comp_sacar { display: none; margin-top: 10px; }
+
 </style>
 </head>
 <body>
@@ -206,7 +216,7 @@
          si o si: con eso solo ya puedo hacer tu estudio. El mail y el
          WhatsApp son por donde te llega despues.</p>
     </div>
-    <section><div class="campo"><label class="etiqueta" for="c_nombre">Tu nombre y apellido <span class="hace-falta">hace falta</span></label><p class="ayuda">Nombre y apellido completos, como figuran en tu documento.</p><input type="text" id="c_nombre" name="c_nombre"><p class="aviso" id="av_c_nombre"></p><p class="eco" id="ok_c_nombre"></p></div><div class="campo"><label class="etiqueta" for="c_fecha_nacimiento">Tu fecha de nacimiento <span class="hace-falta">hace falta</span></label><p class="ayuda">Con tu nombre completo y esta fecha ya puedo hacer tu estudio.</p><input type="date" id="c_fecha_nacimiento" name="c_fecha_nacimiento"><p class="aviso" id="av_c_fecha_nacimiento"></p><p class="eco" id="ok_c_fecha_nacimiento"></p></div><div class="campo"><label class="etiqueta" for="c_email">Tu email <span class="hace-falta">hace falta</span></label><p class="ayuda">Ahi te llega tu informe cuando este listo.</p><input type="text" id="c_email" name="c_email"><p class="aviso" id="av_c_email"></p><p class="eco" id="ok_c_email"></p></div><div class="campo"><label class="etiqueta" for="c_whatsapp">Tu WhatsApp <span class="hace-falta">hace falta</span></label><p class="ayuda">Con codigo de pais. Ejemplo: +54 9 11 1234-5678</p><input type="text" id="c_whatsapp" name="c_whatsapp"><p class="aviso" id="av_c_whatsapp"></p><p class="eco" id="ok_c_whatsapp"></p></div><div class="campo"><label class="etiqueta" for="c_pais">En que pais vivis <span class="hace-falta">hace falta</span></label><p class="ayuda">Con esto te armamos el plan de comidas con las frutas y verduras que de verdad se consiguen donde vivis, y en la temporada que estas atravesando. Si tu pais no esta en la lista, dejalo sin responder y lo vemos en la sesion.</p><select id="c_pais" name="c_pais"><option value="">(sin responder)</option><option value="Argentina">Argentina</option><option value="Bolivia">Bolivia</option><option value="Brasil">Brasil</option><option value="Canada">Canadá</option><option value="Chile">Chile</option><option value="Colombia">Colombia</option><option value="Costa Rica">Costa Rica</option><option value="Cuba">Cuba</option><option value="Ecuador">Ecuador</option><option value="El Salvador">El Salvador</option><option value="Espana">España</option><option value="Estados Unidos">Estados Unidos</option><option value="Guatemala">Guatemala</option><option value="Honduras">Honduras</option><option value="Mexico">México</option><option value="Nicaragua">Nicaragua</option><option value="Panama">Panamá</option><option value="Paraguay">Paraguay</option><option value="Peru">Perú</option><option value="Puerto Rico">Puerto Rico</option><option value="Republica Dominicana">República Dominicana</option><option value="Uruguay">Uruguay</option><option value="Venezuela">Venezuela</option><option value="Australia">Australia</option><option value="Nueva Zelanda">Nueva Zelanda</option><option value="Sudafrica">Sudáfrica</option></select><p class="aviso" id="av_c_pais"></p><p class="eco" id="ok_c_pais"></p></div><div class="campo"><label class="etiqueta" for="c_ciudad">En que ciudad</label><p class="ayuda">Ejemplo: La Plata</p><input type="text" id="c_ciudad" name="c_ciudad"></div><div class="campo" id="campo_comprobante"><label class="etiqueta" for="w_comprobante">Comprobante de pago</label><p class="ayuda">Se completa solo con el numero de tu pago. Si quedo vacio, escribi el numero de operacion que te dio Mercado Pago o PayPal (esta en el mail del pago).</p><input type="text" id="w_comprobante" name="w_comprobante"><input type="hidden" id="w_comprobante_prov" name="w_comprobante_prov"><p class="ayuda" id="w_comprobante_estado"></p></div></section>
+    <section><div class="campo"><label class="etiqueta" for="c_nombre">Tu nombre y apellido <span class="hace-falta">hace falta</span></label><p class="ayuda">Nombre y apellido completos, como figuran en tu documento.</p><input type="text" id="c_nombre" name="c_nombre"><p class="aviso" id="av_c_nombre"></p><p class="eco" id="ok_c_nombre"></p></div><div class="campo"><label class="etiqueta" for="c_fecha_nacimiento">Tu fecha de nacimiento <span class="hace-falta">hace falta</span></label><p class="ayuda">Con tu nombre completo y esta fecha ya puedo hacer tu estudio.</p><input type="date" id="c_fecha_nacimiento" name="c_fecha_nacimiento"><p class="aviso" id="av_c_fecha_nacimiento"></p><p class="eco" id="ok_c_fecha_nacimiento"></p></div><div class="campo"><label class="etiqueta" for="c_email">Tu email <span class="hace-falta">hace falta</span></label><p class="ayuda">Ahi te llega tu informe cuando este listo.</p><input type="text" id="c_email" name="c_email"><p class="aviso" id="av_c_email"></p><p class="eco" id="ok_c_email"></p></div><div class="campo"><label class="etiqueta" for="c_whatsapp">Tu WhatsApp <span class="hace-falta">hace falta</span></label><p class="ayuda">Con codigo de pais. Ejemplo: +54 9 11 1234-5678</p><input type="text" id="c_whatsapp" name="c_whatsapp"><p class="aviso" id="av_c_whatsapp"></p><p class="eco" id="ok_c_whatsapp"></p></div><div class="campo"><label class="etiqueta" for="c_pais">En que pais vivis <span class="hace-falta">hace falta</span></label><p class="ayuda">Con esto te armamos el plan de comidas con las frutas y verduras que de verdad se consiguen donde vivis, y en la temporada que estas atravesando. Si tu pais no esta en la lista, dejalo sin responder y lo vemos en la sesion.</p><select id="c_pais" name="c_pais"><option value="">(sin responder)</option><option value="Argentina">Argentina</option><option value="Bolivia">Bolivia</option><option value="Brasil">Brasil</option><option value="Canada">Canadá</option><option value="Chile">Chile</option><option value="Colombia">Colombia</option><option value="Costa Rica">Costa Rica</option><option value="Cuba">Cuba</option><option value="Ecuador">Ecuador</option><option value="El Salvador">El Salvador</option><option value="Espana">España</option><option value="Estados Unidos">Estados Unidos</option><option value="Guatemala">Guatemala</option><option value="Honduras">Honduras</option><option value="Mexico">México</option><option value="Nicaragua">Nicaragua</option><option value="Panama">Panamá</option><option value="Paraguay">Paraguay</option><option value="Peru">Perú</option><option value="Puerto Rico">Puerto Rico</option><option value="Republica Dominicana">República Dominicana</option><option value="Uruguay">Uruguay</option><option value="Venezuela">Venezuela</option><option value="Australia">Australia</option><option value="Nueva Zelanda">Nueva Zelanda</option><option value="Sudafrica">Sudáfrica</option></select><p class="aviso" id="av_c_pais"></p><p class="eco" id="ok_c_pais"></p></div><div class="campo"><label class="etiqueta" for="c_ciudad">En que ciudad</label><p class="ayuda">Ejemplo: La Plata</p><input type="text" id="c_ciudad" name="c_ciudad"></div><div class="campo" id="campo_comprobante"><label class="etiqueta" for="w_comprobante">Comprobante de pago</label><p class="ayuda">Se completa solo con el numero de tu pago. Si quedo vacio, escribi el numero de operacion que te dio Mercado Pago o PayPal (esta en el mail del pago).</p><input type="text" id="w_comprobante" name="w_comprobante"><input type="hidden" id="w_comprobante_prov" name="w_comprobante_prov"><p class="ayuda" id="w_comprobante_estado"></p><div class="foto-caja" id="w_comp_caja"><label class="boton-archivo" for="w_comp_archivo">Adjuntar el comprobante</label><input type="file" id="w_comp_archivo" accept="image/*,application/pdf" onchange="comprobanteArchivoElegido(this)"><p class="ayuda">Es opcional. Si tenes a mano la captura o el PDF de tu pago, adjuntalo y le saco el numero solo. Si no, no pasa nada: segui tranquila.</p><div id="w_comp_estado" class="foto-estado"></div><img id="w_comp_previa" alt=""><button type="button" class="secundario chico" id="w_comp_sacar" onclick="comprobanteArchivoSacar()">Sacar este archivo y elegir otro</button></div></div></section>
 
     <div class="parte">
       <h3>Enseguida, tu testigo</h3>
@@ -219,6 +229,7 @@
     </div>
     <section id="paso-testigo">
     <h2>Como me mandas tu testigo</h2>
+    <div class="campo" id="t_fila_pago"><label class="etiqueta">Como pagaste tu sesion?</label><p class="ayuda">Un toque y listo. Con eso te muestro solo las formas de mandarme tu testigo que te sirven a vos.</p><div class="opciones cortas"><label class="chip pago"><input type="radio" name="t_pago" value="mp"><span>En pesos, con Mercado Pago</span></label><label class="chip pago"><input type="radio" name="t_pago" value="paypal"><span>Desde afuera, con PayPal</span></label></div></div>
     <div class="igual-igual">
       <p class="cuenta-tres"><strong>Las tres formas valen exactamente lo mismo.</strong>
          Tu estudio sale igual de completo y de preciso por cualquiera de las tres. No cambia nada segun como me mandes el testigo: ni el detalle, ni lo que se puede leer, ni el informe que te llega despues. No hay una opcion mejor que otra, hay una que te queda mas comoda. Elegi esa.</p>
@@ -231,7 +242,7 @@
       <p class="ayuda" id="t_ayuda_pais">Las de abajo son las que llegan
          hasta donde vivis.</p>
       <p class="aviso" id="t_aviso_pais"></p>
-      <div class="opciones" id="t_opciones"><label class="chip via" data-via="nombre_fecha" data-solo-ar="0"><input type="radio" name="t_via" value="nombre_fecha" checked><span><strong>Nombre y fecha de nacimiento</strong><span class="via-resumen">Ya me los diste en el paso anterior. No tenes que mandar nada mas.</span></span></label><label class="chip via" data-via="foto_datos" data-solo-ar="0"><input type="radio" name="t_via" value="foto_datos"><span><strong>Foto</strong><span class="via-resumen">Una foto tuya de ahora. La elegis aca abajo y viaja adentro de este mismo archivo.</span></span></label><label class="chip via" data-via="muestra_postal" data-solo-ar="1"><input type="radio" name="t_via" value="muestra_postal"><span><strong>Muestra de uñas por correo</strong><span class="via-resumen">Los recortes de tus uñas, en un sobre por Correo Argentino.</span></span></label></div>
+      <div class="opciones" id="t_opciones"><label class="chip via" data-via="nombre_fecha" data-solo-ar="0"><input type="radio" name="t_via" value="nombre_fecha" checked><span><strong>Nombre y fecha de nacimiento</strong><span class="via-resumen">Ya me los diste en el paso anterior. No tenes que mandar nada mas.</span></span></label><label class="chip via" data-via="foto_datos" data-solo-ar="0"><input type="radio" name="t_via" value="foto_datos"><span><strong>Foto</strong><span class="via-resumen">Una foto tuya de ahora. La elegis aca abajo y viaja adentro de este mismo archivo.</span></span></label><label class="chip via" data-via="muestra_postal" data-solo-ar="1"><input type="radio" name="t_via" value="muestra_postal"><span><strong>Muestra de uñas por correo</strong><span class="via-resumen">Los recortes de las uñas de una mano (o de un pie), en un sobre por Correo Argentino. Tu estudio arranca cuando me llega.</span></span></label></div>
     </div>
     <div class="instructivo" id="t_ins_nombre_fecha" data-via="nombre_fecha"><h4>Nombre y fecha de nacimiento</h4><ol><li>Ya esta hecho. Tu nombre completo y tu fecha de nacimiento los escribiste en el paso anterior, y de ahi los tomo.</li><li>No tenes que mandar nada mas: ni foto, ni sobre, ni correo.</li><li>Lo unico: fijate que el nombre este completo, con apellido, como figura en tu documento, y que la fecha sea la tuya. Con eso alcanza.</li></ol><p class="nota">Esta es la que uso mas y la que menos trabajo te da. Si te quedas con esta, ya terminaste.</p></div><div class="instructivo" id="t_ins_foto_datos" data-via="foto_datos"><h4>Foto</h4><ol><li>Que sea de ahora. Una de hace anios no me sirve: necesito como estas hoy.</li><li>De frente, mirando a la camara, con buena luz. Sin lentes oscuros, sin gorra y sin filtros.</li><li>Que salgas vos nada mas. Si hay mas gente en la foto, sacate una aparte.</li><li>Una selfie del celular alcanza y sobra: no hace falta nada especial ni que la saque un fotografo.</li><li>Elegila con el boton de aca abajo. Se achica sola en tu telefono y viaja adentro de este mismo archivo, junto con tu nombre y tu fecha: no tenes que mandarla aparte ni acordarte de nada mas.</li><li>Si el telefono no te deja adjuntarla, mandamela por WhatsApp al +54 9 343 451-8981 y listo, no pasa nada.</li></ol>
       <div class="foto-caja">
@@ -244,14 +255,14 @@
                 onclick="testigoFotoSacar()">Sacar esta foto y elegir otra</button>
       </div>
       <p class="nota">Si tu telefono no la puede achicar, te lo digo ahi
-         mismo y te paso a donde mandarmela. El estudio sale igual.</p><p class="nota">Tu foto se usa solo para tu estudio. No se comparte ni se publica.</p></div><div class="instructivo" id="t_ins_muestra_postal" data-via="muestra_postal"><h4>Muestra de uñas por correo</h4><ol><li>Lavate bien las manos y secalas. Sin esmalte: si tenes, sacalo antes.</li><li>Cortate las uñas de las dos manos. Con los recortes de 6 a 8 uñas alcanza; no hace falta que sean grandes.</li><li>Ponelos en una bolsita ziploc chica, o envueltos en papel de cocina limpio adentro de un sobre.</li><li>Con birome, escribi en la bolsita o en un papelito adentro tu nombre completo y tu fecha de nacimiento.</li><li>Mandalo por Correo Argentino (carta simple o encomienda) a la direccion de aca abajo.</li><li>Cuando lo despaches, avisame asi lo espero. Cuando me llegue, te confirmo y agendo tu estudio.</li></ol><div class="direccion"><span class="direccion-rotulo">Mandalo a:</span><br>Carbo 275<br>Crespo<br>Entre Rios<br>CP 3116<br>Argentina</div><p class="nota">Esta opcion es solo dentro de Argentina: desde afuera el sobre no llega. La muestra se usa una sola vez para tu estudio y se descarta despues. Tarda unos dias en llegar: mientras tanto mandame el formulario igual, no esperes.</p></div>
+         mismo y te paso a donde mandarmela. El estudio sale igual.</p><p class="nota">Tu foto se usa solo para tu estudio. No se comparte ni se publica.</p></div><div class="instructivo" id="t_ins_muestra_postal" data-via="muestra_postal"><h4>Muestra de uñas por correo</h4><ol><li>Lavate bien las manos y secalas. Sin esmalte: si tenes, sacalo antes.</li><li>Cortate las uñas de UNA mano. Si te queda mas comodo, las de un pie sirven igual. Con los recortes de esa mano (o ese pie) alcanza: no hace falta que sean grandes ni que cortes de mas.</li><li>Ponelos en una bolsita chica con cierre (una ziploc), o envueltos en papel de cocina limpio adentro de un sobre.</li><li>Con birome, escribi en la bolsita o en un papelito adentro tu nombre completo y tu fecha de nacimiento.</li><li>Mandalo por Correo Argentino (carta simple o encomienda) a la direccion de aca abajo.</li><li>Cuando lo despaches, avisame asi lo espero.</li><li>Tu estudio arranca el dia que el sobre me llega: hasta que no lo tenga en la mano no puedo empezar. Por eso mandame igual este formulario ahora, sin esperar: asi cuando llegue el sobre arranco de una.</li></ol><div class="direccion"><span class="direccion-rotulo">Mandalo a:</span><br>Jose Maria Basgall<br>Carbo 275<br>Crespo<br>Entre Rios<br>CP 3116<br>Argentina</div><p class="nota">Esta opcion es solo dentro de Argentina y para el pago en pesos: desde afuera el sobre no llega. Es la unica de las tres que tiene espera, porque tu estudio arranca cuando el sobre esta en mi mano. La muestra se usa una sola vez para tu estudio y se descarta despues.</p></div>
   </section>
 
     <div class="parte">
       <h3>Despues, tu historia</h3>
       <p>Que te trae, como venis y que te paso antes.</p>
     </div>
-    <section><h2>Para empezar</h2><div class="campo"><label class="etiqueta" for="a_edad">Edad</label><p class="ayuda">En anios. Ejemplo: 44</p><input type="number" id="a_edad" name="a_edad" min="0"></div><div class="campo"><label class="etiqueta" for="a_sexo">Sexo</label><select id="a_sexo" name="a_sexo"><option value="">(elegir)</option><option value="F">Femenino</option><option value="M">Masculino</option><option value="otro">Otro</option></select></div><div class="campo"><label class="etiqueta" for="a_peso_kg">Peso aproximado (kg)</label><p class="ayuda">Ejemplo: 78. Si no sabes exacto, aproximado esta bien. Sirve para ajustar las cantidades del plan de alimentacion y el agua del dia.</p><input type="number" id="a_peso_kg" name="a_peso_kg" min="0"></div><div class="campo"><label class="etiqueta" for="a_altura_cm">Altura (cm)</label><p class="ayuda">Ejemplo: 175</p><input type="number" id="a_altura_cm" name="a_altura_cm" min="0"></div><div class="campo"><label class="etiqueta" for="a_ocupacion">A que te dedicas</label><p class="ayuda">Ejemplo: docente / camionero / trabajo en casa con dos chicos</p><input type="text" id="a_ocupacion" name="a_ocupacion"></div></section><section><h2>Que te trae</h2><div class="campo"><label class="etiqueta" for="a_motivo_consulta">Contame con tus palabras que te pasa</label><p class="ayuda">Escribi como se lo contarias a alguien de confianza. Ejemplo: &#x27;hace como un anio que me levanto cansado aunque duerma bien, y despues de comer me hincho mucho. Empezo despues de una mudanza pesada.&#x27;</p><textarea id="a_motivo_consulta" name="a_motivo_consulta" rows="4"></textarea></div><div class="campo"><span class="etiqueta">Marca lo que sentis seguido</span><div class="chips" data-campo="a_sintomas_actuales"><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="cansancio"> Cansancio</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="digestion"> Digestion pesada</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="sueno"> Duermo mal</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="dolor"> Dolores</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="animo"> Animo bajo</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="piel"> Piel</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="hormonal"> Hormonal</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="articulaciones"> Articulaciones</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="respiracion"> Respiracion</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="ojos"> Vista</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="cabeza"> Dolor de cabeza</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="peso"> Peso</label></div></div><div class="campo"><label class="etiqueta" for="a_sintomas_otros">Algo mas que no este arriba</label><p class="ayuda">Ejemplo: zumbido en el oido derecho</p><input type="text" id="a_sintomas_otros" name="a_sintomas_otros"></div><div class="campo"><label class="etiqueta" for="a_duracion_sintomas">Desde cuando</label><p class="ayuda">Ejemplo: 3 meses / desde el embarazo / hace anios</p><input type="text" id="a_duracion_sintomas" name="a_duracion_sintomas"></div><div class="campo"><label class="etiqueta" for="a_intensidad_1_10">Cuanto te molesta, del 1 al 10</label><p class="ayuda">1 = casi no lo noto. 10 = me condiciona el dia.</p><div class="rango"><input type="range" id="a_intensidad_1_10" name="a_intensidad_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div></section><section><h2>Como venis estos dias</h2><div class="campo"><label class="etiqueta" for="a_energia_1_10">Tu energia, del 1 al 10</label><p class="ayuda">1 = arrastrandome. 10 = a full.</p><div class="rango"><input type="range" id="a_energia_1_10" name="a_energia_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div><div class="campo"><label class="etiqueta" for="a_durmio_bien_anoche">Como venis durmiendo</label><select id="a_durmio_bien_anoche" name="a_durmio_bien_anoche"><option value="">(elegir)</option><option value="si">Bien</option><option value="regular">Mas o menos</option><option value="no">Mal</option></select></div><div class="campo"><label class="etiqueta" for="a_estres_1_10">Tu nivel de estres, del 1 al 10</label><div class="rango"><input type="range" id="a_estres_1_10" name="a_estres_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div><div class="campo"><label class="etiqueta" for="a_situacion_vida">Esta pasando algo importante en tu vida</label><p class="ayuda">Mudanza, duelo, cambio de trabajo, separacion, un proyecto nuevo. Lo que sientas que pesa. Si preferis no escribirlo, dejalo vacio y lo charlamos.</p><textarea id="a_situacion_vida" name="a_situacion_vida" rows="3"></textarea></div></section><section><h2>Antecedentes</h2><div class="campo"><label class="etiqueta" for="a_medicacion_detalle">Medicacion o suplementos que tomes</label><p class="ayuda">Nombre y para que, si lo sabes. Ejemplo: &#x27;levotiroxina 50 para la tiroides, magnesio a la noche&#x27;. Esto es importante: hay cosas que no se combinan.</p><textarea id="a_medicacion_detalle" name="a_medicacion_detalle" rows="3"></textarea></div><div class="campo"><label class="etiqueta" for="a_medicacion_desde">Hace cuanto la tomas</label><p class="ayuda">Mas o menos esta bien: &#x27;hace 3 meses&#x27;, &#x27;desde el 2019&#x27;, &#x27;hace mucho tiempo&#x27;.</p><input type="text" id="a_medicacion_desde" name="a_medicacion_desde"></div><div class="campo"><span class="etiqueta">Te diagnosticaron alguna de estas</span><div class="chips" data-campo="a_diagnosticos_previos"><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="diabetes"> Diabetes</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="hipertension"> Presion alta</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="tiroides"> Tiroides</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="autoinmune"> Autoinmune</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="cardio"> Corazon</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="renal"> Rinion</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="hepatica"> Higado</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="asma"> Asma</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="oncologico"> Oncologico</label></div></div><div class="campo"><label class="etiqueta" for="a_cirugias_previas">Cirugias que te hayan hecho</label><p class="ayuda">Ejemplo: vesicula 2019, cesarea 2015</p><input type="text" id="a_cirugias_previas" name="a_cirugias_previas"></div><div class="campo"><label class="etiqueta" for="a_antecedentes_familiares">Cosas que se repiten en tu familia</label><p class="ayuda">Ejemplo: diabetes por parte de madre, tiroides mi hermana</p><input type="text" id="a_antecedentes_familiares" name="a_antecedentes_familiares"></div></section><section><h2>Como comes y te movés</h2><div class="campo"><label class="etiqueta" for="a_alimentacion">Tu alimentacion</label><select id="a_alimentacion" name="a_alimentacion"><option value="">(elegir)</option><option value="omnivoro">De todo</option><option value="vegetariano">Vegetariana</option><option value="vegano">Vegana</option><option value="sin_gluten">Sin gluten</option><option value="otro">Otra</option></select></div><div class="campo"><span class="etiqueta">Sos alergica o alergico a alguno de estos</span><p class="ayuda">Marca lo que te haga reaccion. Esto manda sobre todo lo demas: lo que marques aca no te lo vamos a recomendar aunque el equipo lo de bien.</p><div class="chips" data-campo="a_alergias"><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="lacteos"> Lacteos (leche, queso)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="gluten"> Gluten (trigo, TACC)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="frutos_secos"> Frutos secos (nueces, almendras)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="mani"> Mani</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="mariscos"> Mariscos y crustaceos</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="pescado"> Pescado</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="huevo"> Huevo</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="soja"> Soja</label></div></div><div class="campo"><label class="etiqueta" for="a_alergias_otras">Alguna otra alergia</label><p class="ayuda">Cortito, solo el alimento. Ejemplo: kiwi, frutilla</p><input type="text" id="a_alergias_otras" name="a_alergias_otras"></div><div class="campo"><span class="etiqueta">Algo que no te caiga bien</span><p class="ayuda">No es alergia: es lo que te hincha, te cae pesado o te descompone.</p><div class="chips" data-campo="a_intolerancias"><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="lactosa"> Lactosa</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="gluten"> Gluten / TACC</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="fructosa"> Fructosa / azucares</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="histamina"> Histamina (fermentados, embutidos)</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="cafeina"> Cafeina (cafe, energizantes)</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="picantes"> Picantes</label></div></div><div class="campo"><label class="etiqueta" for="a_intolerancias_otras">Algo mas que no te caiga bien</label><p class="ayuda">Cortito. Ejemplo: cebolla cruda</p><input type="text" id="a_intolerancias_otras" name="a_intolerancias_otras"></div><div class="campo"><label class="etiqueta" for="a_actividad_fisica">Actividad fisica</label><select id="a_actividad_fisica" name="a_actividad_fisica"><option value="">(elegir)</option><option value="sedentario">Poca o nada</option><option value="moderada">2-3 veces por semana</option><option value="diaria">Casi todos los dias</option></select></div><div class="campo"><label class="etiqueta" for="a_hora_despertar">A que hora te levantas</label><p class="ayuda">Un dia normal, no el domingo. Ejemplo: 6:30</p><input type="text" id="a_hora_despertar" name="a_hora_despertar"></div><div class="campo"><label class="etiqueta" for="a_hora_acostarse">A que hora te acostas</label><p class="ayuda">Asi la cena no te queda pegada a la cama. Ejemplo: 23</p><input type="text" id="a_hora_acostarse" name="a_hora_acostarse"></div><div class="campo"><span class="etiqueta">Tus horas ocupadas</span><p class="ayuda">Tocá las horas en que NO podés parar a comer tranquila: trabajo, viaje, clases, la actividad de los chicos. Con eso el plan corre las comidas para esquivarlas, y las que no se pueden correr te las deja para llevar. Lo que no toques queda como hora libre.</p><div class="chips grilla-horaria" data-campo="a_agenda_ocupada" style="grid-template-columns: 2.6em repeat(3, 1fr)"><span class="gh-esq"></span><span class="gh-dia">Lun a vie</span><span class="gh-dia">Sabado</span><span class="gh-dia">Domingo</span><span class="gh-hora">6</span><label class="gh-celda" title="sem 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-06"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-06"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-06"><span class="gh-marca"></span></label><span class="gh-hora">7</span><label class="gh-celda" title="sem 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-07"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-07"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-07"><span class="gh-marca"></span></label><span class="gh-hora">8</span><label class="gh-celda" title="sem 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-08"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-08"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-08"><span class="gh-marca"></span></label><span class="gh-hora">9</span><label class="gh-celda" title="sem 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-09"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-09"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-09"><span class="gh-marca"></span></label><span class="gh-hora">10</span><label class="gh-celda" title="sem 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-10"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-10"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-10"><span class="gh-marca"></span></label><span class="gh-hora">11</span><label class="gh-celda" title="sem 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-11"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-11"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-11"><span class="gh-marca"></span></label><span class="gh-hora">12</span><label class="gh-celda" title="sem 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-12"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-12"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-12"><span class="gh-marca"></span></label><span class="gh-hora">13</span><label class="gh-celda" title="sem 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-13"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-13"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-13"><span class="gh-marca"></span></label><span class="gh-hora">14</span><label class="gh-celda" title="sem 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-14"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-14"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-14"><span class="gh-marca"></span></label><span class="gh-hora">15</span><label class="gh-celda" title="sem 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-15"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-15"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-15"><span class="gh-marca"></span></label><span class="gh-hora">16</span><label class="gh-celda" title="sem 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-16"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-16"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-16"><span class="gh-marca"></span></label><span class="gh-hora">17</span><label class="gh-celda" title="sem 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-17"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-17"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-17"><span class="gh-marca"></span></label><span class="gh-hora">18</span><label class="gh-celda" title="sem 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-18"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-18"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-18"><span class="gh-marca"></span></label><span class="gh-hora">19</span><label class="gh-celda" title="sem 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-19"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-19"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-19"><span class="gh-marca"></span></label><span class="gh-hora">20</span><label class="gh-celda" title="sem 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-20"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-20"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-20"><span class="gh-marca"></span></label><span class="gh-hora">21</span><label class="gh-celda" title="sem 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-21"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-21"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-21"><span class="gh-marca"></span></label><span class="gh-hora">22</span><label class="gh-celda" title="sem 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-22"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-22"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-22"><span class="gh-marca"></span></label><span class="gh-hora">23</span><label class="gh-celda" title="sem 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-23"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-23"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-23"><span class="gh-marca"></span></label></div></div></section><section><h2>Solo si corresponde</h2><p class="nota">Si no aplica a tu caso, salteate este bloque entero.</p><div class="campo"><label class="etiqueta" for="a_ciclo">Ciclo menstrual</label><select id="a_ciclo" name="a_ciclo"><option value="">(no aplica)</option><option value="menstruando">Menstruo</option><option value="no_menstruando">No menstruo</option><option value="menopausia">Menopausia</option><option value="embarazo">Embarazo</option><option value="lactancia">Lactancia</option></select></div><div class="campo checkbox-solo"><label><input type="checkbox" id="a_buscando_embarazo" name="a_buscando_embarazo"> Estas buscando embarazo</label></div><div class="campo"><label class="etiqueta" for="a_anticoncepcion">Anticoncepcion</label><p class="ayuda">Ejemplo: DIU / pastillas / ninguna</p><input type="text" id="a_anticoncepcion" name="a_anticoncepcion"></div><div class="campo checkbox-solo"><label><input type="checkbox" id="a_sintomas_urinarios" name="a_sintomas_urinarios"> Molestias urinarias o de prostata</label></div></section>
+    <section><h2>Para empezar</h2><div class="campo"><label class="etiqueta" for="a_edad">Edad</label><p class="ayuda">En anios. Ejemplo: 44</p><input type="number" id="a_edad" name="a_edad" min="0"></div><div class="campo"><label class="etiqueta" for="a_sexo">Sexo</label><select id="a_sexo" name="a_sexo"><option value="">(elegir)</option><option value="F">Femenino</option><option value="M">Masculino</option><option value="otro">Otro</option></select></div><div class="campo"><label class="etiqueta" for="a_peso_kg">Peso aproximado (kg)</label><p class="ayuda">Ejemplo: 78. Si no sabes exacto, aproximado esta bien. Sirve para ajustar las cantidades del plan de alimentacion y el agua del dia.</p><input type="number" id="a_peso_kg" name="a_peso_kg" min="0"></div><div class="campo"><label class="etiqueta" for="a_altura_cm">Altura (cm)</label><p class="ayuda">Ejemplo: 175</p><input type="number" id="a_altura_cm" name="a_altura_cm" min="0"></div><div class="campo"><label class="etiqueta" for="a_grupo_sanguineo">Tu grupo sanguineo</label><p class="ayuda">Si no te lo acordas, elegi &#x27;No lo se&#x27; y seguimos: no hace falta que lo busques ni que te hagas nada.</p><select id="a_grupo_sanguineo" name="a_grupo_sanguineo"><option value="">(sin responder)</option><option value="no_sabe">No lo se</option><option value="0-">0-</option><option value="0+">0+</option><option value="A-">A-</option><option value="A+">A+</option><option value="B-">B-</option><option value="B+">B+</option><option value="AB-">AB-</option><option value="AB+">AB+</option></select></div><div class="campo"><label class="etiqueta" for="a_ocupacion">A que te dedicas</label><p class="ayuda">Ejemplo: docente / camionero / trabajo en casa con dos chicos</p><input type="text" id="a_ocupacion" name="a_ocupacion"></div></section><section><h2>Que te trae</h2><div class="campo"><label class="etiqueta" for="a_motivo_consulta">Contame con tus palabras que te pasa</label><p class="ayuda">Escribi como se lo contarias a alguien de confianza. Ejemplo: &#x27;hace como un anio que me levanto cansado aunque duerma bien, y despues de comer me hincho mucho. Empezo despues de una mudanza pesada.&#x27;</p><textarea id="a_motivo_consulta" name="a_motivo_consulta" rows="4"></textarea></div><div class="campo"><span class="etiqueta">Marca lo que sentis seguido</span><div class="chips" data-campo="a_sintomas_actuales"><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="cansancio"> Cansancio</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="digestion"> Digestion pesada</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="sueno"> Duermo mal</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="dolor"> Dolores</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="animo"> Animo bajo</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="piel"> Piel</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="hormonal"> Hormonal</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="articulaciones"> Articulaciones</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="respiracion"> Respiracion</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="ojos"> Vista</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="cabeza"> Dolor de cabeza</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="peso"> Peso</label></div></div><div class="campo"><label class="etiqueta" for="a_sintomas_otros">Algo mas que no este arriba</label><p class="ayuda">Ejemplo: zumbido en el oido derecho</p><input type="text" id="a_sintomas_otros" name="a_sintomas_otros"></div><div class="campo"><label class="etiqueta" for="a_duracion_sintomas">Desde cuando</label><p class="ayuda">Ejemplo: 3 meses / desde el embarazo / hace anios</p><input type="text" id="a_duracion_sintomas" name="a_duracion_sintomas"></div><div class="campo"><label class="etiqueta" for="a_intensidad_1_10">Cuanto te molesta, del 1 al 10</label><p class="ayuda">1 = casi no lo noto. 10 = me condiciona el dia.</p><div class="rango"><input type="range" id="a_intensidad_1_10" name="a_intensidad_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div></section><section><h2>Como venis estos dias</h2><div class="campo"><label class="etiqueta" for="a_energia_1_10">Tu energia, del 1 al 10</label><p class="ayuda">1 = arrastrandome. 10 = a full.</p><div class="rango"><input type="range" id="a_energia_1_10" name="a_energia_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div><div class="campo"><label class="etiqueta" for="a_durmio_bien_anoche">Como venis durmiendo</label><select id="a_durmio_bien_anoche" name="a_durmio_bien_anoche"><option value="">(elegir)</option><option value="si">Bien</option><option value="regular">Mas o menos</option><option value="no">Mal</option></select></div><div class="campo"><label class="etiqueta" for="a_estres_1_10">Tu nivel de estres, del 1 al 10</label><div class="rango"><input type="range" id="a_estres_1_10" name="a_estres_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div><div class="campo"><label class="etiqueta" for="a_situacion_vida">Esta pasando algo importante en tu vida</label><p class="ayuda">Mudanza, duelo, cambio de trabajo, separacion, un proyecto nuevo. Lo que sientas que pesa. Si preferis no escribirlo, dejalo vacio y lo charlamos.</p><textarea id="a_situacion_vida" name="a_situacion_vida" rows="3"></textarea></div></section><section><h2>Antecedentes</h2><div class="campo"><label class="etiqueta" for="a_medicacion_detalle">Medicacion o suplementos que tomes</label><p class="ayuda">Nombre y para que, si lo sabes. Ejemplo: &#x27;levotiroxina 50 para la tiroides, magnesio a la noche&#x27;. Esto es importante: hay cosas que no se combinan.</p><textarea id="a_medicacion_detalle" name="a_medicacion_detalle" rows="3"></textarea></div><div class="campo"><label class="etiqueta" for="a_medicacion_desde">Hace cuanto la tomas</label><p class="ayuda">Mas o menos esta bien: &#x27;hace 3 meses&#x27;, &#x27;desde el 2019&#x27;, &#x27;hace mucho tiempo&#x27;.</p><input type="text" id="a_medicacion_desde" name="a_medicacion_desde"></div><div class="campo"><span class="etiqueta">Te diagnosticaron alguna de estas</span><div class="chips" data-campo="a_diagnosticos_previos"><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="diabetes"> Diabetes</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="hipertension"> Presion alta</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="tiroides"> Tiroides</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="autoinmune"> Autoinmune</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="cardio"> Corazon</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="renal"> Rinion</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="hepatica"> Higado</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="asma"> Asma</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="oncologico"> Oncologico</label></div></div><div class="campo"><label class="etiqueta" for="a_cirugias_previas">Cirugias que te hayan hecho</label><p class="ayuda">Ejemplo: vesicula 2019, cesarea 2015</p><input type="text" id="a_cirugias_previas" name="a_cirugias_previas"></div><div class="campo"><label class="etiqueta" for="a_antecedentes_familiares">Cosas que se repiten en tu familia</label><p class="ayuda">Ejemplo: diabetes por parte de madre, tiroides mi hermana</p><input type="text" id="a_antecedentes_familiares" name="a_antecedentes_familiares"></div></section><section><h2>Como comes y te movés</h2><div class="campo"><label class="etiqueta" for="a_alimentacion">Tu alimentacion</label><select id="a_alimentacion" name="a_alimentacion"><option value="">(elegir)</option><option value="omnivoro">De todo</option><option value="vegetariano">Vegetariana</option><option value="vegano">Vegana</option><option value="sin_gluten">Sin gluten</option><option value="otro">Otra</option></select></div><div class="campo"><span class="etiqueta">Sos alergica o alergico a alguno de estos</span><p class="ayuda">Marca lo que te haga reaccion. Esto manda sobre todo lo demas: lo que marques aca no te lo vamos a recomendar aunque el equipo lo de bien.</p><div class="chips" data-campo="a_alergias"><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="lacteos"> Lacteos (leche, queso)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="gluten"> Gluten (trigo, TACC)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="frutos_secos"> Frutos secos (nueces, almendras)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="mani"> Mani</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="mariscos"> Mariscos y crustaceos</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="pescado"> Pescado</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="huevo"> Huevo</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="soja"> Soja</label></div></div><div class="campo"><label class="etiqueta" for="a_alergias_otras">Alguna otra alergia</label><p class="ayuda">Cortito, solo el alimento. Ejemplo: kiwi, frutilla</p><input type="text" id="a_alergias_otras" name="a_alergias_otras"></div><div class="campo"><span class="etiqueta">Algo que no te caiga bien</span><p class="ayuda">No es alergia: es lo que te hincha, te cae pesado o te descompone.</p><div class="chips" data-campo="a_intolerancias"><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="lactosa"> Lactosa</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="gluten"> Gluten / TACC</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="fructosa"> Fructosa / azucares</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="histamina"> Histamina (fermentados, embutidos)</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="cafeina"> Cafeina (cafe, energizantes)</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="picantes"> Picantes</label></div></div><div class="campo"><label class="etiqueta" for="a_intolerancias_otras">Algo mas que no te caiga bien</label><p class="ayuda">Cortito. Ejemplo: cebolla cruda</p><input type="text" id="a_intolerancias_otras" name="a_intolerancias_otras"></div><div class="campo"><label class="etiqueta" for="a_actividad_fisica">Actividad fisica</label><select id="a_actividad_fisica" name="a_actividad_fisica"><option value="">(elegir)</option><option value="sedentario">Poca o nada</option><option value="moderada">2-3 veces por semana</option><option value="diaria">Casi todos los dias</option></select></div><div class="campo"><label class="etiqueta" for="a_hora_despertar">A que hora te levantas</label><p class="ayuda">Un dia normal, no el domingo. Ejemplo: 6:30</p><input type="text" id="a_hora_despertar" name="a_hora_despertar"></div><div class="campo"><label class="etiqueta" for="a_hora_acostarse">A que hora te acostas</label><p class="ayuda">Asi la cena no te queda pegada a la cama. Ejemplo: 23</p><input type="text" id="a_hora_acostarse" name="a_hora_acostarse"></div><div class="campo"><span class="etiqueta">Tus horas ocupadas</span><p class="ayuda">Tocá las horas en que NO podés parar a comer tranquila: trabajo, viaje, clases, la actividad de los chicos. Con eso el plan corre las comidas para esquivarlas, y las que no se pueden correr te las deja para llevar. Lo que no toques queda como hora libre.</p><div class="chips grilla-horaria" data-campo="a_agenda_ocupada" style="grid-template-columns: 2.6em repeat(3, 1fr)"><span class="gh-esq"></span><span class="gh-dia">Lun a vie</span><span class="gh-dia">Sabado</span><span class="gh-dia">Domingo</span><span class="gh-hora">6</span><label class="gh-celda" title="sem 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-06"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-06"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-06"><span class="gh-marca"></span></label><span class="gh-hora">7</span><label class="gh-celda" title="sem 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-07"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-07"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-07"><span class="gh-marca"></span></label><span class="gh-hora">8</span><label class="gh-celda" title="sem 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-08"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-08"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-08"><span class="gh-marca"></span></label><span class="gh-hora">9</span><label class="gh-celda" title="sem 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-09"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-09"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-09"><span class="gh-marca"></span></label><span class="gh-hora">10</span><label class="gh-celda" title="sem 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-10"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-10"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-10"><span class="gh-marca"></span></label><span class="gh-hora">11</span><label class="gh-celda" title="sem 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-11"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-11"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-11"><span class="gh-marca"></span></label><span class="gh-hora">12</span><label class="gh-celda" title="sem 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-12"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-12"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-12"><span class="gh-marca"></span></label><span class="gh-hora">13</span><label class="gh-celda" title="sem 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-13"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-13"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-13"><span class="gh-marca"></span></label><span class="gh-hora">14</span><label class="gh-celda" title="sem 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-14"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-14"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-14"><span class="gh-marca"></span></label><span class="gh-hora">15</span><label class="gh-celda" title="sem 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-15"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-15"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-15"><span class="gh-marca"></span></label><span class="gh-hora">16</span><label class="gh-celda" title="sem 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-16"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-16"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-16"><span class="gh-marca"></span></label><span class="gh-hora">17</span><label class="gh-celda" title="sem 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-17"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-17"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-17"><span class="gh-marca"></span></label><span class="gh-hora">18</span><label class="gh-celda" title="sem 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-18"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-18"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-18"><span class="gh-marca"></span></label><span class="gh-hora">19</span><label class="gh-celda" title="sem 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-19"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-19"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-19"><span class="gh-marca"></span></label><span class="gh-hora">20</span><label class="gh-celda" title="sem 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-20"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-20"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-20"><span class="gh-marca"></span></label><span class="gh-hora">21</span><label class="gh-celda" title="sem 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-21"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-21"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-21"><span class="gh-marca"></span></label><span class="gh-hora">22</span><label class="gh-celda" title="sem 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-22"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-22"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-22"><span class="gh-marca"></span></label><span class="gh-hora">23</span><label class="gh-celda" title="sem 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-23"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-23"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-23"><span class="gh-marca"></span></label></div></div></section><section><h2>Solo si corresponde</h2><p class="nota">Si no aplica a tu caso, salteate este bloque entero.</p><div class="campo"><label class="etiqueta" for="a_ciclo">Ciclo menstrual</label><select id="a_ciclo" name="a_ciclo"><option value="">(no aplica)</option><option value="menstruando">Menstruo</option><option value="no_menstruando">No menstruo</option><option value="menopausia">Menopausia</option><option value="embarazo">Embarazo</option><option value="lactancia">Lactancia</option></select></div><div class="campo checkbox-solo"><label><input type="checkbox" id="a_buscando_embarazo" name="a_buscando_embarazo"> Estas buscando embarazo</label></div><div class="campo"><label class="etiqueta" for="a_anticoncepcion">Anticoncepcion</label><p class="ayuda">Ejemplo: DIU / pastillas / ninguna</p><input type="text" id="a_anticoncepcion" name="a_anticoncepcion"></div><div class="campo checkbox-solo"><label><input type="checkbox" id="a_sintomas_urinarios" name="a_sintomas_urinarios"> Molestias urinarias o de prostata</label></div></section>
 
     <div class="parte">
       <h3>Y por ultimo, tu tipo de cuerpo y energia</h3>
@@ -268,7 +279,7 @@
 <div class="acciones">
   <div class="adentro">
     <div class="barra"><i id="barra"></i></div>
-    <div id="progreso">Contestaste 0 preguntas de 75</div>
+    <div id="progreso">Contestaste 0 preguntas de 76</div>
     <div id="navegacion" style="display:none">
       <button class="primario" id="btnSiguiente" onclick="irPaso(1)">Siguiente</button>
       <button class="secundario chico" id="btnVolver" onclick="irPaso(-1)">Volver</button>
@@ -288,7 +299,7 @@
 
 <script>
 var META = {"patient_id": null, "paciente": "", "origen": "ficha_web_v1", "version": 1};
-var TOTAL = 75;
+var TOTAL = 76;
 var CLAVE = 'bioanalyst_formulario_nuevo';
 
 function form() { return document.getElementById('f'); }
@@ -922,6 +933,142 @@ function testigoViaElegida() {
   } catch (e) { return 'nombre_fecha'; }
 }
 
+// --- DE DONDE VINO EL PAGO ------------------------------------------------
+// Pedido de Jose (2026-09-10): la muestra de unas "solo este disponible
+// para los que entren por pago en pesos y pais Argentina; para los de
+// PayPal no, ya que si estan en otro pais no pueden enviarme las unias".
+//
+// El pais solo no alcanza: lo contesta ella en un desplegable, y el que
+// paga en dolares desde Miami puede poner Argentina sin mentir. El pago,
+// en cambio, es un hecho. Se lee de la direccion con la que llego -el link
+// de Mercado Pago de la casa vuelve con ?pago=mp pegado- y, si la
+// direccion no lo dice, se le pregunta en un renglon.
+// Va entre comillas A PROPOSITO. El marcador lo reemplaza `js()`, pero si
+// alguna vez llegara sin reemplazar -un modulo viejo, una plantilla a
+// medio armar- suelto quedaria `var X = true;`, que es un
+// error de sintaxis y se lleva puesto el script ENTERO: sin autoguardado,
+// sin pasos y sin boton de mandar. Entre comillas, lo peor que pasa es que
+// se comporta como el formulario de siempre.
+var TESTIGO_ES_WEB = ('true' === 'true');
+// 'mp', 'paypal' o '' (no se sabe). Se calcula una sola vez: la direccion
+// con la que entro no cambia mientras completa la ficha.
+var TESTIGO_PAGO_URL = null;
+
+function testigoQueryDeLaURL() {
+  try {
+    var q = String(window.location.search || '');
+    var hash = String(window.location.hash || '');
+    if (!q && hash.indexOf('?') >= 0) q = hash.slice(hash.indexOf('?'));
+    if (q.charAt(0) === '?') q = q.slice(1);
+    return q;
+  } catch (e) { return ''; }
+}
+
+function testigoPagoDeLaURL() {
+  if (TESTIGO_PAGO_URL !== null) return TESTIGO_PAGO_URL;
+  TESTIGO_PAGO_URL = '';
+  try {
+    var q = testigoQueryDeLaURL();
+    if (!q) return TESTIGO_PAGO_URL;
+    var partes = q.split('&'), mapa = {}, i;
+    for (i = 0; i < partes.length; i++) {
+      var p = partes[i].split('=');
+      if (!p[0]) continue;
+      var k = '', v = '';
+      try {
+        k = decodeURIComponent(p[0]).toLowerCase();
+        v = decodeURIComponent(String(p[1] || '')).toLowerCase();
+      } catch (e1) { continue; }
+      if (!(k in mapa)) mapa[k] = v;
+    }
+    // 1) El que lo dice con todas las letras. El link de pago de la casa
+    //    vuelve a la ficha con ?pago=mp (crear_link_mp.py).
+    var dicho = mapa['pago'] || '';
+    if (dicho === 'mp' || dicho === 'mercadopago') {
+      TESTIGO_PAGO_URL = 'mp'; return TESTIGO_PAGO_URL;
+    }
+    if (dicho === 'pp' || dicho === 'paypal') {
+      TESTIGO_PAGO_URL = 'paypal'; return TESTIGO_PAGO_URL;
+    }
+    // 2) PayPal se mira ANTES que Mercado Pago a proposito: si por lo que
+    //    fuera vinieran los dos, gana el que cierra la puerta. Prometerle
+    //    un correo que no llega es peor que no ofrecerlo.
+    var pp = ['tx', 'txn_id', 'paymentid', 'orderid', 'order_id'];
+    for (i = 0; i < pp.length; i++) {
+      if (mapa[pp[i]] && mapa[pp[i]] !== 'null') {
+        TESTIGO_PAGO_URL = 'paypal'; return TESTIGO_PAGO_URL;
+      }
+    }
+    var mp = ['payment_id', 'collection_id', 'merchant_order_id',
+              'preference_id'];
+    for (i = 0; i < mp.length; i++) {
+      if (mapa[mp[i]] && mapa[mp[i]] !== 'null') {
+        TESTIGO_PAGO_URL = 'mp'; return TESTIGO_PAGO_URL;
+      }
+    }
+  } catch (e) { /* sin direccion legible, se le pregunta y listo */ }
+  return TESTIGO_PAGO_URL;
+}
+
+function testigoPagoContestado() {
+  try {
+    var m = document.querySelector('input[name="t_pago"]:checked');
+    return m ? String(m.value || '') : '';
+  } catch (e) { return ''; }
+}
+
+// La direccion manda; si no dijo nada, lo que ella contesto en el renglon.
+function testigoPago() {
+  try {
+    var u = testigoPagoDeLaURL();
+    if (u) return u;
+    return testigoPagoContestado();
+  } catch (e) { return ''; }
+}
+
+// Se le puede OFRECER el sobre por correo? Espejo exacto de
+// `testigo_opciones.puede_las_unas`, con la unica diferencia que esta
+// puesta a mano: en la ficha web, mientras no se sepa de que pago viene,
+// la opcion no se muestra y se le pregunta. En el formulario que Jose
+// manda a mano -que no sale de ningun pago- manda el pais, igual que hasta
+// hoy: ahi no hay nada que preguntar.
+function testigoPuedeLasUnas() {
+  try {
+    if (!testigoPaisEsArgentina()) return false;
+    var pago = testigoPago();
+    if (pago === 'paypal') return false;
+    if (!pago && TESTIGO_ES_WEB) return false;
+    return true;
+  } catch (e) { return false; }
+}
+
+// Preguntar solo cuando la respuesta CAMBIA algo: es la ficha web, la
+// direccion no lo dijo, y ademas vive en Argentina. Si vive afuera, el
+// sobre ya quedo descartado por el pais y la pregunta seria un tramite de
+// mas.
+function testigoHayQuePreguntarPago() {
+  try {
+    return !!(TESTIGO_ES_WEB && !testigoPagoDeLaURL()
+              && testigoPaisEsArgentina());
+  } catch (e) { return false; }
+}
+
+// Por que no esta la del sobre, dicho como corresponde en cada caso. Los
+// dos motivos son distintos y el consejo tambien: uno es donde vive y el
+// otro con que pago.
+function testigoPorQueNoElSobre() {
+  try {
+    if (!testigoPaisEsArgentina()) {
+      return 'Desde afuera de Argentina el sobre no llega, asi que esa'
+        + ' opcion no esta. Te deje la de nombre y fecha, que vale'
+        + ' exactamente lo mismo.';
+    }
+    return 'La del sobre por correo es solo para el pago en pesos dentro de'
+      + ' Argentina, porque viaja por Correo Argentino. Te deje la de nombre'
+      + ' y fecha, que vale exactamente lo mismo.';
+  } catch (e) { return ''; }
+}
+
 // Eligio la foto y no adjunto ninguna. Del lado de Jose el aviso ya
 // estaba ("eligio FOTO y el archivo llego sin foto: pedisela"), pero ella
 // se iba convencida de que la habia mandado y el ida y vuelta lo terminaba
@@ -938,20 +1085,32 @@ function testigoFaltaLaFoto() {
 // de la que esta marcada. Se llama sola cada vez que se toca algo.
 function testigoSincronizar() {
   try {
-    var ar = testigoPaisEsArgentina();
-    // Si esta en Argentina, el aviso de "desde afuera el sobre no llega" ya
+    // Las DOS condiciones juntas (pais y pago), en un solo lugar. Todo lo
+    // de abajo cuelga de esto: las opciones que se ven, la frase de "las
+    // tres" o "las dos", y el aviso.
+    var unas = testigoPuedeLasUnas();
+    // EL RENGLON DE COMO PAGO. Se destapa solo cuando la respuesta cambia
+    // algo; el resto del tiempo no existe en pantalla.
+    try {
+      var fila = document.getElementById('t_fila_pago');
+      if (fila) {
+        fila.className = testigoHayQuePreguntarPago()
+          ? 'campo hace-falta-preguntar' : 'campo';
+      }
+    } catch (e0) { /* sin el renglon, manda el pais y listo */ }
+    // Si la opcion del sobre esta disponible, el aviso de "esa no esta" ya
     // no corresponde. Sin esto quedaba colgado: la que se habia equivocado
     // de pais y volvia a Argentina veia las tres opciones -la del correo
     // incluida- con un cartel naranja arriba diciendole que esa opcion no
     // estaba. Se contradecian en la misma pantalla.
-    if (ar) testigoDecirPais('');
+    if (unas) testigoDecirPais('');
     // "las tres" o "las dos", segun cuantas le quedan de verdad. Se toca
     // una sola clase en el <html> y cambian las tres frases de una: el
     // rotulo de la parte, el titulo del recuadro y el cuerpo.
     try {
       var raiz = document.documentElement;
       if (raiz && raiz.classList) {
-        if (ar) raiz.classList.remove('afuera');
+        if (unas) raiz.classList.remove('afuera');
         else raiz.classList.add('afuera');
       }
     } catch (e1) { /* la frase de tres queda, y las tres opciones tambien */ }
@@ -959,7 +1118,7 @@ function testigoSincronizar() {
     var i, c, entra;
     for (i = 0; i < chips.length; i++) {
       c = chips[i];
-      entra = ar || c.getAttribute('data-solo-ar') !== '1';
+      entra = unas || c.getAttribute('data-solo-ar') !== '1';
       c.className = entra ? 'chip via' : 'chip via apagada';
       // Si se estaba yendo del pais y tenia marcada la de correo, se
       // vuelve a la de nombre y fecha: mandar un sobre desde afuera no
@@ -973,17 +1132,15 @@ function testigoSincronizar() {
           // El aviso va en la linea de la seccion y NO en la del bloque de
           // la foto: ese bloque puede estar escondido justo cuando esto
           // pasa, y entonces el cartel no lo lee nadie.
-          testigoDecirPais('Desde afuera de Argentina el sobre no llega, asi'
-            + ' que esa opcion no esta. Te deje la de nombre y fecha, que'
-            + ' vale exactamente lo mismo.');
+          testigoDecirPais(testigoPorQueNoElSobre());
         }
       }
     }
     var ayuda = document.getElementById('t_ayuda_pais');
     if (ayuda) {
-      ayuda.textContent = ar
+      ayuda.textContent = unas
         ? 'Tenes las tres. La primera es la mas comoda y es la que uso mas.'
-        : 'Estas son las dos que llegan hasta donde vivis. Las dos valen igual.';
+        : 'Estas son las dos que te sirven a vos. Valen exactamente lo mismo.';
     }
     var via = testigoViaElegida();
     var bloques = document.querySelectorAll('.instructivo');
@@ -1159,7 +1316,11 @@ function testigoParaElArchivo() {
       }
     }
     var sel = document.getElementById('c_pais');
+    // `pago` viaja para que del otro lado se pueda leer POR QUE se le
+    // ofrecio lo que se le ofrecio: 'mp' (pesos), 'paypal' o '' (el
+    // formulario de siempre, que no sale de ningun pago).
     out.testigo = { via: via, pais: (sel ? (sel.value || '') : ''),
+                    pago: testigoPago(),
                     ofrecidas: ofrecidas,
                     foto_adjunta: !!(TESTIGO_FOTO && TESTIGO_FOTO.datos) };
     if (TESTIGO_FOTO && TESTIGO_FOTO.datos) out.foto = TESTIGO_FOTO;
@@ -1361,16 +1522,16 @@ function testigoAlTocar(ev) {
   try {
     var t = ev && ev.target;
     if (!t) return;
-    // Solo dos cosas mueven la seccion: el pais y la opcion elegida. El
-    // resto del formulario (70 campos que disparan un evento por letra)
-    // no tiene que pagar nada de esto.
-    if (t.name === 't_via' || t.id === 'c_pais') {
+    // Solo tres cosas mueven la seccion: el pais, como pago y la opcion
+    // elegida. El resto del formulario (70 campos que disparan un evento
+    // por letra) no tiene que pagar nada de esto.
+    if (t.name === 't_via' || t.name === 't_pago' || t.id === 'c_pais') {
       // El aviso de "esa opcion no llega hasta alla" se borra en cuanto
       // vuelve a elegir: si no, le queda un cartel colgado que ya no
       // corresponde a lo que tiene marcado.
       if (t.name === 't_via') testigoDecirPais('');
       testigoSincronizar();
-      if (t.name === 't_via') return;
+      if (t.name === 't_via' || t.name === 't_pago') return;
     }
     if (t.id && t.id.indexOf('c_') === 0) {
       var clave = t.id.slice(2);
@@ -1458,8 +1619,190 @@ function comprobanteAplicar() {
   } catch (e) { /* el formulario sigue entero sin el autocompletado */ }
 }
 
+// --- LA FOTO DEL COMPROBANTE (2026-09-10) --------------------------------
+// El que paga desde la app de Mercado Pago y entra a la ficha despues (o
+// desde otro telefono) llega con el campo de arriba VACIO: la redireccion
+// que lo autocompleta no paso por su navegador. Copiar doce digitos de una
+// pantalla a otra lo hace la mitad. Adjuntando la captura, el numero se lee
+// SOLO del otro lado, donde vive Tesseract.
+//
+// TODO ESTO ES OPCIONAL. Si el telefono no puede achicar, si el archivo
+// pesa de mas o si esta funcion se rompe entera, la ficha se manda igual y
+// entra como entraba antes: la unica consecuencia es que Jose mira el
+// numero con el ojo, que es exactamente lo que hace hoy.
+var COMPROBANTE_ARCHIVO = null;
+var COMPROBANTE_LEYENDO = false;
+// Mas resolucion que la foto del testigo a proposito: aquella es para que
+// Jose la MIRE, esta es para que la LEA un OCR. A 1000 px una captura de
+// celular deja los digitos en 9 pixeles de alto y no los lee nadie.
+var COMPROBANTE_PASOS = [[1600, 0.82], [1300, 0.75], [1000, 0.65]];
+var COMPROBANTE_TOPE = 1200000;
+
+function comprobanteDecir(txt) {
+  try {
+    var e = document.getElementById('w_comp_estado');
+    if (e) e.textContent = txt || '';
+  } catch (e2) { /* noop */ }
+}
+
+function comprobanteArchivoFallo(txt) {
+  COMPROBANTE_ARCHIVO = null;
+  COMPROBANTE_LEYENDO = false;
+  try {
+    var p = document.getElementById('w_comp_previa');
+    if (p) { p.style.display = 'none'; p.removeAttribute('src'); }
+    var b = document.getElementById('w_comp_sacar');
+    if (b) b.style.display = 'none';
+  } catch (e) { /* noop */ }
+  comprobanteDecir(txt || ('No pude preparar ese archivo en este telefono. '
+    + 'No pasa nada: segui con la ficha, y si tenes el numero de tu pago '
+    + 'escribilo arriba a mano. Tu estudio sale igual.'));
+}
+
+function comprobanteGuardarArchivo() {
+  try {
+    if (!COMPROBANTE_ARCHIVO) return;
+    // Con SU PROPIA llave, aparte de las respuestas: si el telefono se
+    // queda sin lugar, lo que se pierde es el comprobante y no las 75
+    // respuestas que ya escribio.
+    window.localStorage.setItem(CLAVE + '_comp',
+      JSON.stringify(COMPROBANTE_ARCHIVO));
+  } catch (e) { /* sigue en memoria hasta que mande */ }
+}
+
+function comprobanteRestaurarArchivo() {
+  try {
+    var crudo = window.localStorage.getItem(CLAVE + '_comp');
+    if (!crudo) return;
+    var f = JSON.parse(crudo);
+    if (!f || !f.datos) return;
+    COMPROBANTE_ARCHIVO = f;
+    comprobanteMostrarPrevia(f);
+    comprobanteDecir('Tu comprobante quedo guardado de la vez pasada. '
+      + 'Ya esta adjunto.');
+  } catch (e) { /* si no se pudo, elige otro y listo */ }
+}
+
+function comprobanteMostrarPrevia(f) {
+  try {
+    var p = document.getElementById('w_comp_previa');
+    if (p) {
+      if (f.mime && f.mime.indexOf('image/') === 0) {
+        p.src = 'data:' + f.mime + ';base64,' + f.datos;
+        p.style.display = 'block';
+      } else {
+        p.style.display = 'none';
+        p.removeAttribute('src');
+      }
+    }
+    var b = document.getElementById('w_comp_sacar');
+    if (b) b.style.display = 'inline-block';
+  } catch (e) { /* noop */ }
+}
+
+function comprobanteArchivoSacar() {
+  try {
+    COMPROBANTE_ARCHIVO = null;
+    var inp = document.getElementById('w_comp_archivo');
+    if (inp) inp.value = '';
+    var p = document.getElementById('w_comp_previa');
+    if (p) { p.style.display = 'none'; p.removeAttribute('src'); }
+    var b = document.getElementById('w_comp_sacar');
+    if (b) b.style.display = 'none';
+    comprobanteDecir('Saque el comprobante. Podes adjuntar otro cuando '
+      + 'quieras.');
+    try { window.localStorage.removeItem(CLAVE + '_comp'); } catch (e) {}
+  } catch (e) { /* noop */ }
+}
+
+function comprobanteArchivoElegido(input) {
+  try {
+    var f = input && input.files && input.files[0];
+    if (!f) return;
+    if (COMPROBANTE_LEYENDO) {
+      comprobanteDecir('Todavia estoy con el anterior. Esperame que '
+        + 'termine, no lo toques.');
+      return;
+    }
+    COMPROBANTE_LEYENDO = true;
+    var esPdf = (String(f.type || '').indexOf('pdf') >= 0)
+      || /\.pdf$/i.test(String(f.name || ''));
+    comprobanteDecir('Estoy preparando tu comprobante. Puede tardar unos '
+      + 'segundos: no cierres ni toques nada, te aviso cuando este.');
+    var lector = new FileReader();
+    lector.onerror = function () { comprobanteArchivoFallo(); };
+    lector.onload = function (ev) {
+      try {
+        var url = String(ev.target.result || '');
+        var coma = url.indexOf(',');
+        if (coma < 0) { comprobanteArchivoFallo(); return; }
+        var b64 = url.slice(coma + 1);
+
+        // EL PDF NO SE PUEDE ACHICAR EN EL TELEFONO. Va tal cual si entra
+        // en el tope; si no entra, se le dice y sigue sin adjunto.
+        if (esPdf) {
+          var pesa = Math.round(b64.length * 0.75);
+          if (pesa > COMPROBANTE_TOPE * 3) {
+            comprobanteArchivoFallo('Ese PDF pesa demasiado para viajar '
+              + 'adentro de la ficha. Sacale una captura de pantalla y '
+              + 'adjunta esa, o escribi el numero de tu pago arriba a '
+              + 'mano. Tu estudio sale igual.');
+            return;
+          }
+          COMPROBANTE_ARCHIVO = {
+            nombre: String(f.name || 'comprobante.pdf').slice(0, 80),
+            mime: 'application/pdf', datos: b64, bytes: pesa };
+          comprobanteMostrarPrevia(COMPROBANTE_ARCHIVO);
+          COMPROBANTE_LEYENDO = false;
+          comprobanteDecir('Listo, tu comprobante quedo adjunto ('
+            + Math.round(pesa / 1024) + ' KB). Viaja adentro del archivo '
+            + 'que me mandas al final.');
+          comprobanteGuardarArchivo();
+          return;
+        }
+
+        // IMAGEN: se achica en el propio telefono, con MAS resolucion que
+        // la foto del testigo (esta la tiene que leer un OCR). Se reusa
+        // testigoAchicar, que ya vive en esta pagina y esta probado.
+        var img = new Image();
+        img.onerror = function () { comprobanteArchivoFallo(); };
+        img.onload = function () {
+          try {
+            if (typeof testigoAchicar !== 'function') {
+              comprobanteArchivoFallo(); return;
+            }
+            var r = null, i;
+            for (i = 0; i < COMPROBANTE_PASOS.length; i++) {
+              r = testigoAchicar(img, COMPROBANTE_PASOS[i][0],
+                                 COMPROBANTE_PASOS[i][1]);
+              if (r && r.bytes <= 700000) break;
+            }
+            if (!r || r.bytes > COMPROBANTE_TOPE) {
+              comprobanteArchivoFallo(); return;
+            }
+            COMPROBANTE_ARCHIVO = {
+              nombre: String(f.name || 'comprobante.jpg').slice(0, 80),
+              mime: 'image/jpeg', datos: r.datos, ancho: r.ancho,
+              alto: r.alto, bytes: r.bytes };
+            comprobanteMostrarPrevia(COMPROBANTE_ARCHIVO);
+            COMPROBANTE_LEYENDO = false;
+            comprobanteDecir('Listo, tu comprobante quedo adjunto ('
+              + Math.round(r.bytes / 1024) + ' KB). Viaja adentro del '
+              + 'archivo que me mandas al final: no tenes que mandarlo '
+              + 'aparte.');
+            comprobanteGuardarArchivo();
+          } catch (e) { comprobanteArchivoFallo(); }
+        };
+        img.src = url;
+      } catch (e) { comprobanteArchivoFallo(); }
+    };
+    lector.readAsDataURL(f);
+  } catch (e) { comprobanteArchivoFallo(); }
+}
+
 // recolectar() se envuelve, no se toca: si esto falla, el archivo sale
 // igual que siempre (sin comprobante) y todo lo demas intacto.
+var COMPROBANTE_SIN_ADJUNTO = false;
 var recolectarSinComprobante = recolectar;
 recolectar = function () {
   var datos = recolectarSinComprobante();
@@ -1473,8 +1816,34 @@ recolectar = function () {
         proveedor: (prov && prov.value) || '', id: id };
     }
   } catch (e) { /* sin comprobante, el archivo viaja igual */ }
+  try {
+    if (COMPROBANTE_ARCHIVO && !COMPROBANTE_SIN_ADJUNTO) {
+      datos.comprobante_foto = COMPROBANTE_ARCHIVO;
+    }
+  } catch (e) { /* sin adjunto, el archivo viaja igual */ }
   return datos;
 };
+
+// EL PLAN B NO ADMITE ADJUNTOS. copiar() pega el .json como TEXTO en un
+// mensaje: un comprobante en base64 son cientos de miles de letras y no se
+// pega en ningun lado (es la misma razon por la que la foto del testigo se
+// saca ahi). Se baja la bandera un instante, se deja que copiar() haga lo
+// suyo sin el adjunto, y se vuelve a subir.
+try {
+  var _copiarSinComprobante = copiar;
+  copiar = function () {
+    COMPROBANTE_SIN_ADJUNTO = true;
+    try { _copiarSinComprobante(); }
+    finally { COMPROBANTE_SIN_ADJUNTO = false; }
+    try {
+      if (COMPROBANTE_ARCHIVO) {
+        comprobanteDecir('Tu comprobante no entra en un mensaje de texto: '
+          + 'mandamelo aparte como una foto normal, o alcanza con que me '
+          + 'pases el numero de tu pago.');
+      }
+    } catch (e) { /* noop */ }
+  };
+} catch (e) { /* sin esto, copiar() sigue siendo el de siempre */ }
 
 // --- UN BORRADOR POR COMPRADOR --------------------------------------------
 // La clave del guardado local era UNA para todos: dos personas que pagaban
@@ -1505,6 +1874,14 @@ try {
 // Despues de restaurar() y armarPasos(): lo guardado manda, el
 // autocompletado solo llena lo que este vacio.
 try { window.setTimeout(comprobanteAplicar, 0); } catch (e) { /* noop */ }
+// El adjunto se restaura en su PROPIA vuelta, y aparte: si el comprobante
+// guardado quedo corrupto en el telefono, lo que se pierde es el adjunto y
+// no el autocompletado del numero. Va despues de que CLAVE ya quedo con el
+// numero del pago (el bloque de aca abajo), asi cada comprador recupera EL
+// SUYO y no el del que uso la computadora antes.
+try {
+  window.setTimeout(comprobanteRestaurarArchivo, 0);
+} catch (e) { /* noop */ }
 
 // --- A DONDE MANDARLA (solo ficha web) ------------------------------------
 // La funcion que descarga el archivo se llama guardar() -- es la que llama
@@ -1520,9 +1897,200 @@ try {
   var _guardarDeSiempre = guardar;
   guardar = function () {
     _guardarDeSiempre();
-    try { setTimeout(mostrarBotonesEnvio, 350); } catch (e) {}
+    try { despuesDeGuardar(); } catch (e) {
+      try { setTimeout(mostrarBotonesEnvio, 350); } catch (e2) {}
+    }
   };
 } catch (e) {}
+
+// --- EL ESTADO DEL ENVIO --------------------------------------------------
+// 'pendiente' = el archivo esta hecho y todavia no me lo mando.
+// 'mandada'   = uso la hoja de compartir y eligio a donde mandarlo.
+// Vive al lado del borrador, en el mismo telefono. Si el navegador no deja
+// guardar (modo privado, o la pagina abierta como archivo), todo lo demas
+// sigue funcionando igual: lo unico que se pierde es el recordatorio.
+var ENVIO_CLAVE = (typeof CLAVE === 'string' ? CLAVE : 'bioanalyst') + '_envio';
+
+function envioMarcar(estado, archivo) {
+  try {
+    window.localStorage.setItem(ENVIO_CLAVE, JSON.stringify({
+      estado: estado, archivo: archivo || '',
+      cuando: new Date().toISOString().slice(0, 16).replace('T', ' ')
+    }));
+  } catch (e) { /* noop */ }
+}
+
+function envioLeer() {
+  try {
+    var crudo = window.localStorage.getItem(ENVIO_CLAVE);
+    if (!crudo) return null;
+    var d = JSON.parse(crudo);
+    return (d && typeof d === 'object') ? d : null;
+  } catch (e) { return null; }
+}
+
+// ¿TODAVIA ESTA LA FICHA QUE QUEDO SIN MANDAR? (2026-09-10, auditoria).
+// El cartel dice "tu ficha esta completa": si el borrador ya no esta, esa
+// frase es MENTIRA y el boton que la acompaña contesta "todavia no
+// completaste nada". Pasaba de verdad por dos caminos: apretando "Empezar
+// de cero" (borra el borrador y NO tocaba esta marca) y en un telefono que
+// limpio los datos del sitio. Un cartel que grita en falso entrena a
+// ignorarlo, y despues no lo lee el dia que dice algo que importa.
+//
+// El borrador y la marca se escriben juntos -- guardar() llama a
+// guardarLocal() justo antes de bajar el archivo -- asi que "hay marca
+// pendiente Y hay borrador con respuestas" es exactamente "quedo una ficha
+// completa sin mandar". Nunca tira: ante la duda, no hay cartel.
+function envioHayBorrador() {
+  try {
+    var crudo = window.localStorage.getItem(CLAVE);
+    if (!crudo) return false;
+    var d = JSON.parse(crudo);
+    var campos = (d && typeof d === 'object' && d.campos) ? d.campos : null;
+    if (!campos) return false;
+    for (var k in campos) {
+      if (Object.prototype.hasOwnProperty.call(campos, k)) return true;
+    }
+    return false;
+  } catch (e) { return false; }
+}
+
+// Y "Empezar de cero" apaga tambien el recordatorio: si ella misma borro
+// lo que habia, no hay nada pendiente de mandar. Se mira si el borrador se
+// fue de verdad, porque borrar() pregunta primero y ella puede cancelar.
+try {
+  var _borrarDeSiempre = borrar;
+  borrar = function () {
+    _borrarDeSiempre();
+    try {
+      if (!window.localStorage.getItem(CLAVE)) {
+        window.localStorage.removeItem(ENVIO_CLAVE);
+      }
+    } catch (e) { /* noop */ }
+  };
+} catch (e) { /* sin esto, borrar() sigue siendo el de siempre */ }
+
+// El archivo de verdad, para la hoja de compartir. Es EXACTAMENTE lo mismo
+// que acaba de bajar guardar(): se rearma con las mismas funciones.
+function envioArchivo() {
+  try {
+    var datos = conTestigo(recolectar());
+    var txt = JSON.stringify(datos, null, 2);
+    return new File([txt], nombreArchivo(), { type: 'application/json' });
+  } catch (e) { return null; }
+}
+
+function envioSePuedeCompartir(paquete) {
+  try {
+    return !!(navigator && navigator.share && navigator.canShare
+              && navigator.canShare(paquete));
+  } catch (e) { return false; }
+}
+
+// Lo que pasa cuando aprieta el boton verde, DESPUES de que el archivo se
+// genero. Si el telefono deja compartir archivos, se abre la hoja de
+// compartir con el archivo ya adjunto: un solo toque mas y esta mandada.
+// Si no deja, salen los dos botones de siempre.
+function despuesDeGuardar() {
+  var est = document.getElementById('estado');
+  var t = (est && est.textContent) || '';
+  // 'Listo...' es el cartel que pone guardar() cuando el archivo salio. Si
+  // no arranca asi, no hay archivo (falto algo, o el navegador no dejo
+  // descargar) y aca no hay nada que mandar todavia.
+  if (t.indexOf('Listo') !== 0) return;
+  var f = envioArchivo();
+  envioMarcar('pendiente', f ? f.name : '');
+  var paquete = f ? { files: [f], title: 'Mi ficha completada' } : null;
+  if (paquete && envioSePuedeCompartir(paquete)) {
+    try {
+      navigator.share(paquete).then(function () {
+        envioMarcar('mandada', f.name);
+        try {
+          est.textContent = 'Listo, ya me la mandaste. Si el mensaje te '
+            + 'quedo sin enviar, apreta de nuevo el boton verde.';
+        } catch (e) { /* noop */ }
+        try { envioSacarBotones(); } catch (e) { /* noop */ }
+        try { envioSacarCartel(); } catch (e) { /* noop */ }
+      }).catch(function () {
+        // Cancelo, o el telefono no dejo. Queda el camino de siempre.
+        mostrarBotonesEnvio(false, true);
+      });
+      return;
+    } catch (e) { /* sigue por el camino de siempre */ }
+  }
+  setTimeout(function () { mostrarBotonesEnvio(false); }, 350);
+}
+
+function envioSacarBotones() {
+  try {
+    var previa = document.getElementById('envio-botones');
+    if (previa && previa.parentNode) previa.parentNode.removeChild(previa);
+  } catch (e) { /* noop */ }
+}
+
+// --- EL CARTEL DE "TODAVIA NO ME LLEGO" -----------------------------------
+// Se dibuja al abrir la pagina, arriba de todo, cuando quedo una ficha
+// completa sin mandar. Es el unico aviso que le puede llegar: la pagina no
+// tiene servidor atras y Jose no tiene forma de saber que ella la lleno.
+function envioSacarCartel() {
+  try {
+    var c = document.getElementById('envio-cartel');
+    if (c && c.parentNode) c.parentNode.removeChild(c);
+  } catch (e) { /* noop */ }
+}
+
+function envioCartel() {
+  try {
+    var d = envioLeer();
+    if (!d || d.estado !== 'pendiente') return false;
+    // Y que la ficha de la que habla siga estando (ver envioHayBorrador).
+    if (!envioHayBorrador()) return false;
+    envioSacarCartel();
+    var caja = document.createElement('div');
+    caja.id = 'envio-cartel';
+    caja.style.cssText = 'background:rgba(196,122,53,.14);border:1px solid '
+      + 'rgba(196,122,53,.55);border-radius:10px;padding:12px 14px;'
+      + 'font-size:14px;margin-bottom:16px;line-height:1.45';
+    var p = document.createElement('p');
+    p.style.cssText = 'margin:0 0 10px';
+    p.innerHTML = '<strong>Tu ficha esta completa, pero todavia no me '
+      + 'llego.</strong> Quedo guardada en este telefono: apreta el boton de '
+      + 'abajo y mandamela, que sin ella no puedo arrancar tu estudio.';
+    caja.appendChild(p);
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = 'Mandarmela ahora';
+    b.style.cssText = 'display:inline-block;padding:12px 22px;border:0;'
+      + 'border-radius:999px;font-weight:700;font-size:15px;cursor:pointer;'
+      + 'background:#006B64;color:#fff';
+    b.onclick = function () { try { guardar(); } catch (e) { /* noop */ } };
+    caja.appendChild(b);
+    var anclaje = document.getElementById('retomado');
+    if (anclaje && anclaje.parentNode) {
+      anclaje.parentNode.insertBefore(caja, anclaje);
+    } else {
+      document.body.insertBefore(caja, document.body.firstChild);
+    }
+    return true;
+  } catch (e) { return false; }
+}
+
+// UN SOLO CAMINO: el boton verde deja de decir "Guardar y mandar" (que no
+// dice a donde) y pasa a decir lo unico que hay que hacer. Si el boton
+// cambiara de lugar, se pierde solo el texto: el boton sigue andando.
+function envioRenombrarBoton() {
+  try {
+    var finales = document.getElementById('finales');
+    if (!finales) return;
+    var b = finales.querySelector('button.primario');
+    if (b) b.textContent = 'Mandarmela ahora';
+  } catch (e) { /* noop */ }
+}
+
+try {
+  envioRenombrarBoton();
+  envioCartel();
+} catch (e) { /* noop */ }
 
 // El plan B ("No pude descargar: copiar el texto") dejaba a la paciente
 // igual de sola: texto copiado y ni un boton que diga a donde mandarlo
@@ -1532,12 +2100,19 @@ try {
   copiar = function () {
     _copiarDeSiempre();
     try {
+      var estC = document.getElementById('estado');
+      var tC = (estC && estC.textContent) || '';
+      if (tC.indexOf('Copiado') === 0 || tC.indexOf('Selecciona') === 0) {
+        envioMarcar('pendiente', '');
+      }
+    } catch (e) {}
+    try {
       setTimeout(function () { mostrarBotonesEnvio(true); }, 350);
     } catch (e) {}
   };
 } catch (e) {}
 
-function mostrarBotonesEnvio(porCopia) {
+function mostrarBotonesEnvio(porCopia, porCancelada) {
   try {
     var est = document.getElementById('estado');
     if (!est) return;
@@ -1562,6 +2137,14 @@ function mostrarBotonesEnvio(porCopia) {
       a.style.cssText = 'display:inline-block;padding:13px 22px;' +
         'border-radius:999px;text-decoration:none;font-weight:700;' +
         'font-size:15px;background:#006B64;color:#fff';
+      // Se fue a mandarla: se apaga el recordatorio de "todavia no me
+      // llego". No es una confirmacion (nadie del otro lado puede
+      // saberlo), es lo mismo que sabe la hoja de compartir: que eligio a
+      // donde mandarla.
+      a.onclick = function () {
+        try { envioMarcar('mandada', ''); } catch (e) { /* noop */ }
+        try { envioSacarCartel(); } catch (e) { /* noop */ }
+      };
       return a;
     }
     var wsp = '5493434518981';
@@ -1572,7 +2155,7 @@ function mostrarBotonesEnvio(porCopia) {
           : 'Hola Jose! Te mando mi ficha completada: te adjunto el ' +
             'archivo que se acaba de descargar.')));
     }
-    var mail = 'tarjetacuantica0@gmail.com';
+    var mail = 'Tarjetacuantica0@gmail.com';
     if (mail) {
       caja.appendChild(boton('Mandarla por mail',
         'mailto:' + mail + '?subject=' + encodeURIComponent(
@@ -1586,8 +2169,11 @@ function mostrarBotonesEnvio(porCopia) {
     ayuda.textContent = porCopia
       ? 'El texto de tu ficha ya quedo copiado: abri el mensaje, mantene ' +
         'apretado donde se escribe, toca "Pegar" y mandalo.'
-      : 'El archivo quedo en tu carpeta de Descargas: ' +
-        'adjuntalo al mensaje con el clip.';
+      : (porCancelada
+        ? 'Quedo sin mandarse. El archivo esta en tu carpeta de Descargas: ' +
+          'elegi por donde y adjuntalo con el clip.'
+        : 'El archivo quedo en tu carpeta de Descargas: ' +
+          'adjuntalo al mensaje con el clip.');
     caja.appendChild(ayuda);
     est.parentNode.insertBefore(caja, est.nextSibling);
     caja.scrollIntoView({behavior: 'smooth', block: 'center'});

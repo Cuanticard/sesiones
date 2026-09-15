@@ -201,7 +201,7 @@
   </header>
 
   <div class="intro" id="introduccion">
-    <p>Hola, son <strong>cuatro partes</strong>, casi todo de tocar una
+    <p><span id="saludo">Hola,</span> son <strong>cuatro partes</strong>, casi todo de tocar una
        opcion. Se va de a un paso por vez: contesta y apreta
        <strong>Siguiente</strong>.</p>
     <p>Lo que no sepas o no quieras contestar, dejalo vacio y lo charlamos.
@@ -263,14 +263,14 @@
                 onclick="testigoFotoSacar()">Sacar esta foto y elegir otra</button>
       </div>
       <p class="nota">Si tu telefono no la puede achicar, te lo digo ahi
-         mismo y te paso a donde mandarmela. El estudio sale igual.</p><p class="nota">Tu foto se usa solo para tu estudio. No se comparte ni se publica.</p></div><div class="instructivo" id="t_ins_muestra_postal" data-via="muestra_postal"><h4>Muestra de uñas por correo</h4><ol><li>Lavate bien las manos y secalas. Sin esmalte: si tenes, sacalo antes.</li><li>Cortate las uñas de UNA mano. Si te queda mas comodo, las de un pie sirven igual. Con los recortes de esa mano (o ese pie) alcanza: no hace falta que sean grandes ni que cortes de mas.</li><li>Ponelos en una bolsita chica con cierre (una ziploc), o envueltos en papel de cocina limpio adentro de un sobre.</li><li>Con birome, escribi en la bolsita o en un papelito adentro tu nombre completo y tu fecha de nacimiento.</li><li>Mandalo por Correo Argentino (carta simple o encomienda) a la direccion de aca abajo.</li><li>Cuando lo despaches, avisame asi lo espero.</li><li>Tu estudio arranca el dia que el sobre me llega: hasta que no lo tenga en la mano no puedo empezar. Por eso mandame igual este formulario ahora, sin esperar: asi cuando llegue el sobre arranco de una.</li></ol><div class="direccion"><span class="direccion-rotulo">Mandalo a:</span><br>Jose Maria Basgall<br>Carbo 275<br>Crespo<br>Entre Rios<br>CP 3116<br>Argentina</div><p class="nota">Esta opcion es solo dentro de Argentina y para el pago en pesos: desde afuera el sobre no llega. Es la unica de las tres que tiene espera, porque tu estudio arranca cuando el sobre esta en mi mano. La muestra se usa una sola vez para tu estudio y se descarta despues.</p></div>
+         mismo y te paso a donde mandarmela. El estudio sale igual.</p><p class="nota">Tu foto se usa solo para tu estudio. No se comparte ni se publica.</p></div><div class="instructivo" id="t_ins_muestra_postal" data-via="muestra_postal"><h4>Muestra de uñas por correo</h4><ol><li>Lavate bien las manos y secalas. Sin esmalte: si tenes, sacalo antes.</li><li>Cortate las uñas de UNA mano. Si te queda mas comodo, las de un pie sirven igual. Con los recortes de esa mano (o ese pie) alcanza: no hace falta que sean grandes ni que cortes de mas.</li><li>Ponelos en una bolsita chica con cierre (una ziploc), o envueltos en papel de cocina limpio adentro de un sobre.</li><li>Con birome, escribi en la bolsita o en un papelito adentro tu nombre completo y tu fecha de nacimiento.</li><li>Mandalo por Correo Argentino (carta simple o encomienda) a la direccion de aca abajo.</li><li>Cuando lo despaches, avisame asi lo espero.</li><li>Tu estudio arranca el dia que el sobre me llega: hasta que no lo tenga en la mano no puedo empezar. Por eso mandame igual este formulario ahora, sin esperar: asi cuando llegue el sobre arranco de una.</li></ol><div class="direccion"><span class="direccion-rotulo">Mandalo a:</span><br>Jose Maria Basgall<br>Carbo 275<br>Crespo<br>Entre Rios<br>CP 3116<br>Argentina</div><p class="nota">Esta forma es solo dentro de Argentina: el sobre viaja por Correo Argentino y desde afuera no llega. Es la unica de las tres que tiene espera, porque tu estudio arranca cuando el sobre esta en mi mano. La muestra se usa una sola vez para tu estudio y se descarta despues.</p></div>
   </section>
 
     <div class="parte">
       <h3>Despues, tu historia</h3>
       <p>Que te trae, como venis y que te paso antes.</p>
     </div>
-    <section><h2>Para empezar</h2><div class="campo"><label class="etiqueta" for="a_edad">Edad</label><p class="ayuda">En anios. Ejemplo: 44</p><input type="number" id="a_edad" name="a_edad" min="0"></div><div class="campo"><label class="etiqueta" for="a_sexo">Sexo</label><select id="a_sexo" name="a_sexo"><option value="">(elegir)</option><option value="F">Femenino</option><option value="M">Masculino</option><option value="otro">Otro</option></select></div><div class="campo"><label class="etiqueta" for="a_peso_kg">Peso aproximado (kg)</label><p class="ayuda">Ejemplo: 78. Si no sabes exacto, aproximado esta bien. Sirve para ajustar las cantidades del plan de alimentacion y el agua del dia.</p><input type="number" id="a_peso_kg" name="a_peso_kg" min="0"></div><div class="campo"><label class="etiqueta" for="a_altura_cm">Altura (cm)</label><p class="ayuda">Ejemplo: 175</p><input type="number" id="a_altura_cm" name="a_altura_cm" min="0"></div><div class="campo"><label class="etiqueta" for="a_grupo_sanguineo">Tu grupo sanguineo</label><p class="ayuda">Si no te lo acordas, elegi &#x27;No lo se&#x27; y seguimos: no hace falta que lo busques ni que te hagas nada.</p><select id="a_grupo_sanguineo" name="a_grupo_sanguineo"><option value="">(sin responder)</option><option value="no_sabe">No lo se</option><option value="0-">0-</option><option value="0+">0+</option><option value="A-">A-</option><option value="A+">A+</option><option value="B-">B-</option><option value="B+">B+</option><option value="AB-">AB-</option><option value="AB+">AB+</option></select></div><div class="campo"><label class="etiqueta" for="a_ocupacion">A que te dedicas</label><p class="ayuda">Ejemplo: docente / camionero / trabajo en casa con dos chicos</p><input type="text" id="a_ocupacion" name="a_ocupacion"></div></section><section><h2>Que te trae</h2><div class="campo"><label class="etiqueta" for="a_motivo_consulta">Contame con tus palabras que te pasa</label><p class="ayuda">Escribi como se lo contarias a alguien de confianza. Ejemplo: &#x27;hace como un anio que me levanto cansado aunque duerma bien, y despues de comer me hincho mucho. Empezo despues de una mudanza pesada.&#x27;</p><textarea id="a_motivo_consulta" name="a_motivo_consulta" rows="4"></textarea></div><div class="campo"><span class="etiqueta">Marca lo que sentis seguido</span><div class="chips" data-campo="a_sintomas_actuales"><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="cansancio"> Cansancio</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="digestion"> Digestion pesada</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="sueno"> Duermo mal</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="dolor"> Dolores</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="animo"> Animo bajo</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="piel"> Piel</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="hormonal"> Hormonal</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="articulaciones"> Articulaciones</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="respiracion"> Respiracion</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="ojos"> Vista</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="cabeza"> Dolor de cabeza</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="peso"> Peso</label></div></div><div class="campo"><label class="etiqueta" for="a_sintomas_otros">Algo mas que no este arriba</label><p class="ayuda">Ejemplo: zumbido en el oido derecho</p><input type="text" id="a_sintomas_otros" name="a_sintomas_otros"></div><div class="campo"><label class="etiqueta" for="a_duracion_sintomas">Desde cuando</label><p class="ayuda">Ejemplo: 3 meses / desde el embarazo / hace anios</p><input type="text" id="a_duracion_sintomas" name="a_duracion_sintomas"></div><div class="campo"><label class="etiqueta" for="a_intensidad_1_10">Cuanto te molesta, del 1 al 10</label><p class="ayuda">1 = casi no lo noto. 10 = me condiciona el dia.</p><div class="rango"><input type="range" id="a_intensidad_1_10" name="a_intensidad_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div></section><section><h2>Como venis estos dias</h2><div class="campo"><label class="etiqueta" for="a_energia_1_10">Tu energia, del 1 al 10</label><p class="ayuda">1 = arrastrandome. 10 = a full.</p><div class="rango"><input type="range" id="a_energia_1_10" name="a_energia_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div><div class="campo"><label class="etiqueta" for="a_durmio_bien_anoche">Como venis durmiendo</label><select id="a_durmio_bien_anoche" name="a_durmio_bien_anoche"><option value="">(elegir)</option><option value="si">Bien</option><option value="regular">Mas o menos</option><option value="no">Mal</option></select></div><div class="campo"><label class="etiqueta" for="a_estres_1_10">Tu nivel de estres, del 1 al 10</label><div class="rango"><input type="range" id="a_estres_1_10" name="a_estres_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div><div class="campo"><label class="etiqueta" for="a_situacion_vida">Esta pasando algo importante en tu vida</label><p class="ayuda">Mudanza, duelo, cambio de trabajo, separacion, un proyecto nuevo. Lo que sientas que pesa. Si preferis no escribirlo, dejalo vacio y lo charlamos.</p><textarea id="a_situacion_vida" name="a_situacion_vida" rows="3"></textarea></div></section><section><h2>Antecedentes</h2><div class="campo"><label class="etiqueta" for="a_medicacion_detalle">Medicacion o suplementos que tomes</label><p class="ayuda">Nombre y para que, si lo sabes. Ejemplo: &#x27;levotiroxina 50 para la tiroides, magnesio a la noche&#x27;. Esto es importante: hay cosas que no se combinan.</p><textarea id="a_medicacion_detalle" name="a_medicacion_detalle" rows="3"></textarea></div><div class="campo"><label class="etiqueta" for="a_medicacion_desde">Hace cuanto la tomas</label><p class="ayuda">Mas o menos esta bien: &#x27;hace 3 meses&#x27;, &#x27;desde el 2019&#x27;, &#x27;hace mucho tiempo&#x27;.</p><input type="text" id="a_medicacion_desde" name="a_medicacion_desde"></div><div class="campo"><span class="etiqueta">Te diagnosticaron alguna de estas</span><div class="chips" data-campo="a_diagnosticos_previos"><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="diabetes"> Diabetes</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="hipertension"> Presion alta</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="tiroides"> Tiroides</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="autoinmune"> Autoinmune</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="cardio"> Corazon</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="renal"> Rinion</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="hepatica"> Higado</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="asma"> Asma</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="oncologico"> Oncologico</label></div></div><div class="campo"><label class="etiqueta" for="a_cirugias_previas">Cirugias que te hayan hecho</label><p class="ayuda">Ejemplo: vesicula 2019, cesarea 2015</p><input type="text" id="a_cirugias_previas" name="a_cirugias_previas"></div><div class="campo"><label class="etiqueta" for="a_antecedentes_familiares">Cosas que se repiten en tu familia</label><p class="ayuda">Ejemplo: diabetes por parte de madre, tiroides mi hermana</p><input type="text" id="a_antecedentes_familiares" name="a_antecedentes_familiares"></div></section><section><h2>Como comes y te movés</h2><div class="campo"><label class="etiqueta" for="a_alimentacion">Tu alimentacion</label><select id="a_alimentacion" name="a_alimentacion"><option value="">(elegir)</option><option value="omnivoro">De todo</option><option value="vegetariano">Vegetariana</option><option value="vegano">Vegana</option><option value="sin_gluten">Sin gluten</option><option value="otro">Otra</option></select></div><div class="campo"><span class="etiqueta">Sos alergica o alergico a alguno de estos</span><p class="ayuda">Marca lo que te haga reaccion. Esto manda sobre todo lo demas: lo que marques aca no te lo vamos a recomendar aunque el equipo lo de bien.</p><div class="chips" data-campo="a_alergias"><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="lacteos"> Lacteos (leche, queso)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="gluten"> Gluten (trigo, TACC)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="frutos_secos"> Frutos secos (nueces, almendras)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="mani"> Mani</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="mariscos"> Mariscos y crustaceos</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="pescado"> Pescado</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="huevo"> Huevo</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="soja"> Soja</label></div></div><div class="campo"><label class="etiqueta" for="a_alergias_otras">Alguna otra alergia</label><p class="ayuda">Cortito, solo el alimento. Ejemplo: kiwi, frutilla</p><input type="text" id="a_alergias_otras" name="a_alergias_otras"></div><div class="campo"><span class="etiqueta">Algo que no te caiga bien</span><p class="ayuda">No es alergia: es lo que te hincha, te cae pesado o te descompone.</p><div class="chips" data-campo="a_intolerancias"><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="lactosa"> Lactosa</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="gluten"> Gluten / TACC</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="fructosa"> Fructosa / azucares</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="histamina"> Histamina (fermentados, embutidos)</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="cafeina"> Cafeina (cafe, energizantes)</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="picantes"> Picantes</label></div></div><div class="campo"><label class="etiqueta" for="a_intolerancias_otras">Algo mas que no te caiga bien</label><p class="ayuda">Cortito. Ejemplo: cebolla cruda</p><input type="text" id="a_intolerancias_otras" name="a_intolerancias_otras"></div><div class="campo"><label class="etiqueta" for="a_actividad_fisica">Actividad fisica</label><select id="a_actividad_fisica" name="a_actividad_fisica"><option value="">(elegir)</option><option value="sedentario">Poca o nada</option><option value="moderada">2-3 veces por semana</option><option value="diaria">Casi todos los dias</option></select></div><div class="campo"><label class="etiqueta" for="a_hora_despertar">A que hora te levantas</label><p class="ayuda">Un dia normal, no el domingo. Ejemplo: 6:30</p><input type="text" id="a_hora_despertar" name="a_hora_despertar"></div><div class="campo"><label class="etiqueta" for="a_hora_acostarse">A que hora te acostas</label><p class="ayuda">Asi la cena no te queda pegada a la cama. Ejemplo: 23</p><input type="text" id="a_hora_acostarse" name="a_hora_acostarse"></div><div class="campo"><span class="etiqueta">Tus horas ocupadas</span><p class="ayuda">Tocá las horas en que NO podés parar a comer tranquila: trabajo, viaje, clases, la actividad de los chicos. Con eso el plan corre las comidas para esquivarlas, y las que no se pueden correr te las deja para llevar. Lo que no toques queda como hora libre.</p><div class="chips grilla-horaria" data-campo="a_agenda_ocupada" style="grid-template-columns: 2.6em repeat(3, 1fr)"><span class="gh-esq"></span><span class="gh-dia">Lun a vie</span><span class="gh-dia">Sabado</span><span class="gh-dia">Domingo</span><span class="gh-hora">6</span><label class="gh-celda" title="sem 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-06"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-06"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-06"><span class="gh-marca"></span></label><span class="gh-hora">7</span><label class="gh-celda" title="sem 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-07"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-07"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-07"><span class="gh-marca"></span></label><span class="gh-hora">8</span><label class="gh-celda" title="sem 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-08"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-08"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-08"><span class="gh-marca"></span></label><span class="gh-hora">9</span><label class="gh-celda" title="sem 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-09"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-09"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-09"><span class="gh-marca"></span></label><span class="gh-hora">10</span><label class="gh-celda" title="sem 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-10"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-10"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-10"><span class="gh-marca"></span></label><span class="gh-hora">11</span><label class="gh-celda" title="sem 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-11"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-11"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-11"><span class="gh-marca"></span></label><span class="gh-hora">12</span><label class="gh-celda" title="sem 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-12"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-12"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-12"><span class="gh-marca"></span></label><span class="gh-hora">13</span><label class="gh-celda" title="sem 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-13"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-13"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-13"><span class="gh-marca"></span></label><span class="gh-hora">14</span><label class="gh-celda" title="sem 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-14"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-14"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-14"><span class="gh-marca"></span></label><span class="gh-hora">15</span><label class="gh-celda" title="sem 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-15"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-15"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-15"><span class="gh-marca"></span></label><span class="gh-hora">16</span><label class="gh-celda" title="sem 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-16"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-16"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-16"><span class="gh-marca"></span></label><span class="gh-hora">17</span><label class="gh-celda" title="sem 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-17"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-17"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-17"><span class="gh-marca"></span></label><span class="gh-hora">18</span><label class="gh-celda" title="sem 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-18"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-18"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-18"><span class="gh-marca"></span></label><span class="gh-hora">19</span><label class="gh-celda" title="sem 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-19"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-19"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-19"><span class="gh-marca"></span></label><span class="gh-hora">20</span><label class="gh-celda" title="sem 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-20"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-20"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-20"><span class="gh-marca"></span></label><span class="gh-hora">21</span><label class="gh-celda" title="sem 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-21"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-21"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-21"><span class="gh-marca"></span></label><span class="gh-hora">22</span><label class="gh-celda" title="sem 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-22"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-22"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-22"><span class="gh-marca"></span></label><span class="gh-hora">23</span><label class="gh-celda" title="sem 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-23"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-23"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-23"><span class="gh-marca"></span></label></div></div></section><section><h2>Solo si corresponde</h2><p class="nota">Si no aplica a tu caso, salteate este bloque entero.</p><div class="campo"><label class="etiqueta" for="a_ciclo">Ciclo menstrual</label><select id="a_ciclo" name="a_ciclo"><option value="">(no aplica)</option><option value="menstruando">Menstruo</option><option value="no_menstruando">No menstruo</option><option value="menopausia">Menopausia</option><option value="embarazo">Embarazo</option><option value="lactancia">Lactancia</option></select></div><div class="campo checkbox-solo"><label><input type="checkbox" id="a_buscando_embarazo" name="a_buscando_embarazo"> Estas buscando embarazo</label></div><div class="campo"><label class="etiqueta" for="a_anticoncepcion">Anticoncepcion</label><p class="ayuda">Ejemplo: DIU / pastillas / ninguna</p><input type="text" id="a_anticoncepcion" name="a_anticoncepcion"></div><div class="campo checkbox-solo"><label><input type="checkbox" id="a_sintomas_urinarios" name="a_sintomas_urinarios"> Molestias urinarias o de prostata</label></div></section>
+    <section><h2>Para empezar</h2><div class="campo"><label class="etiqueta" for="a_edad">Edad <span class="hace-falta">hace falta</span></label><p class="ayuda">En numeros. Ejemplo: 64</p><input type="number" id="a_edad" name="a_edad" inputmode="numeric" min="0" max="120" step="1"><p class="aviso" id="av_a_edad"></p><p class="eco" id="ok_a_edad"></p></div><div class="campo"><label class="etiqueta" for="a_sexo">Sexo</label><select id="a_sexo" name="a_sexo"><option value="">(elegir)</option><option value="F">Femenino</option><option value="M">Masculino</option><option value="otro">Otro</option></select></div><div class="campo"><label class="etiqueta" for="a_peso_kg">Peso aproximado (kg)</label><p class="ayuda">Ejemplo: 78. Si no sabes exacto, aproximado esta bien. Sirve para ajustar las cantidades del plan de alimentacion y el agua del dia.</p><input type="number" id="a_peso_kg" name="a_peso_kg" min="0"></div><div class="campo"><label class="etiqueta" for="a_altura_cm">Altura (cm)</label><p class="ayuda">Ejemplo: 175</p><input type="number" id="a_altura_cm" name="a_altura_cm" min="0"></div><div class="campo"><label class="etiqueta" for="a_grupo_sanguineo">Tu grupo sanguineo</label><p class="ayuda">Si no te lo acordas, elegi &#x27;No lo se&#x27; y seguimos: no hace falta que lo busques ni que te hagas nada.</p><select id="a_grupo_sanguineo" name="a_grupo_sanguineo"><option value="">(sin responder)</option><option value="no_sabe">No lo se</option><option value="0-">0-</option><option value="0+">0+</option><option value="A-">A-</option><option value="A+">A+</option><option value="B-">B-</option><option value="B+">B+</option><option value="AB-">AB-</option><option value="AB+">AB+</option></select></div><div class="campo"><label class="etiqueta" for="a_ocupacion">A que te dedicas</label><p class="ayuda">Ejemplo: docente / camionero / trabajo en casa con dos chicos</p><input type="text" id="a_ocupacion" name="a_ocupacion"></div></section><section><h2>Que te trae</h2><div class="campo"><label class="etiqueta" for="a_motivo_consulta">Contame con tus palabras que te pasa</label><p class="ayuda">Escribi como se lo contarias a alguien de confianza. Ejemplo: &#x27;hace como un anio que me levanto cansado aunque duerma bien, y despues de comer me hincho mucho. Empezo despues de una mudanza pesada.&#x27;</p><textarea id="a_motivo_consulta" name="a_motivo_consulta" rows="4"></textarea></div><div class="campo"><span class="etiqueta">Marca lo que sentis seguido</span><div class="chips" data-campo="a_sintomas_actuales"><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="cansancio"> Cansancio</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="digestion"> Digestion pesada</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="sueno"> Duermo mal</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="dolor"> Dolores</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="animo"> Animo bajo</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="piel"> Piel</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="hormonal"> Hormonal</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="articulaciones"> Articulaciones</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="respiracion"> Respiracion</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="ojos"> Vista</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="cabeza"> Dolor de cabeza</label><label class="chip"><input type="checkbox" data-grupo="a_sintomas_actuales" value="peso"> Peso</label></div></div><div class="campo"><label class="etiqueta" for="a_sintomas_otros">Algo mas que no este arriba</label><p class="ayuda">Ejemplo: zumbido en el oido derecho</p><input type="text" id="a_sintomas_otros" name="a_sintomas_otros"></div><div class="campo"><label class="etiqueta" for="a_duracion_sintomas">Desde cuando</label><p class="ayuda">Ejemplo: 3 meses / desde el embarazo / hace anios</p><input type="text" id="a_duracion_sintomas" name="a_duracion_sintomas"></div><div class="campo"><label class="etiqueta" for="a_intensidad_1_10">Cuanto te molesta, del 1 al 10</label><p class="ayuda">1 = casi no lo noto. 10 = me condiciona el dia.</p><div class="rango"><input type="range" id="a_intensidad_1_10" name="a_intensidad_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div></section><section><h2>Como venis estos dias</h2><div class="campo"><label class="etiqueta" for="a_energia_1_10">Tu energia, del 1 al 10</label><p class="ayuda">1 = arrastrandome. 10 = a full.</p><div class="rango"><input type="range" id="a_energia_1_10" name="a_energia_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div><div class="campo"><label class="etiqueta" for="a_durmio_bien_anoche">Como venis durmiendo</label><select id="a_durmio_bien_anoche" name="a_durmio_bien_anoche"><option value="">(elegir)</option><option value="si">Bien</option><option value="regular">Mas o menos</option><option value="no">Mal</option></select></div><div class="campo"><label class="etiqueta" for="a_estres_1_10">Tu nivel de estres, del 1 al 10</label><div class="rango"><input type="range" id="a_estres_1_10" name="a_estres_1_10" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value"><output>5</output></div></div><div class="campo"><label class="etiqueta" for="a_situacion_vida">Esta pasando algo importante en tu vida</label><p class="ayuda">Mudanza, duelo, cambio de trabajo, separacion, un proyecto nuevo. Lo que sientas que pesa. Si preferis no escribirlo, dejalo vacio y lo charlamos.</p><textarea id="a_situacion_vida" name="a_situacion_vida" rows="3"></textarea></div></section><section><h2>Antecedentes</h2><div class="campo"><label class="etiqueta" for="a_medicacion_detalle">Medicacion o suplementos que tomes</label><p class="ayuda">Nombre y para que, si lo sabes. Ejemplo: &#x27;levotiroxina 50 para la tiroides, magnesio a la noche&#x27;. Esto es importante: hay cosas que no se combinan.</p><textarea id="a_medicacion_detalle" name="a_medicacion_detalle" rows="3"></textarea></div><div class="campo"><label class="etiqueta" for="a_medicacion_desde">Hace cuanto la tomas</label><p class="ayuda">Mas o menos esta bien: &#x27;hace 3 meses&#x27;, &#x27;desde el 2019&#x27;, &#x27;hace mucho tiempo&#x27;.</p><input type="text" id="a_medicacion_desde" name="a_medicacion_desde"></div><div class="campo"><span class="etiqueta">Te diagnosticaron alguna de estas</span><div class="chips" data-campo="a_diagnosticos_previos"><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="diabetes"> Diabetes</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="hipertension"> Presion alta</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="tiroides"> Tiroides</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="autoinmune"> Autoinmune</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="cardio"> Corazon</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="renal"> Rinion</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="hepatica"> Higado</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="asma"> Asma</label><label class="chip"><input type="checkbox" data-grupo="a_diagnosticos_previos" value="oncologico"> Oncologico</label></div></div><div class="campo"><label class="etiqueta" for="a_cirugias_previas">Cirugias que te hayan hecho</label><p class="ayuda">Ejemplo: vesicula 2019, cesarea 2015</p><input type="text" id="a_cirugias_previas" name="a_cirugias_previas"></div><div class="campo"><label class="etiqueta" for="a_antecedentes_familiares">Cosas que se repiten en tu familia</label><p class="ayuda">Ejemplo: diabetes por parte de madre, tiroides mi hermana</p><input type="text" id="a_antecedentes_familiares" name="a_antecedentes_familiares"></div></section><section><h2>Como comes y te movés</h2><div class="campo"><label class="etiqueta" for="a_alimentacion">Tu alimentacion</label><select id="a_alimentacion" name="a_alimentacion"><option value="">(elegir)</option><option value="omnivoro">De todo</option><option value="vegetariano">Vegetariana</option><option value="vegano">Vegana</option><option value="sin_gluten">Sin gluten</option><option value="otro">Otra</option></select></div><div class="campo"><span class="etiqueta">Sos alergica o alergico a alguno de estos</span><p class="ayuda">Marca lo que te haga reaccion. Esto manda sobre todo lo demas: lo que marques aca no te lo vamos a recomendar aunque el equipo lo de bien.</p><div class="chips" data-campo="a_alergias"><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="lacteos"> Lacteos (leche, queso)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="gluten"> Gluten (trigo, TACC)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="frutos_secos"> Frutos secos (nueces, almendras)</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="mani"> Mani</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="mariscos"> Mariscos y crustaceos</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="pescado"> Pescado</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="huevo"> Huevo</label><label class="chip"><input type="checkbox" data-grupo="a_alergias" value="soja"> Soja</label></div></div><div class="campo"><label class="etiqueta" for="a_alergias_otras">Alguna otra alergia</label><p class="ayuda">Cortito, solo el alimento. Ejemplo: kiwi, frutilla</p><input type="text" id="a_alergias_otras" name="a_alergias_otras"></div><div class="campo"><span class="etiqueta">Algo que no te caiga bien</span><p class="ayuda">No es alergia: es lo que te hincha, te cae pesado o te descompone.</p><div class="chips" data-campo="a_intolerancias"><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="lactosa"> Lactosa</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="gluten"> Gluten / TACC</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="fructosa"> Fructosa / azucares</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="histamina"> Histamina (fermentados, embutidos)</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="cafeina"> Cafeina (cafe, energizantes)</label><label class="chip"><input type="checkbox" data-grupo="a_intolerancias" value="picantes"> Picantes</label></div></div><div class="campo"><label class="etiqueta" for="a_intolerancias_otras">Algo mas que no te caiga bien</label><p class="ayuda">Cortito. Ejemplo: cebolla cruda</p><input type="text" id="a_intolerancias_otras" name="a_intolerancias_otras"></div><div class="campo"><label class="etiqueta" for="a_actividad_fisica">Actividad fisica</label><select id="a_actividad_fisica" name="a_actividad_fisica"><option value="">(elegir)</option><option value="sedentario">Poca o nada</option><option value="moderada">2-3 veces por semana</option><option value="diaria">Casi todos los dias</option></select></div><div class="campo"><label class="etiqueta" for="a_hora_despertar">A que hora te levantas</label><p class="ayuda">Un dia normal, no el domingo. Ejemplo: 6:30</p><input type="text" id="a_hora_despertar" name="a_hora_despertar"></div><div class="campo"><label class="etiqueta" for="a_hora_acostarse">A que hora te acostas</label><p class="ayuda">Asi la cena no te queda pegada a la cama. Ejemplo: 23</p><input type="text" id="a_hora_acostarse" name="a_hora_acostarse"></div><div class="campo"><span class="etiqueta">Tus horas ocupadas</span><p class="ayuda">Tocá las horas en que NO podés parar a comer tranquila: trabajo, viaje, clases, la actividad de los chicos. Con eso el plan corre las comidas para esquivarlas, y las que no se pueden correr te las deja para llevar. Lo que no toques queda como hora libre.</p><div class="chips grilla-horaria" data-campo="a_agenda_ocupada" style="grid-template-columns: 2.6em repeat(3, 1fr)"><span class="gh-esq"></span><span class="gh-dia">Lun a vie</span><span class="gh-dia">Sabado</span><span class="gh-dia">Domingo</span><span class="gh-hora">6</span><label class="gh-celda" title="sem 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-06"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-06"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 6:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-06"><span class="gh-marca"></span></label><span class="gh-hora">7</span><label class="gh-celda" title="sem 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-07"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-07"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 7:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-07"><span class="gh-marca"></span></label><span class="gh-hora">8</span><label class="gh-celda" title="sem 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-08"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-08"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 8:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-08"><span class="gh-marca"></span></label><span class="gh-hora">9</span><label class="gh-celda" title="sem 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-09"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-09"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 9:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-09"><span class="gh-marca"></span></label><span class="gh-hora">10</span><label class="gh-celda" title="sem 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-10"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-10"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 10:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-10"><span class="gh-marca"></span></label><span class="gh-hora">11</span><label class="gh-celda" title="sem 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-11"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-11"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 11:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-11"><span class="gh-marca"></span></label><span class="gh-hora">12</span><label class="gh-celda" title="sem 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-12"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-12"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 12:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-12"><span class="gh-marca"></span></label><span class="gh-hora">13</span><label class="gh-celda" title="sem 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-13"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-13"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 13:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-13"><span class="gh-marca"></span></label><span class="gh-hora">14</span><label class="gh-celda" title="sem 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-14"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-14"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 14:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-14"><span class="gh-marca"></span></label><span class="gh-hora">15</span><label class="gh-celda" title="sem 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-15"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-15"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 15:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-15"><span class="gh-marca"></span></label><span class="gh-hora">16</span><label class="gh-celda" title="sem 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-16"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-16"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 16:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-16"><span class="gh-marca"></span></label><span class="gh-hora">17</span><label class="gh-celda" title="sem 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-17"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-17"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 17:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-17"><span class="gh-marca"></span></label><span class="gh-hora">18</span><label class="gh-celda" title="sem 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-18"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-18"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 18:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-18"><span class="gh-marca"></span></label><span class="gh-hora">19</span><label class="gh-celda" title="sem 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-19"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-19"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 19:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-19"><span class="gh-marca"></span></label><span class="gh-hora">20</span><label class="gh-celda" title="sem 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-20"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-20"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 20:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-20"><span class="gh-marca"></span></label><span class="gh-hora">21</span><label class="gh-celda" title="sem 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-21"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-21"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 21:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-21"><span class="gh-marca"></span></label><span class="gh-hora">22</span><label class="gh-celda" title="sem 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-22"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-22"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 22:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-22"><span class="gh-marca"></span></label><span class="gh-hora">23</span><label class="gh-celda" title="sem 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sem-23"><span class="gh-marca"></span></label><label class="gh-celda" title="sab 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="sab-23"><span class="gh-marca"></span></label><label class="gh-celda" title="dom 23:00"><input type="checkbox" data-grupo="a_agenda_ocupada" value="dom-23"><span class="gh-marca"></span></label></div></div></section><section><h2>Solo si corresponde</h2><p class="nota">Si no aplica a tu caso, salteate este bloque entero.</p><div class="campo"><label class="etiqueta" for="a_ciclo">Ciclo menstrual</label><select id="a_ciclo" name="a_ciclo"><option value="">(no aplica)</option><option value="menstruando">Menstruo</option><option value="no_menstruando">No menstruo</option><option value="menopausia">Menopausia</option><option value="embarazo">Embarazo</option><option value="lactancia">Lactancia</option></select></div><div class="campo checkbox-solo"><label><input type="checkbox" id="a_buscando_embarazo" name="a_buscando_embarazo"> Estas buscando embarazo</label></div><div class="campo"><label class="etiqueta" for="a_anticoncepcion">Anticoncepcion</label><p class="ayuda">Ejemplo: DIU / pastillas / ninguna</p><input type="text" id="a_anticoncepcion" name="a_anticoncepcion"></div><div class="campo checkbox-solo"><label><input type="checkbox" id="a_sintomas_urinarios" name="a_sintomas_urinarios"> Molestias urinarias o de prostata</label></div></section>
 
     <div class="parte">
       <h3>Y por ultimo, tu tipo de cuerpo y energia</h3>
@@ -353,6 +353,13 @@ function fnacArmar(clave) {
       // 45 de enero o el anio 2400, el campo queda vacio y el aviso de
       // siempre se lo dice. Adivinar que quiso poner seria peor.
       if (nd < 1 || nd > 31 || na < 1900 || na > 2100) ok = false;
+      // Y que la fecha EXISTA: un 31 de febrero pasaba los topes y llegaba
+      // al estudio como una fecha que nadie tiene.
+      if (ok) {
+        var dt = new Date(na, Number(m) - 1, nd);
+        if (dt.getFullYear() !== na || (dt.getMonth() + 1) !== Number(m)
+            || dt.getDate() !== nd) ok = false;
+      }
     }
     p.oculto.value = ok
       ? (a + '-' + m + '-' + (d.length === 1 ? '0' + d : d))
@@ -410,6 +417,17 @@ function fnacEnchufar() {
         if ((p.dia.value || '').length === 2 && p.mes) {
           try { p.mes.focus(); } catch (e) { /* noop */ }
         }
+      });
+    }
+    // Al salir del anio se le dice que falta, con la parte exacta: asi el
+    // "62" no se pierde callado.
+    if (p.anio) {
+      p.anio.addEventListener('blur', function () {
+        try {
+          if (typeof pintarCampo === 'function') {
+            pintarCampo('fecha_nacimiento');
+          }
+        } catch (e) { /* noop */ }
       });
     }
     if (p.mes) {
@@ -897,6 +915,41 @@ function guardar() {
       'Todavia no completaste nada. Contesta al menos algo y volve a probar.';
     return;
   }
+  // FECHA DE NACIMIENTO Y EDAD: OBLIGATORIAS, SIN "LO MANDO IGUAL"
+  // (2026-09-15). Todo lo demas de la ficha se puede mandar incompleto a
+  // sabiendas; estas dos no, porque sin ellas no hay estudio. Asi fue como
+  // la ficha de Hector llego sin fecha. Si esta revision fallara por lo que
+  // sea, sigue el camino de siempre: nunca deja a nadie sin poder mandar.
+  try {
+    var duros = [];
+    var cnom = document.getElementById('c_nombre');
+    if (cnom && !String(cnom.value || '').trim()) {
+      duros.push({ msg: 'Tu nombre y apellido son obligatorios.', pref: 'c_' });
+    }
+    if (typeof revisarCampo === 'function') {
+      var rfd = revisarCampo('fecha_nacimiento');
+      if (rfd && rfd.mal) duros.push({ msg: rfd.mal, pref: 'c_' });
+    }
+    if (typeof revisarEdad === 'function') {
+      var red = revisarEdad();
+      if (red && red.mal) duros.push({ msg: red.mal, pref: 'a_' });
+    }
+    if (duros.length) {
+      var lista = [];
+      for (var q = 0; q < duros.length; q++) lista.push('- ' + duros[q].msg);
+      try {
+        window.alert('Antes de mandarla me falta esto, y es obligatorio:'
+          + String.fromCharCode(10, 10) + lista.join(String.fromCharCode(10)));
+      } catch (e) { /* noop */ }
+      var dp = -1;
+      try { dp = pasoDelPrefijo(duros[0].pref); } catch (e) { dp = -1; }
+      if (dp >= 0) mostrarPaso(dp);
+      try { if (typeof revisarContacto === 'function') revisarContacto(true); } catch (e) {}
+      try { if (typeof pintarEdad === 'function') pintarEdad(); } catch (e) {}
+      document.getElementById('estado').textContent = duros[0].msg;
+      return;
+    }
+  } catch (e) { /* nunca deja a nadie sin poder mandar */ }
   // LOS DATOS DE CONTACTO. Sin mail y sin WhatsApp no hay devolucion
   // posible, y sin nombre y fecha de nacimiento no hay estudio. Se avisa
   // fuerte, pero se manda igual si insiste (mismo trato que las partes en
@@ -1103,6 +1156,13 @@ function testigoPagoDeLaURL() {
     }
     if (dicho === 'pp' || dicho === 'paypal') {
       TESTIGO_PAGO_URL = 'paypal'; return TESTIGO_PAGO_URL;
+    }
+    // Los dos que no pasan por ningun cobrador: el link que Jose le manda
+    // a una paciente suya. Con esto -y SIN tocar nada mas de aca abajo-
+    // testigoHayQuePreguntarPago() ya devuelve false (la direccion lo
+    // dijo) y testigoPuedeLasUnas() ya devuelve true en Argentina.
+    if (dicho === 'directo' || dicho === 'regalo') {
+      TESTIGO_PAGO_URL = dicho; return TESTIGO_PAGO_URL;
     }
     // 2) PayPal se mira ANTES que Mercado Pago a proposito: si por lo que
     //    fuera vinieran los dos, gana el que cierra la puerta. Prometerle
@@ -1503,6 +1563,112 @@ function telLindo(d, raw) {
   } catch (e) { return d; }
 }
 
+// QUE LE FALTA A LA FECHA, dicho con la parte exacta (2026-09-15). Antes el
+// mensaje era "necesito tu fecha" aunque la persona la hubiera escrito: si
+// habia puesto "62" en el anio, la fecha quedaba vacia y nadie le decia que
+// el problema era el anio. Se miran los tres casilleros de verdad.
+function fnacQueFalta() {
+  try {
+    var fd = document.getElementById('c_fecha_nacimiento__dia');
+    var fm = document.getElementById('c_fecha_nacimiento__mes');
+    var fa = document.getElementById('c_fecha_nacimiento__anio');
+    var sd = fd ? String(fd.value || '').trim() : '';
+    var sm = fm ? String(fm.value || '').trim() : '';
+    var sa = fa ? String(fa.value || '').trim() : '';
+    if (!sd && !sm && !sa) {
+      return 'Tu fecha de nacimiento es obligatoria: escribi el dia, elegi '
+        + 'el mes y escribi el anio.';
+    }
+    if (sa && sa.length < 4) {
+      return 'Escribi el anio completo, con los cuatro numeros. Por '
+        + 'ejemplo: 1962.';
+    }
+    if (!sd) return 'Te falta el dia de tu fecha de nacimiento.';
+    if (!sm) return 'Te falta el mes de tu fecha de nacimiento.';
+    if (!sa) {
+      return 'Te falta el anio de tu fecha de nacimiento, con los cuatro '
+        + 'numeros.';
+    }
+    return 'Esa fecha no existe (por ejemplo, un 31 de febrero). Fijate el '
+      + 'dia y el mes.';
+  } catch (e) {
+    return 'Tu fecha de nacimiento es obligatoria.';
+  }
+}
+
+// LA EDAD, OBLIGATORIA Y EN NUMEROS (2026-09-15). Y se cruza con la fecha:
+// si no coinciden, una de las dos esta mal escrita. Se deja un anio de
+// margen porque quien cumple la semana que viene escribe la edad nueva.
+function revisarEdad() {
+  try {
+    var el = document.getElementById('a_edad');
+    if (!el) return {};
+    var v = String(el.value || '').trim();
+    if (!v) {
+      return { mal: 'Tu edad es obligatoria. Escribila en numeros, por '
+        + 'ejemplo 64.' };
+    }
+    var n = Number(v);
+    if (!isFinite(n) || Math.floor(n) !== n || n < 0 || n > 120) {
+      return { mal: 'Escribi tu edad en numeros enteros, por ejemplo 64.' };
+    }
+    var fn = document.getElementById('c_fecha_nacimiento');
+    var f = fn ? String(fn.value || '').trim() : '';
+    var partes = f.split('-');
+    if (partes.length === 3 && partes[0].length === 4) {
+      var ya = Number(partes[0]), mm = Number(partes[1]), dd = Number(partes[2]);
+      var hoy = new Date();
+      var calc = hoy.getFullYear() - ya;
+      var mesHoy = hoy.getMonth() + 1;
+      if (mesHoy < mm || (mesHoy === mm && hoy.getDate() < dd)) calc = calc - 1;
+      if (Math.abs(n - calc) > 1) {
+        return { mal: 'Tu edad (' + n + ') no coincide con tu fecha de '
+          + 'nacimiento, que da ' + calc + ' anios. Fijate cual de las dos '
+          + 'esta mal.' };
+      }
+    }
+    return { bien: 'Anotado: ' + n + ' anios.' };
+  } catch (e) { return {}; }
+}
+
+function pintarEdad() {
+  try {
+    var r = revisarEdad();
+    var el = document.getElementById('a_edad');
+    if (!el) return true;
+    var av = document.getElementById('av_a_edad');
+    var eco = document.getElementById('ok_a_edad');
+    if (av) av.textContent = r.mal || '';
+    if (eco) eco.textContent = r.mal ? '' : (r.bien || '');
+    var caja = el.parentNode;
+    if (caja && caja.className !== undefined) {
+      caja.className = String(caja.className || '')
+        .split(' ').filter(function (c) { return c && c !== 'mal'; })
+        .concat(r.mal ? ['mal'] : []).join(' ');
+    }
+    return !r.mal;
+  } catch (e) { return true; }
+}
+
+function edadEnchufar() {
+  try {
+    var el = document.getElementById('a_edad');
+    if (el) {
+      el.addEventListener('blur', function () { pintarEdad(); });
+      el.addEventListener('input', function () {
+        if (String(el.value || '').trim()) pintarEdad();
+      });
+    }
+    // Si corrige la fecha despues, el cruce con la edad se vuelve a mirar.
+    var fn = document.getElementById('c_fecha_nacimiento');
+    if (fn) {
+      fn.addEventListener('change', function () {
+        if (el && String(el.value || '').trim()) pintarEdad();
+      });
+    }
+  } catch (e) { /* noop */ }
+}
+
 // Devuelve {mal: '...'} o {bien: '...'} o {} si esta vacio y no hace falta.
 function revisarCampo(clave) {
   var el = document.getElementById('c_' + clave);
@@ -1517,10 +1683,10 @@ function revisarCampo(clave) {
     return { bien: 'Anotado: ' + v };
   }
   if (clave === 'fecha_nacimiento') {
-    if (!v) return { mal: 'Tu fecha de nacimiento es de las dos cosas que necesito si o si.' };
+    if (!v) return { mal: fnacQueFalta() };
     var p = v.split('-');
     var anio = parseInt(p[0], 10);
-    if (!anio || p.length < 3) return { mal: 'Esa fecha no se entiende. Elegila con el calendario.' };
+    if (!anio || p.length < 3) return { mal: 'Esa fecha no se entiende. Fijate el dia, el mes y el anio.' };
     var hoy = new Date();
     if (anio > hoy.getFullYear()) return { mal: 'Esa fecha esta en el futuro. Fijate el ano.' };
     if (anio < 1900) return { mal: 'Ese ano no puede ser. Fijate que no se te haya ido un digito.' };
@@ -1609,14 +1775,45 @@ var insistioContacto = 0;
 
 function puedeAvanzar(desde) {
   try {
+    // LA EDAD, en el paso de la historia: obligatoria, sin segunda vuelta.
+    var ph = -1;
+    try { ph = pasoDelPrefijo('a_'); } catch (e0) { ph = -1; }
+    if (ph >= 0 && desde === ph) {
+      var re = revisarEdad();
+      pintarEdad();
+      if (re && re.mal) {
+        var e1 = document.getElementById('estado');
+        if (e1) e1.textContent = re.mal;
+        try {
+          var ce = document.getElementById('a_edad');
+          if (ce && ce.scrollIntoView) ce.scrollIntoView();
+        } catch (e2) { /* noop */ }
+        return false;
+      }
+    }
     var pc = pasoDelContacto();
     if (pc < 0 || desde !== pc) return true;
     var faltan = revisarContacto(true);
     if (!faltan.length) { insistioContacto = 0; return true; }
     insistioContacto++;
-    if (insistioContacto >= 2) return true;
+    // LA FECHA NO TIENE SEGUNDA VUELTA (2026-09-15). El resto del contacto
+    // sigue dejando pasar al segundo intento, para que nadie quede encerrado
+    // en la primera pantalla por un dato que no tiene a mano. La fecha no:
+    // sin fecha no hay estudio, y asi fue como la de Hector llego vacia.
+    // El NOMBRE vacio tampoco: con el nombre y la fecha se escanea.
+    var rf = revisarCampo('fecha_nacimiento');
+    var faltaLaFecha = !!(rf && rf.mal);
+    var cn = document.getElementById('c_nombre');
+    var faltaElNombre = !!(cn && !String(cn.value || '').trim());
+    if (insistioContacto >= 2 && !faltaLaFecha && !faltaElNombre) return true;
     var est = document.getElementById('estado');
-    if (est) {
+    if (est && faltaLaFecha) {
+      est.textContent = rf.mal + '  Sin tu fecha de nacimiento no puedo '
+        + 'hacer tu estudio.';
+    } else if (est && faltaElNombre) {
+      est.textContent = 'Necesito tu nombre y apellido: sin eso no puedo '
+        + 'hacer tu estudio.';
+    } else if (est) {
       est.textContent = (faltan.length === 1)
         ? (faltan[0] + '  Si no lo tenes a mano, apreta Siguiente de nuevo y seguimos.')
         : ('Me faltan ' + faltan.length + ' datos de arriba, mira los avisos '
@@ -1659,6 +1856,59 @@ function testigoAlTocar(ev) {
     }
   } catch (e) { /* noop */ }
 }
+
+// --- QUIEN ES Y COMO LLEGO (solo ficha web) -----------------------------
+function fichaDeLaURL(clave) {
+  try {
+    var q = testigoQueryDeLaURL();
+    if (!q) return '';
+    var partes = q.split('&');
+    for (var i = 0; i < partes.length; i++) {
+      var p = partes[i].split('='), k = '';
+      if (!p[0]) continue;
+      try { k = decodeURIComponent(p[0]).toLowerCase(); } catch (e) { continue; }
+      if (k !== clave) continue;
+      try { return decodeURIComponent(String(p[1] || '').replace(/\+/g, ' ')); }
+      catch (e) { return ''; }
+    }
+  } catch (e) { /* noop */ }
+  return '';
+}
+try {
+  var _pago = (typeof testigoPagoDeLaURL === 'function') ? testigoPagoDeLaURL() : '';
+  var _deJose = (_pago === 'directo' || _pago === 'regalo');
+  if (_deJose) {
+    try { META.origen = 'ficha_link_v1'; } catch (e) {}
+    // El comprobante que no se le pide (el campo lo dibuja el servidor).
+    try {
+      var _c = document.getElementById('campo_comprobante');
+      if (_c) _c.style.display = 'none';
+    } catch (e) {}
+  }
+  var _p = String(fichaDeLaURL('p') || '').replace(/[^0-9]/g, '').slice(0, 9);
+  if (_p) {
+    try { META.patient_id = parseInt(_p, 10); } catch (e) {}
+    var _claveDeElla = CLAVE + '_p' + _p;   // un borrador por paciente
+    try {
+      if (window.localStorage.getItem(_claveDeElla) === null) {
+        var _viejo = window.localStorage.getItem(CLAVE);
+        if (_viejo !== null) {
+          window.localStorage.setItem(_claveDeElla, _viejo);
+          window.localStorage.removeItem(CLAVE);
+        }
+      }
+    } catch (e) {}
+    CLAVE = _claveDeElla;
+  }
+  var _n = String(fichaDeLaURL('n') || '')
+             .replace(/[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ '\-]/g, '').trim().slice(0, 24);
+  if (_n) {
+    try {                      // textContent, NUNCA innerHTML
+      var _s = document.getElementById('saludo');
+      if (_s) _s.textContent = 'Hola ' + _n + ',';
+    } catch (e) {}
+  }
+} catch (e) { /* la ficha se comporta exactamente como hoy */ }
 
 // --- EL COMPROBANTE DE PAGO (solo ficha web) ------------------------------
 var COMPROBANTE_PARAMS = [
@@ -2282,7 +2532,12 @@ function mostrarBotonesEnvio(porCopia, porCancelada) {
         'mailto:' + mail + '?subject=' + encodeURIComponent(
           'Mi ficha completada') + '&body=' + encodeURIComponent(porCopia
           ? 'Hola Jose! Aca abajo te pego el texto de mi ficha completada:'
-          : 'Te adjunto el archivo que se descargo al terminar la ficha.')));
+          // mailto no adjunta: se le PIDE el clip (ver _NOTA_MAILTO).
+          : 'ANTES DE MANDAR: toca el clip y adjunta el archivo que se ' +
+            'descargo al terminar la ficha. Esta en tu carpeta de ' +
+            'Descargas y su nombre empieza con "formulario". Sin el ' +
+            'archivo, a Jose no le llega nada.\n\n' +
+            'Hola Jose! Te mando mi ficha completada.')));
     }
     var ayuda = document.createElement('p');
     ayuda.style.cssText = 'margin-top:8px;font-size:13px;opacity:.75;' +
@@ -2308,6 +2563,19 @@ function mostrarBotonesEnvio(porCopia, porCancelada) {
 try {
   if (restaurar()) document.getElementById('retomado').style.display = 'block';
 } catch (e) { /* si no se pudo retomar, el formulario sale en blanco */ }
+
+// LA FECHA DE NACIMIENTO, enchufada DESPUES de restaurar. Va aca y no
+// antes por la misma razon que el testigo: restaurar() escribe el campo
+// oculto con lo que habia en el borrador, y esto lo reparte en los tres
+// controles. Al reves, la que retoma la ficha al dia siguiente los veria
+// vacios y tendria que escribir la fecha de nuevo.
+// Y VA ADENTRO DE SU PROPIO try: si esto fallara, los tres controles
+// quedan sin enganchar pero el formulario sale igual y se puede completar
+// todo lo demas. Nunca puede dejar a la paciente sin ficha.
+try {
+  if (typeof fnacEnchufar === 'function') fnacEnchufar();
+  if (typeof edadEnchufar === 'function') edadEnchufar();
+} catch (e) { /* noop */ }
 
 // La seccion del testigo se acomoda DESPUES de restaurar (asi respeta la
 // opcion que ya habia elegido) y adentro de su propio try. Si esto falla,

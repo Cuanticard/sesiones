@@ -175,7 +175,7 @@
        seguir manana y no perdes nada. Reci&eacute;n al final, con el boton
        verde, se descarga el archivo que me tenes que mandar.</p>
     <p>Tus respuestas quedan en tu telefono hasta que vos me mandes el
-       archivo: este formulario no se conecta a internet.</p>
+       archivo: esta ficha no se conecta a internet.</p>
   </div>
 
   <div id="retomado">Retomaste donde habias dejado: esta todo lo que ya
@@ -773,10 +773,10 @@ function nombreArchivo() {
   var f = d.getFullYear() + '-' +
           ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
           ('0' + d.getDate()).slice(-2);
-  // EL HUECO QUE NADIE RELLENABA (2026-09-07). Decia 'formulario' y esa
+  // EL HUECO QUE NADIE RELLENABA (2026-09-07). Decia 'ficha' y esa
   // marca de plantilla aparecia UNA sola vez en todo el modulo: nadie la
   // reemplazaba nunca. La paciente descargaba
-  // 'formulario_formulario_2026-09-07.json' y Jose lo recibia asi.
+  // 'formulario_ficha_2026-09-07.json' y Jose lo recibia asi.
   // Ahora sale con el nombre de quien lo completa, sacado del propio
   // formulario; si todavia no lo escribio, queda solo la fecha.
   var quien = '';
@@ -787,7 +787,7 @@ function nombreArchivo() {
     quien = quien.replace(/[^A-Za-z0-9]+/g, '_')
                  .replace(/^_+|_+$/g, '').slice(0, 40);
   } catch (e) { quien = ''; }
-  return 'formulario_' + (quien ? quien + '_' : '') + f + '.json';
+  return 'ficha_' + (quien ? quien + '_' : '') + f + '.json';
 }
 
 // Que parte GRANDE quedo entera sin contestar. No mira campo por campo (no
@@ -2162,7 +2162,7 @@ function mostrarBotonesEnvio(porCopia, porCancelada) {
           // mailto no adjunta: se le PIDE el clip (ver _NOTA_MAILTO).
           : 'ANTES DE MANDAR: toca el clip y adjunta el archivo que se ' +
             'descargo al terminar la ficha. Esta en tu carpeta de ' +
-            'Descargas y su nombre empieza con "formulario". Sin el ' +
+            'Descargas y su nombre empieza con "ficha". Sin el ' +
             'archivo, a Jose no le llega nada.\n\n' +
             'Hola Jose! Te mando mi ficha completada.')));
     }

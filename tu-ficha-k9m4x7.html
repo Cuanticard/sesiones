@@ -2248,13 +2248,14 @@ try {
 }
 actualizarProgreso();
 
-// --- EL ENVIO DIRECTO (ver formulario_unico.py) ---------------------------
+// --- EL ENVIO DIRECTO (ver formulario_unico.py) ---
 var RELAY_URL = 'https://script.google.com/macros/s/AKfycbwrzY3uUcoTb47YV0JQ0Cq5cZHJB7G0oK3pln3-Rz67si_w6Hp_9dD2mnjnceqAO4sH/exec';
 var RELAY_TOPE_MS = 120000, RELAY_TOPE_TXT = 7000000;
 var relay = { enCurso: false, cerrado: true, vuelta: 0, intentos: 0,
-              noPudo: '', frenar: false, borrando: false, aviso: null };
+              noPudo: '', frenar: false, borrando: false, aviso: null,
+              pago: ['pago_mp', 0, '_pagomp', 0, 0, 'Mercado Pago'] };
 function relayClave() { return ENVIO_CLAVE + '_relay'; }
-// La firma del link (#f=...). Sin ella no se manda nada sola.
+// La firma del link (#f=...).
 var RELAY_FIRMA_RE = /^[a-z]{1,8}_[A-Za-z0-9_.-]{1,64}\.[0-9a-f]{32}$/;
 function relayFirmaClave() { return ENVIO_CLAVE + '_firma'; }
 function relayFirmaDeLaURL() {
@@ -2292,31 +2293,45 @@ function relayFirmaMala() {
   } catch (e) {}
   relay.firmaMala = true;
 }
-// Sin firma: el pago con el que volvio de Mercado Pago (lo lee el comprobante).
+// Sin firma: el pago con el que volvio (lo lee el comprobante).
 var RELAY_PAGO_MP = true;
+var RELAY_PAGO_PP = true;
 var RELAY_PAGO_RE = /^[0-9]{6,20}$/;
-function relayPago() {
-  var p = '', k = ENVIO_CLAVE + '_pagomp';
+var RELAY_PAGO_PP_RE = /^[A-Z0-9]{17}$/;
+function relayLs(k, v) {
   try {
-    if (!RELAY_PAGO_MP || relay.pagoMalo) return '';
-    var c = comprobanteDeLaURL();
-    p = c && c.proveedor === 'mercadopago' ? String(c.id) : '';
-    if (RELAY_PAGO_RE.test(p)) window.localStorage.setItem(k, p);
-    else p = String(window.localStorage.getItem(k) || '');
-    if (p && window.localStorage.getItem(k + '_malo') === p) return '';
+    if (v === undefined) return String(window.localStorage.getItem(k) || '');
+    window.localStorage.setItem(k, v);
   } catch (e) {}
-  return RELAY_PAGO_RE.test(p) ? p : '';
+  return '';
 }
-// La misma ficha, con la firma (o el pago) al final del meta.
+function relayPago() {
+  var c = null, i, t, p, k, v = [
+    ['pago_mp', 'mercadopago', '_pagomp', RELAY_PAGO_RE, RELAY_PAGO_MP, 'Mercado Pago'],
+    ['pago_pp', 'paypal', '_pagopp', RELAY_PAGO_PP_RE, RELAY_PAGO_PP, 'PayPal']];
+  if (relay.pagoMalo) return '';
+  try { c = comprobanteDeLaURL(); } catch (e) {}
+  if (c && c.proveedor === 'paypal') v.reverse();
+  for (i = 0; i < 2; i++) {
+    t = v[i];
+    k = ENVIO_CLAVE + t[2];
+    if (!t[4]) continue;
+    p = c && c.proveedor === t[1] ? String(c.id) : '';
+    if (t[3].test(p)) relayLs(k, p);
+    else p = relayLs(k);
+    if (t[3].test(p) && relayLs(k + '_malo') !== p) { relay.pago = t; return p; }
+  }
+  return '';
+}
 function relayCuerpo(datos, clave, valor) {
   var d = {}, m = {}, k, mo = datos.meta || {};
   var tiene = Object.prototype.hasOwnProperty;
-  for (k in mo) { if (tiene.call(mo, k) && k !== 'firma' && k !== 'pago_mp') m[k] = mo[k]; }
+  for (k in mo) { if (tiene.call(mo, k) && k !== 'firma' && !/^pago_[mp]p$/.test(k)) m[k] = mo[k]; }
   m[clave] = valor;
   for (k in datos) { if (tiene.call(datos, k)) d[k] = k === 'meta' ? m : datos[k]; }
   return JSON.stringify(d, null, 2);
 }
-// El tope es en BYTES, que es lo que mide Google.
+// El tope es en BYTES (lo que mide Google).
 function relayPesaDeMas(t) {
   if (t.length > RELAY_TOPE_TXT) return true;
   if (t.length * 3 <= RELAY_TOPE_TXT) return false;
@@ -2339,7 +2354,7 @@ function relayIntroDeHoy() {
     }
   } catch (e) {}
 }
-// Por que esta vez bajo el archivo en vez de mandarla (se le dice).
+// Por que esta vez bajo el archivo.
 function relayNoPudo(m) { try { if (RELAY_URL) relay.noPudo = m; } catch (e) {} }
 function relayAvisarCamino() {
   try {
@@ -2356,8 +2371,7 @@ function relayAvisarCamino() {
     }
   } catch (e) {}
 }
-// "Quedo guardada en este telefono" se dice SOLO si es verdad: se vuelve a
-// guardar y se relee. Un telefono que no deja guardar la pierde al cerrar.
+// "Quedo guardada" se dice SOLO si se releyo.
 function relayQuedoGuardada() {
   try {
     guardarLocal();
@@ -2368,7 +2382,7 @@ function relayQuedoGuardada() {
       && !!e && e.estado === 'pendiente';
   } catch (x) { return false; }
 }
-// Mientras manda, o si fallo y no quedo guardada, cerrar pide confirmacion.
+// Mientras manda (o sin guardar), cerrar pregunta.
 function relayAlCerrar(ev) {
   try {
     if (relay.borrando || !(relay.enCurso || relay.frenar)) return;
@@ -2408,11 +2422,9 @@ function relayCuando() {
 function relayEstado(t) {
   try { document.getElementById('estado').textContent = t; } catch (e) {}
 }
-// Lo llama guardar() despues de TODOS sus avisos. true = me hago cargo;
-// false = sigue el camino de hoy en el mismo toque.
+// Lo llama guardar() tras sus avisos. false = el camino de hoy.
 function relayTomar(datos, n) {
   try {
-    // Sin firma ni pago de Mercado Pago, el camino de hoy, callado.
     var firma = relayFirma();
     var pago = firma ? '' : relayPago();
     if (!firma && !pago) return false;
@@ -2421,7 +2433,7 @@ function relayTomar(datos, n) {
       return false;
     }
     relay.noPudo = '';
-    var txt = relayCuerpo(datos, firma ? 'firma' : 'pago_mp', firma || pago);
+    var txt = relayCuerpo(datos, firma ? 'firma' : relay.pago[0], firma || pago);
     if (relayPesaDeMas(txt)) {
       relayNoPudo('pesa demasiado');
       return false;
@@ -2483,41 +2495,40 @@ function relayIntento(v) {
   relay.intentos++;
   var h = relay.h;
   try {
-    // Pedido SIMPLE, sin cabeceras propias: el test lo mira.
+    // Pedido SIMPLE (el test lo mira).
     fetch(RELAY_URL, { method: 'POST', body: relay.txt,
                        credentials: 'omit', referrerPolicy: 'no-referrer' })
-    .then(function (r) { return r.text(); })
+    .then(function (r) { relay.st = r.status; return r.text(); })
     .then(function (t) {
       var j = null;
       try { j = JSON.parse(t); } catch (e) { j = null; }
       if (j && j.ok === true) { relayOk(v, h); return; }
-      relayFallo(v, (j && typeof j === 'object') ? j : { motivo: 'rara' });
+      relayFallo(v, (j && typeof j === 'object') ? j
+        : { motivo: relay.st === 404 ? 'rara404' : 'rara' });
     })
     .catch(function () { relayFallo(v, null); });
   } catch (e) { relayFallo(v, null); }
 }
 function relayOk(v, h) {
   try {
-    // Un ok viejo de OTRO contenido no decide: decide la vuelta nueva.
+    // Un ok viejo de OTRO contenido no decide.
     if (v !== relay.vuelta && h !== relay.h) return;
     relayCerrar();
     relayLlego(relayCuando(), false, h);
   } catch (e) {}
 }
-// j null = no hubo respuesta (la red).
+// j null = sin respuesta.
 function relayFallo(v, j) {
   try {
     if (v !== relay.vuelta || relay.cerrado) return;
     if (j && (j.motivo === 'firma' || j.motivo === 'pago'
         || j.motivo === 'pago_apagado')) {
-      // Link (o pago) que Google no acepto: sin reintento y no se vuelve a usar.
+      // Link o pago rechazado: no se reusa.
       var m = j.motivo;
       relayCerrar();
       if (m === 'firma') relayFirmaMala();
       else {
-        try {
-          window.localStorage.setItem(ENVIO_CLAVE + '_pagomp_malo', relayPago());
-        } catch (e) {}
+        relayLs(ENVIO_CLAVE + relay.pago[2] + '_malo', relayPago());
         relay.pagoMalo = true;
       }
       try {
@@ -2526,10 +2537,11 @@ function relayFallo(v, j) {
         }
       } catch (e) {}
       relayNoSalio(m === 'firma' ? 'tu link no me deja mandarla directo'
-        : 'no pude confirmarla con Mercado Pago', true);
+        : 'no pude confirmarla con ' + relay.pago[5], true);
       return;
     }
-    if ((!j || j.motivo === 'ocupado') && relayOtraVez(v)) return;
+    if ((!j || j.motivo === 'ocupado' || j.motivo === 'rara404')
+        && relayOtraVez(v)) return;
     relayCerrar();
     var sinRed = false;
     try { sinRed = !j && navigator.onLine === false; } catch (e) {}
@@ -2549,7 +2561,8 @@ function relayMotivo(m) {
   return m === 'tope' ? 'llegaron muchas fichas juntas'
     : m === 'cupo' ? 'se lleno el cupo de hoy'
     : m === 'tamanio' ? 'el archivo es demasiado grande'
-    : m === 'pago_no_contesto' ? 'Mercado Pago no contesto'
+    : m === 'pago_no_contesto' ? relay.pago[5] + ' no contesto'
+    : m === 'pago_todavia' ? relay.pago[5] + ' todavia no me muestra tu pago'
     : 'mi casilla no contesto';
 }
 function relayLlego(cuando, yaEstaba, h) {
@@ -2570,8 +2583,7 @@ function relayLlego(cuando, yaEstaba, h) {
       + 'mandar, toca "Mandarla de otra forma".'
     : 'Ya me llego tu ficha, ' + cuando
       + '. No tenes que hacer nada mas: yo te escribo.');
-  // Si Google dijo que la mando y a Jose no le aparecio, apretar de nuevo
-  // no puede ser un callejon: queda el camino de hoy.
+  // Apretar de nuevo: queda el camino de hoy.
   if (yaEstaba) relayBotones(false);
 }
 function relaySacarBotones() {
@@ -2625,7 +2637,7 @@ function relayBotones(conProbar) {
         }
       } catch (e) { try { guardar(); } catch (e2) {} }
     });
-    // El camino de hoy, entero, con este toque (la hoja de compartir lo pide).
+    // El camino de hoy, con este toque (lo pide compartir).
     b('Mandarla de otra forma', function () {
       try {
         try { guardarLocal(); } catch (e) {}

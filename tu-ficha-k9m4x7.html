@@ -173,9 +173,9 @@
     <p><strong>No hace falta que lo hagas de una.</strong> Lo que vas
        poniendo queda guardado en este mismo telefono: podes cerrarlo,
        seguir manana y no perdes nada. Reci&eacute;n al final, con el boton
-       verde, se descarga el archivo que me tenes que mandar.</p>
-    <p>Tus respuestas quedan en tu telefono hasta que vos me mandes el
-       archivo: esta ficha no se conecta a internet.</p>
+       verde, <span id="relay-intro-boton">tu ficha me llega directo.</span></p>
+    <p id="relay-intro-red">Tus respuestas no salen de este telefono hasta que apretas el boton
+       verde. Ahi viajan directo a mi casilla de mail, por mi cuenta de Google.</p>
   </div>
 
   <div id="retomado">Retomaste donde habias dejado: esta todo lo que ya
@@ -932,6 +932,10 @@ function guardar() {
     }
   }
   guardarLocal();
+  if (typeof relayTomar === 'function' && relayTomar(datos, n)) return;
+  descargaDeHoy(datos, n);
+}
+function descargaDeHoy(datos, n) {
   var txt = JSON.stringify(datos, null, 2);
   try {
     var blob = new Blob([txt], { type: 'application/json' });
@@ -1731,9 +1735,17 @@ function comprobanteArchivoElegido(input) {
 
         // EL PDF NO SE PUEDE ACHICAR EN EL TELEFONO. Va tal cual si entra
         // en el tope; si no entra, se le dice y sigue sin adjunto.
+        //
+        // EL MISMO TOPE QUE LA IMAGEN, NO EL TRIPLE (2026-09-16). Medido
+        // con el programita de Google de verdad: una ficha de 1,7 MB vuelve
+        // "ok" en 6 segundos; una de 4,9 MB LLEGA al mail pero la respuesta
+        // vuelve 404 a los 49 segundos. La paciente veia "no se pudo mandar
+        // sola" con la ficha ya adentro, y la mandaba de nuevo. Con el
+        // triple (3,6 MB) la ficha pasaba los 4,8 MB. Un PDF mas grande se
+        // reemplaza por una captura, que si se achica.
         if (esPdf) {
           var pesa = Math.round(b64.length * 0.75);
-          if (pesa > COMPROBANTE_TOPE * 3) {
+          if (pesa > COMPROBANTE_TOPE) {
             comprobanteArchivoFallo('Ese PDF pesa demasiado para viajar '
               + 'adentro de la ficha. Sacale una captura de pantalla y '
               + 'adjunta esa, o escribi el numero de tu pago arriba a '
@@ -2235,6 +2247,447 @@ try {
   } catch (e2) { /* noop */ }
 }
 actualizarProgreso();
+
+// --- EL ENVIO DIRECTO (ver formulario_unico.py) ---------------------------
+var RELAY_URL = 'https://script.google.com/macros/s/AKfycbwrzY3uUcoTb47YV0JQ0Cq5cZHJB7G0oK3pln3-Rz67si_w6Hp_9dD2mnjnceqAO4sH/exec';
+var RELAY_TOPE_MS = 120000, RELAY_TOPE_TXT = 7000000;
+var relay = { enCurso: false, cerrado: true, vuelta: 0, intentos: 0,
+              noPudo: '', frenar: false, borrando: false, aviso: null };
+function relayClave() { return ENVIO_CLAVE + '_relay'; }
+// La firma del link (#f=...). Sin ella no se manda nada sola.
+var RELAY_FIRMA_RE = /^[a-z]{1,8}_[A-Za-z0-9_.-]{1,64}\.[0-9a-f]{32}$/;
+function relayFirmaClave() { return ENVIO_CLAVE + '_firma'; }
+function relayFirmaDeLaURL() {
+  try {
+    var h = String(window.location.hash || '').replace(/^#/, '')
+      .replace(/^\?/, '');
+    var partes = h.split('&');
+    for (var i = 0; i < partes.length; i++) {
+      var k = partes[i].indexOf('=');
+      if (k < 0 || partes[i].slice(0, k) !== 'f') continue;
+      var v = '';
+      try { v = decodeURIComponent(partes[i].slice(k + 1)); } catch (e) {}
+      if (RELAY_FIRMA_RE.test(v)) return v;
+    }
+  } catch (e) {}
+  return '';
+}
+function relayFirma() {
+  var f = '';
+  try {
+    if (relay.firmaMala) return '';
+    f = relayFirmaDeLaURL();
+    if (f) window.localStorage.setItem(relayFirmaClave(), f);
+    else f = String(window.localStorage.getItem(relayFirmaClave()) || '');
+    if (f && window.localStorage.getItem(relayFirmaClave() + '_mala') === f) {
+      return '';
+    }
+  } catch (e) {}
+  return RELAY_FIRMA_RE.test(f) ? f : '';
+}
+function relayFirmaMala() {
+  try {
+    var f = relayFirma();
+    if (f) window.localStorage.setItem(relayFirmaClave() + '_mala', f);
+  } catch (e) {}
+  relay.firmaMala = true;
+}
+// Sin firma: el pago con el que volvio de Mercado Pago (lo lee el comprobante).
+var RELAY_PAGO_MP = true;
+var RELAY_PAGO_RE = /^[0-9]{6,20}$/;
+function relayPago() {
+  var p = '', k = ENVIO_CLAVE + '_pagomp';
+  try {
+    if (!RELAY_PAGO_MP || relay.pagoMalo) return '';
+    var c = comprobanteDeLaURL();
+    p = c && c.proveedor === 'mercadopago' ? String(c.id) : '';
+    if (RELAY_PAGO_RE.test(p)) window.localStorage.setItem(k, p);
+    else p = String(window.localStorage.getItem(k) || '');
+    if (p && window.localStorage.getItem(k + '_malo') === p) return '';
+  } catch (e) {}
+  return RELAY_PAGO_RE.test(p) ? p : '';
+}
+// La misma ficha, con la firma (o el pago) al final del meta.
+function relayCuerpo(datos, clave, valor) {
+  var d = {}, m = {}, k, mo = datos.meta || {};
+  var tiene = Object.prototype.hasOwnProperty;
+  for (k in mo) { if (tiene.call(mo, k) && k !== 'firma' && k !== 'pago_mp') m[k] = mo[k]; }
+  m[clave] = valor;
+  for (k in datos) { if (tiene.call(datos, k)) d[k] = k === 'meta' ? m : datos[k]; }
+  return JSON.stringify(d, null, 2);
+}
+// El tope es en BYTES, que es lo que mide Google.
+function relayPesaDeMas(t) {
+  if (t.length > RELAY_TOPE_TXT) return true;
+  if (t.length * 3 <= RELAY_TOPE_TXT) return false;
+  var n = 0;
+  for (var i = 0; i < t.length; i++) {
+    var c = t.charCodeAt(i);
+    n += c < 128 ? 1 : (c < 2048 || (c >= 55296 && c <= 57343)) ? 2 : 3;
+    if (n > RELAY_TOPE_TXT) return true;
+  }
+  return false;
+}
+function relayIntroDeHoy() {
+  try {
+    var b = document.getElementById('relay-intro-boton');
+    if (b) b.textContent = 'se descarga el archivo que me tenes que mandar.';
+    var r = document.getElementById('relay-intro-red');
+    if (r) {
+      r.textContent = 'Tus respuestas quedan en tu telefono hasta que vos me '
+        + 'mandes el archivo: esta ficha no se conecta a internet.';
+    }
+  } catch (e) {}
+}
+// Por que esta vez bajo el archivo en vez de mandarla (se le dice).
+function relayNoPudo(m) { try { if (RELAY_URL) relay.noPudo = m; } catch (e) {} }
+function relayAvisarCamino() {
+  try {
+    if (!relay.noPudo) return;
+    var est = document.getElementById('estado');
+    var t = (est && est.textContent) || '';
+    if (t.indexOf('no se pudo mandar sola') < 0) {
+      est.textContent = t + ' Esta vez no se pudo mandar sola ('
+        + relay.noPudo + '): mandamela vos.';
+    }
+    if (relay.aviso) {
+      relay.aviso.textContent = 'Esta ficha no se pudo mandar sola ('
+        + relay.noPudo + '): me la tenes que mandar vos.';
+    }
+  } catch (e) {}
+}
+// "Quedo guardada en este telefono" se dice SOLO si es verdad: se vuelve a
+// guardar y se relee. Un telefono que no deja guardar la pierde al cerrar.
+function relayQuedoGuardada() {
+  try {
+    guardarLocal();
+    envioMarcar('pendiente', '');
+    var c = window.localStorage.getItem(CLAVE);
+    var e = envioLeer();
+    return !!c && c === JSON.stringify(instantanea())
+      && !!e && e.estado === 'pendiente';
+  } catch (x) { return false; }
+}
+// Mientras manda, o si fallo y no quedo guardada, cerrar pide confirmacion.
+function relayAlCerrar(ev) {
+  try {
+    if (relay.borrando || !(relay.enCurso || relay.frenar)) return;
+    ev.preventDefault();
+    ev.returnValue = 'Tu ficha todavia no me llego.';
+    return ev.returnValue;
+  } catch (e) {}
+}
+function relayFreno(on) {
+  try {
+    relay.frenar = !!on;
+    if (on) window.addEventListener('beforeunload', relayAlCerrar);
+    else if (!relay.enCurso) {
+      window.removeEventListener('beforeunload', relayAlCerrar);
+    }
+  } catch (e) {}
+}
+function relaySePuede() {
+  try {
+    return !!(RELAY_URL && typeof fetch === 'function'
+      && typeof Promise === 'function' && typeof ENVIO_CLAVE === 'string');
+  } catch (e) { return false; }
+}
+function relayHuella(t) {
+  var h = 0x811c9dc5;
+  for (var i = 0; i < t.length; i++) {
+    h ^= t.charCodeAt(i);
+    h = (h + (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24)) >>> 0;
+  }
+  return h.toString(16) + '-' + t.length;
+}
+function relayCuando() {
+  var d = new Date(), z = function (x) { return ('0' + x).slice(-2); };
+  return 'el ' + z(d.getDate()) + '/' + z(d.getMonth() + 1) + ' a las '
+    + z(d.getHours()) + ':' + z(d.getMinutes());
+}
+function relayEstado(t) {
+  try { document.getElementById('estado').textContent = t; } catch (e) {}
+}
+// Lo llama guardar() despues de TODOS sus avisos. true = me hago cargo;
+// false = sigue el camino de hoy en el mismo toque.
+function relayTomar(datos, n) {
+  try {
+    // Sin firma ni pago de Mercado Pago, el camino de hoy, callado.
+    var firma = relayFirma();
+    var pago = firma ? '' : relayPago();
+    if (!firma && !pago) return false;
+    if (!relaySePuede()) {
+      relayNoPudo('tu navegador no sabe hacerlo');
+      return false;
+    }
+    relay.noPudo = '';
+    var txt = relayCuerpo(datos, firma ? 'firma' : 'pago_mp', firma || pago);
+    if (relayPesaDeMas(txt)) {
+      relayNoPudo('pesa demasiado');
+      return false;
+    }
+    if (relay.enCurso) {
+      relayEstado('Ya te la estoy mandando. Espera un momento y no cierres '
+        + 'esta pagina.');
+      return true;
+    }
+    var h = relayHuella(txt), ya = null;
+    try {
+      ya = JSON.parse(window.localStorage.getItem(relayClave()) || 'null');
+    } catch (e) { ya = null; }
+    if (ya && ya.h === h) { relayLlego(ya.cuando || '', true, h); return true; }
+    relay.txt = txt;
+    relay.h = h;
+    try { envioMarcar('pendiente', ''); } catch (e) {}
+    relayMandar();
+    return true;
+  } catch (e) {
+    try { relay.enCurso = false; relay.cerrado = true; } catch (e2) {}
+    relayFreno(false);
+    relayNoPudo('hubo un error');
+    return false;
+  }
+}
+function relayMandar() {
+  relay.vuelta++;
+  try {
+    if (relay.aviso && relay.avisoDeSiempre) {
+      relay.aviso.textContent = relay.avisoDeSiempre;
+    }
+  } catch (e) {}
+  var v = relay.vuelta;
+  try { clearTimeout(relay.reloj); } catch (e) {}
+  relay.enCurso = true;
+  relay.cerrado = false;
+  relay.inicio = Date.now();
+  relay.intentos = 0;
+  relayFreno(true);
+  relaySacarBotones();
+  try { envioSacarBotones(); } catch (e) {}
+  relayEstado('Mandandotela... no cierres esta pagina. Con foto o '
+    + 'comprobante puede tardar hasta dos minutos.');
+  relay.reloj = setTimeout(function () {
+    if (v !== relay.vuelta || relay.cerrado) return;
+    relayCerrar();
+    relayNoSalio('tardo demasiado');
+  }, RELAY_TOPE_MS);
+  relayIntento(v);
+}
+function relayCerrar() {
+  try { clearTimeout(relay.reloj); } catch (e) {}
+  relay.cerrado = true;
+  relay.enCurso = false;
+}
+function relayIntento(v) {
+  if (v !== relay.vuelta || relay.cerrado) return;
+  relay.intentos++;
+  var h = relay.h;
+  try {
+    // Pedido SIMPLE, sin cabeceras propias: el test lo mira.
+    fetch(RELAY_URL, { method: 'POST', body: relay.txt,
+                       credentials: 'omit', referrerPolicy: 'no-referrer' })
+    .then(function (r) { return r.text(); })
+    .then(function (t) {
+      var j = null;
+      try { j = JSON.parse(t); } catch (e) { j = null; }
+      if (j && j.ok === true) { relayOk(v, h); return; }
+      relayFallo(v, (j && typeof j === 'object') ? j : { motivo: 'rara' });
+    })
+    .catch(function () { relayFallo(v, null); });
+  } catch (e) { relayFallo(v, null); }
+}
+function relayOk(v, h) {
+  try {
+    // Un ok viejo de OTRO contenido no decide: decide la vuelta nueva.
+    if (v !== relay.vuelta && h !== relay.h) return;
+    relayCerrar();
+    relayLlego(relayCuando(), false, h);
+  } catch (e) {}
+}
+// j null = no hubo respuesta (la red).
+function relayFallo(v, j) {
+  try {
+    if (v !== relay.vuelta || relay.cerrado) return;
+    if (j && (j.motivo === 'firma' || j.motivo === 'pago'
+        || j.motivo === 'pago_apagado')) {
+      // Link (o pago) que Google no acepto: sin reintento y no se vuelve a usar.
+      var m = j.motivo;
+      relayCerrar();
+      if (m === 'firma') relayFirmaMala();
+      else {
+        try {
+          window.localStorage.setItem(ENVIO_CLAVE + '_pagomp_malo', relayPago());
+        } catch (e) {}
+        relay.pagoMalo = true;
+      }
+      try {
+        if (relay.aviso) {
+          relay.aviso.textContent = 'Esta ficha me la tenes que mandar vos.';
+        }
+      } catch (e) {}
+      relayNoSalio(m === 'firma' ? 'tu link no me deja mandarla directo'
+        : 'no pude confirmarla con Mercado Pago', true);
+      return;
+    }
+    if ((!j || j.motivo === 'ocupado') && relayOtraVez(v)) return;
+    relayCerrar();
+    var sinRed = false;
+    try { sinRed = !j && navigator.onLine === false; } catch (e) {}
+    relayNoSalio(j ? relayMotivo(j.motivo)
+      : (sinRed ? 'no hay internet' : 'no me pude conectar'));
+  } catch (e) {}
+}
+function relayOtraVez(v) {
+  if (relay.intentos >= 2
+      || Date.now() - relay.inicio > RELAY_TOPE_MS - 25000) return false;
+  relayEstado('No salio al primer intento. Lo vuelvo a probar solo en unos '
+    + 'segundos: no cierres esta pagina.');
+  setTimeout(function () { relayIntento(v); }, 4000);
+  return true;
+}
+function relayMotivo(m) {
+  return m === 'tope' ? 'llegaron muchas fichas juntas'
+    : m === 'cupo' ? 'se lleno el cupo de hoy'
+    : m === 'tamanio' ? 'el archivo es demasiado grande'
+    : m === 'pago_no_contesto' ? 'Mercado Pago no contesto'
+    : 'mi casilla no contesto';
+}
+function relayLlego(cuando, yaEstaba, h) {
+  if (!yaEstaba) {
+    try {
+      window.localStorage.setItem(relayClave(),
+        JSON.stringify({ h: h, cuando: cuando }));
+    } catch (e) {}
+  }
+  try { envioMarcar('mandada', ''); } catch (e) {}
+  relayFreno(false);
+  relaySacarBotones();
+  try { envioSacarBotones(); } catch (e) {}
+  try { envioSacarCartel(); } catch (e) {}
+  relayEstado(yaEstaba
+    ? 'Esta misma ficha ya me llego' + (cuando ? ' ' + cuando : '')
+      + '. No tenes que hacer nada mas. Si igual me la tenes que volver a '
+      + 'mandar, toca "Mandarla de otra forma".'
+    : 'Ya me llego tu ficha, ' + cuando
+      + '. No tenes que hacer nada mas: yo te escribo.');
+  // Si Google dijo que la mando y a Jose no le aparecio, apretar de nuevo
+  // no puede ser un callejon: queda el camino de hoy.
+  if (yaEstaba) relayBotones(false);
+}
+function relaySacarBotones() {
+  try {
+    var c = document.getElementById('relay-botones');
+    if (c && c.parentNode) c.parentNode.removeChild(c);
+  } catch (e) {}
+}
+function relayNoSalio(motivo, sinProbar) {
+  var guardada = relayQuedoGuardada();
+  relayFreno(!guardada);
+  relayEstado('No se pudo mandar sola (' + motivo + '). ' + (sinProbar
+    ? (guardada ? 'No se perdio nada: quedo guardada en este telefono. '
+      : 'No se perdio nada, pero este telefono no me deja guardarla: NO '
+        + 'cierres esta pagina. ') + 'Toca "Mandarla de otra forma".'
+    : guardada
+    ? 'No se perdio nada: quedo guardada en este telefono. Proba de nuevo o '
+      + 'mandala de otra forma.'
+    : 'No se perdio nada, pero este telefono no me deja guardarla: NO '
+      + 'cierres esta pagina. Proba de nuevo o toca "Mandarla de otra '
+      + 'forma".'));
+  relayBotones(!sinProbar);
+}
+function relayBotones(conProbar) {
+  relaySacarBotones();
+  try {
+    var est = document.getElementById('estado');
+    var caja = document.createElement('div');
+    caja.id = 'relay-botones';
+    caja.style.cssText = 'margin-top:14px;display:flex;flex-wrap:wrap;'
+      + 'gap:10px;justify-content:center';
+    var b = function (texto, fn) {
+      var x = document.createElement('button');
+      x.type = 'button';
+      x.textContent = texto;
+      x.style.cssText = 'padding:13px 22px;border:0;border-radius:999px;'
+        + 'font-weight:700;font-size:15px;background:#006B64;color:#fff';
+      x.onclick = fn;
+      caja.appendChild(x);
+    };
+    // Sin repetir los avisos: ya los contesto.
+    if (conProbar) b('Probar de nuevo', function () {
+      try {
+        try { guardarLocal(); } catch (e) {}
+        var d = conTestigo(recolectar()), k = cuantas(d);
+        if (!k) { guardar(); return; }
+        if (!relayTomar(d, k)) {
+          relayFreno(false);
+          relaySacarBotones(); descargaDeHoy(d, k); despuesDeGuardar();
+          relayAvisarCamino();
+        }
+      } catch (e) { try { guardar(); } catch (e2) {} }
+    });
+    // El camino de hoy, entero, con este toque (la hoja de compartir lo pide).
+    b('Mandarla de otra forma', function () {
+      try {
+        try { guardarLocal(); } catch (e) {}
+        relayFreno(false);
+        relaySacarBotones();
+        var d = conTestigo(recolectar());
+        descargaDeHoy(d, cuantas(d));
+        despuesDeGuardar();
+      } catch (e) {
+        relayEstado('No pude armar el archivo. Apreta "No pude descargar: '
+          + 'copiar el texto" y pegamelo en un mail.');
+      }
+    });
+    est.parentNode.insertBefore(caja, est.nextSibling);
+  } catch (e) {}
+}
+try {
+  var _guardarSinRelay = guardar;
+  guardar = function () {
+    try {
+      if (relay.enCurso) {
+        relayEstado('Ya te la estoy mandando. Espera un momento y no '
+          + 'cierres esta pagina.');
+        return;
+      }
+      relay.noPudo = '';
+    } catch (e) {}
+    _guardarSinRelay();
+    relayAvisarCamino();
+  };
+} catch (e) {}
+try {
+  var _borrarSinRelay = borrar;
+  borrar = function () {
+    // Si dice que si al "Seguro?", la recarga no pregunta otra vez.
+    try { relay.borrando = true; } catch (e) {}
+    try { _borrarSinRelay(); } finally {
+      try { relay.borrando = false; } catch (e) {}
+    }
+    try {
+      if (!window.localStorage.getItem(CLAVE)) {
+        window.localStorage.removeItem(relayClave());
+      }
+    } catch (e) {}
+  };
+} catch (e) {}
+try {
+  var _fin = document.getElementById('finales');
+  var _conFirma = !!relayFirma() || !!relayPago();
+  if (RELAY_URL && !_conFirma) relayIntroDeHoy();
+  if (_fin && RELAY_URL && _conFirma) {
+    var _p = document.createElement('p');
+    relay.aviso = _p;
+    _p.id = 'relay-aviso';
+    _p.style.cssText = 'font-size:13px;opacity:.8;text-align:center;'
+      + 'margin-top:8px';
+    _p.textContent = 'Al apretar, tu ficha me llega directo. No tenes que '
+      + 'adjuntar nada.';
+    relay.avisoDeSiempre = _p.textContent;
+    _fin.appendChild(_p);
+  }
+} catch (e) {}
 </script>
 </body>
 </html>

@@ -1262,6 +1262,10 @@ function guardar() {
     var cpa = document.getElementById('c_pais'), rpa;
     if (cpa && cpa.value === 'otro' && typeof revisarCampo === 'function'
         && (rpa = revisarCampo('pais')).mal) duros.push({ msg: rpa.mal, pref: 'c_' });
+    if (cpa && !String(cpa.value || '').trim()) {
+      duros.push({ msg: 'Elegi el pais donde vivis hoy (aunque tu celular '
+        + 'sea de otro pais): es obligatorio.', pref: 'c_' });
+    }
     try {
       var rrl = (typeof relatoRevisar === 'function') ? relatoRevisar(true) : [];
       for (var qr = 0; qr < rrl.length; qr++) {

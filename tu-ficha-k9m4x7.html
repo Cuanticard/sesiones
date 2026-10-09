@@ -169,6 +169,37 @@
     border: 1px solid rgba(234,227,210,.5); border-radius: 18px;
     padding: 8px 14px; font-family: inherit; }
 
+html { scroll-padding-top: 16px; scroll-padding-bottom: 190px; }
+.nomape { display: flex; gap: 8px; flex-wrap: wrap; }
+.nomape-c { flex: 1 1 140px; min-width: 0; }
+.nomape-r { display: block; font-size: 13px; opacity: .8;
+margin: 0 0 3px 2px; }
+#ok_c_fecha_nacimiento { font-size: 19px; font-weight: bold;
+line-height: 1.35; margin-top: 8px; }
+#ok_c_nombre { font-size: 17px; font-weight: bold; }
+select { font-size: 16px; }
+@media (max-width: 760px), (pointer: coarse) {
+body.fv-escribiendo .acciones { display: none; }
+}
+#fv-revisa { position: fixed; left: 0; right: 0; top: 0; bottom: 0;
+z-index: 50; background: rgba(0,20,18,.88);
+overflow-y: auto; -webkit-overflow-scrolling: touch;
+padding: 18px 14px 40px; }
+#fv-revisa .fv-caja { max-width: 520px; margin: 0 auto;
+background: #003C38; border: 2px solid #C47A35;
+border-radius: 14px; padding: 18px 16px; color: #EAE3D2; }
+#fv-revisa h3 { margin: 0 0 6px; font-size: 21px; }
+#fv-revisa .fv-intro { font-size: 15px; margin: 0 0 12px; opacity: .9; }
+#fv-revisa dl { margin: 0 0 14px; }
+#fv-revisa dt { font-size: 13px; opacity: .75; margin-top: 10px; }
+#fv-revisa dd { margin: 2px 0 0; font-size: 19px; font-weight: bold;
+word-break: break-word; }
+#fv-revisa .fv-falta { color: #3CE7E1; font-weight: normal;
+font-size: 15px; }
+#fv-revisa .fv-botones { display: flex; flex-direction: column;
+gap: 10px; }
+#fv-revisa button { width: 100%; margin: 0; font-size: 17px; }
+
 </style>
 </head>
 <body>
@@ -208,7 +239,7 @@
          WhatsApp son por donde te llega despues.</p>
       <p>Esos dos datos son tu <strong>testigo</strong>: tu firma biológica, y con ella el equipo entra por campo cuántico a tu análisis y lee cómo está funcionando por dentro cada órgano y cada parte tuya.</p>
     </div>
-    <section><div class="campo"><label class="etiqueta" for="c_nombre">Tu nombre y apellido <span class="hace-falta">hace falta</span></label><p class="ayuda">Nombre y apellido completos, como figuran en tu documento.</p><input type="text" id="c_nombre" name="c_nombre"><p class="aviso" id="av_c_nombre"></p><p class="eco" id="ok_c_nombre"></p></div><div class="campo"><label class="etiqueta" for="c_fecha_nacimiento">Tu fecha de nacimiento <span class="hace-falta">hace falta</span></label><p class="ayuda">Con tu nombre completo y esta fecha ya puedo hacer tu estudio.</p><div class="fnac"><input type="text" id="c_fecha_nacimiento__dia" class="fnac-n" inputmode="numeric" maxlength="2" placeholder="Dia" aria-label="Dia de nacimiento" autocomplete="bday-day"><select id="c_fecha_nacimiento__mes" class="fnac-m" aria-label="Mes de nacimiento" autocomplete="bday-month"><option value="">Mes</option><option value="01">enero</option><option value="02">febrero</option><option value="03">marzo</option><option value="04">abril</option><option value="05">mayo</option><option value="06">junio</option><option value="07">julio</option><option value="08">agosto</option><option value="09">septiembre</option><option value="10">octubre</option><option value="11">noviembre</option><option value="12">diciembre</option></select><input type="text" id="c_fecha_nacimiento__anio" class="fnac-a" inputmode="numeric" maxlength="4" placeholder="Año" aria-label="Año de nacimiento" autocomplete="bday-year"></div><input type="hidden" id="c_fecha_nacimiento" name="c_fecha_nacimiento"><p class="aviso" id="av_c_fecha_nacimiento"></p><p class="eco" id="ok_c_fecha_nacimiento"></p></div><div class="campo"><label class="etiqueta" for="c_whatsapp">Tu WhatsApp <span class="hace-falta">hace falta</span></label><p class="ayuda">El número donde usás WhatsApp, con código de país. Ejemplo: +54 9 11 1234-5678</p><input type="text" id="c_whatsapp" name="c_whatsapp"><p class="aviso" id="av_c_whatsapp"></p><p class="eco" id="ok_c_whatsapp"></p></div><div class="campo"><label class="etiqueta" for="c_pais">Tu país de residencia (dónde vivís hoy) <span class="hace-falta">hace falta</span></label><p class="ayuda">Con esto te armamos el plan de comidas con las frutas y verduras que de verdad se consiguen donde vivis. Si no esta tu pais, elegi Otro pais. Aunque tu celular sea de otro país, elegí el país donde vivís.</p><select id="c_pais" name="c_pais"><option value="">(sin responder)</option><option value="Argentina">Argentina</option><option value="Bolivia">Bolivia</option><option value="Brasil">Brasil</option><option value="Canada">Canadá</option><option value="Chile">Chile</option><option value="Colombia">Colombia</option><option value="Costa Rica">Costa Rica</option><option value="Cuba">Cuba</option><option value="Ecuador">Ecuador</option><option value="El Salvador">El Salvador</option><option value="Estados Unidos">Estados Unidos</option><option value="Guatemala">Guatemala</option><option value="Honduras">Honduras</option><option value="Mexico">México</option><option value="Nicaragua">Nicaragua</option><option value="Panama">Panamá</option><option value="Paraguay">Paraguay</option><option value="Peru">Perú</option><option value="Puerto Rico">Puerto Rico</option><option value="Republica Dominicana">República Dominicana</option><option value="Uruguay">Uruguay</option><option value="Venezuela">Venezuela</option><option value="Alemania">Alemania</option><option value="Andorra">Andorra</option><option value="Austria">Austria</option><option value="Belgica">Bélgica</option><option value="Croacia">Croacia</option><option value="Dinamarca">Dinamarca</option><option value="Escocia">Escocia</option><option value="Espana">España</option><option value="Finlandia">Finlandia</option><option value="Francia">Francia</option><option value="Grecia">Grecia</option><option value="Holanda">Holanda</option><option value="Hungria">Hungría</option><option value="Inglaterra">Inglaterra</option><option value="Irlanda">Irlanda</option><option value="Italia">Italia</option><option value="Luxemburgo">Luxemburgo</option><option value="Noruega">Noruega</option><option value="Paises Bajos">Países Bajos</option><option value="Polonia">Polonia</option><option value="Portugal">Portugal</option><option value="Reino Unido">Reino Unido</option><option value="Republica Checa">República Checa</option><option value="Rumania">Rumania</option><option value="Rusia">Rusia</option><option value="Suecia">Suecia</option><option value="Suiza">Suiza</option><option value="Ucrania">Ucrania</option><option value="Australia">Australia</option><option value="China">China</option><option value="Corea del Sur">Corea del Sur</option><option value="Egipto">Egipto</option><option value="Emiratos Arabes Unidos">Emiratos Árabes Unidos</option><option value="India">India</option><option value="Israel">Israel</option><option value="Japon">Japón</option><option value="Marruecos">Marruecos</option><option value="Nueva Zelanda">Nueva Zelanda</option><option value="Sudafrica">Sudáfrica</option><option value="Turquia">Turquía</option><option value="otro">Otro país (lo escribo abajo)</option></select><p class="aviso" id="av_c_pais"></p><p class="eco" id="ok_c_pais"></p></div><div class="campo"><label class="etiqueta" for="c_pais_otro">Si elegiste Otro país, ¿cuál?</label><input type="text" id="c_pais_otro" name="c_pais_otro"></div><div class="campo"><label class="etiqueta" for="c_ciudad">En que ciudad <span class="hace-falta">hace falta</span></label><p class="ayuda">Ejemplo: La Plata</p><input type="text" id="c_ciudad" name="c_ciudad"><p class="aviso" id="av_c_ciudad"></p><p class="eco" id="ok_c_ciudad"></p></div><div class="campo"><label class="etiqueta" for="c_email">Tu email <span class="hace-falta">hace falta</span></label><p class="ayuda">Ahi te llega tu informe cuando este listo.</p><input type="text" id="c_email" name="c_email"><p class="aviso" id="av_c_email"></p><p class="eco" id="ok_c_email"></p></div><div class="campo"><label class="etiqueta" for="c_instagram">Tu Instagram (si tenés)</label><p class="ayuda">Opcional. Tu usuario, por ejemplo @tu.usuario. Si el WhatsApp falla, te escribo por ahí.</p><input type="text" id="c_instagram" name="c_instagram" data-extra="1"></div><div class="campo" id="campo_comprobante"><label class="etiqueta" for="w_comprobante">Comprobante de pago</label><p class="ayuda">Se completa solo con el numero de tu pago. Si quedo vacio, escribi el numero de operacion que te dio Mercado Pago o PayPal (esta en el mail del pago).</p><input type="text" id="w_comprobante" name="w_comprobante"><input type="hidden" id="w_comprobante_prov" name="w_comprobante_prov"><p class="ayuda" id="w_comprobante_estado"></p><div class="foto-caja" id="w_comp_caja"><label class="boton-archivo" for="w_comp_archivo">Adjuntar el comprobante</label><input type="file" id="w_comp_archivo" accept="image/*,application/pdf" onchange="comprobanteArchivoElegido(this)"><p class="ayuda">Es opcional. Si tenes a mano la captura o el PDF de tu pago, adjuntalo y le saco el numero solo. Si no, no pasa nada: segui tranquila.</p><div id="w_comp_estado" class="foto-estado"></div><img id="w_comp_previa" alt=""><button type="button" class="secundario chico" id="w_comp_sacar" onclick="comprobanteArchivoSacar()">Sacar este archivo y elegir otro</button></div></div></section>
+    <section><div class="campo"><label class="etiqueta" for="c_nombre">Tu nombre y apellido <span class="hace-falta">hace falta</span></label><p class="ayuda">Nombre y apellido completos, como figuran en tu documento.</p><div class="nomape"><div class="nomape-c"><span class="nomape-r">Nombre</span><input type="text" id="c_nombre__nom" class="nomape-i" autocomplete="given-name" autocapitalize="words" aria-label="Tu nombre" placeholder="Ej: María José"></div><div class="nomape-c"><span class="nomape-r">Apellido</span><input type="text" id="c_nombre__ape" class="nomape-i" autocomplete="family-name" autocapitalize="words" aria-label="Tu apellido" placeholder="Ej: Pérez"></div></div><input type="hidden" id="c_nombre" name="c_nombre"><p class="aviso" id="av_c_nombre"></p><p class="eco" id="ok_c_nombre"></p></div><div class="campo"><label class="etiqueta" for="c_fecha_nacimiento">Tu fecha de nacimiento <span class="hace-falta">hace falta</span></label><p class="ayuda">Con tu nombre completo y esta fecha ya puedo hacer tu estudio.</p><div class="fnac"><input type="text" id="c_fecha_nacimiento__dia" class="fnac-n" inputmode="numeric" maxlength="2" placeholder="Dia" aria-label="Dia de nacimiento" autocomplete="bday-day"><select id="c_fecha_nacimiento__mes" class="fnac-m" aria-label="Mes de nacimiento" autocomplete="bday-month"><option value="">Mes</option><option value="01">enero</option><option value="02">febrero</option><option value="03">marzo</option><option value="04">abril</option><option value="05">mayo</option><option value="06">junio</option><option value="07">julio</option><option value="08">agosto</option><option value="09">septiembre</option><option value="10">octubre</option><option value="11">noviembre</option><option value="12">diciembre</option></select><input type="text" id="c_fecha_nacimiento__anio" class="fnac-a" inputmode="numeric" maxlength="4" placeholder="Año" aria-label="Año de nacimiento" autocomplete="bday-year"></div><input type="hidden" id="c_fecha_nacimiento" name="c_fecha_nacimiento"><p class="aviso" id="av_c_fecha_nacimiento"></p><p class="eco" id="ok_c_fecha_nacimiento"></p></div><div class="campo"><label class="etiqueta" for="c_whatsapp">Tu WhatsApp <span class="hace-falta">hace falta</span></label><p class="ayuda">El número donde usás WhatsApp, con código de país. Ejemplo: +54 9 11 1234-5678</p><input type="text" id="c_whatsapp" name="c_whatsapp"><p class="aviso" id="av_c_whatsapp"></p><p class="eco" id="ok_c_whatsapp"></p></div><div class="campo"><label class="etiqueta" for="c_pais">Tu país de residencia (dónde vivís hoy) <span class="hace-falta">hace falta</span></label><p class="ayuda">Con esto te armamos el plan de comidas con las frutas y verduras que de verdad se consiguen donde vivis. Si no esta tu pais, elegi Otro pais. Aunque tu celular sea de otro país, elegí el país donde vivís.</p><select id="c_pais" name="c_pais"><option value="">(sin responder)</option><option value="Argentina">Argentina</option><option value="Bolivia">Bolivia</option><option value="Brasil">Brasil</option><option value="Canada">Canadá</option><option value="Chile">Chile</option><option value="Colombia">Colombia</option><option value="Costa Rica">Costa Rica</option><option value="Cuba">Cuba</option><option value="Ecuador">Ecuador</option><option value="El Salvador">El Salvador</option><option value="Estados Unidos">Estados Unidos</option><option value="Guatemala">Guatemala</option><option value="Honduras">Honduras</option><option value="Mexico">México</option><option value="Nicaragua">Nicaragua</option><option value="Panama">Panamá</option><option value="Paraguay">Paraguay</option><option value="Peru">Perú</option><option value="Puerto Rico">Puerto Rico</option><option value="Republica Dominicana">República Dominicana</option><option value="Uruguay">Uruguay</option><option value="Venezuela">Venezuela</option><option value="Alemania">Alemania</option><option value="Andorra">Andorra</option><option value="Austria">Austria</option><option value="Belgica">Bélgica</option><option value="Croacia">Croacia</option><option value="Dinamarca">Dinamarca</option><option value="Escocia">Escocia</option><option value="Espana">España</option><option value="Finlandia">Finlandia</option><option value="Francia">Francia</option><option value="Grecia">Grecia</option><option value="Holanda">Holanda</option><option value="Hungria">Hungría</option><option value="Inglaterra">Inglaterra</option><option value="Irlanda">Irlanda</option><option value="Italia">Italia</option><option value="Luxemburgo">Luxemburgo</option><option value="Noruega">Noruega</option><option value="Paises Bajos">Países Bajos</option><option value="Polonia">Polonia</option><option value="Portugal">Portugal</option><option value="Reino Unido">Reino Unido</option><option value="Republica Checa">República Checa</option><option value="Rumania">Rumania</option><option value="Rusia">Rusia</option><option value="Suecia">Suecia</option><option value="Suiza">Suiza</option><option value="Ucrania">Ucrania</option><option value="Australia">Australia</option><option value="China">China</option><option value="Corea del Sur">Corea del Sur</option><option value="Egipto">Egipto</option><option value="Emiratos Arabes Unidos">Emiratos Árabes Unidos</option><option value="India">India</option><option value="Israel">Israel</option><option value="Japon">Japón</option><option value="Marruecos">Marruecos</option><option value="Nueva Zelanda">Nueva Zelanda</option><option value="Sudafrica">Sudáfrica</option><option value="Turquia">Turquía</option><option value="otro">Otro país (lo escribo abajo)</option></select><p class="aviso" id="av_c_pais"></p><p class="eco" id="ok_c_pais"></p></div><div class="campo"><label class="etiqueta" for="c_pais_otro">Si elegiste Otro país, ¿cuál?</label><input type="text" id="c_pais_otro" name="c_pais_otro"></div><div class="campo"><label class="etiqueta" for="c_ciudad">En que ciudad <span class="hace-falta">hace falta</span></label><p class="ayuda">Ejemplo: La Plata</p><input type="text" id="c_ciudad" name="c_ciudad"><p class="aviso" id="av_c_ciudad"></p><p class="eco" id="ok_c_ciudad"></p></div><div class="campo"><label class="etiqueta" for="c_email">Tu email <span class="hace-falta">hace falta</span></label><p class="ayuda">El tuyo, aunque haya pagado otra persona: ahí te llega tu informe cuando esté listo.</p><input type="text" id="c_email" name="c_email"><p class="aviso" id="av_c_email"></p><p class="eco" id="ok_c_email"></p></div><div class="campo"><label class="etiqueta" for="c_instagram">Tu Instagram (si tenés)</label><p class="ayuda">Opcional. Tu usuario, por ejemplo @tu.usuario. Si el WhatsApp falla, te escribo por ahí.</p><input type="text" id="c_instagram" name="c_instagram" data-extra="1"></div><div class="campo" id="campo_comprobante"><label class="etiqueta" for="w_comprobante">Comprobante de pago</label><p class="ayuda">Se completa solo con el numero de tu pago. Si quedo vacio, escribi el numero de operacion que te dio Mercado Pago o PayPal (esta en el mail del pago).</p><input type="text" id="w_comprobante" name="w_comprobante"><input type="hidden" id="w_comprobante_prov" name="w_comprobante_prov"><p class="ayuda" id="w_comprobante_estado"></p><div class="foto-caja" id="w_comp_caja"><label class="boton-archivo" for="w_comp_archivo">Adjuntar el comprobante</label><input type="file" id="w_comp_archivo" accept="image/*,application/pdf" onchange="comprobanteArchivoElegido(this)"><p class="ayuda">Es opcional. Si tenes a mano la captura o el PDF de tu pago, adjuntalo y le saco el numero solo. Si no, no pasa nada: segui tranquila.</p><div id="w_comp_estado" class="foto-estado"></div><img id="w_comp_previa" alt=""><button type="button" class="secundario chico" id="w_comp_sacar" onclick="comprobanteArchivoSacar()">Sacar este archivo y elegir otro</button></div></div></section>
 
     <!-- testigo: nombre_fecha (una sola via, 2026-09-15) -->
 
@@ -1806,6 +1837,15 @@ function testigoAlTocar(ev) {
     if (!t) return;
     if (t.id && t.id.indexOf('c_') === 0) {
       var clave = (t.id === 'c_pais_otro') ? 'pais' : t.id.slice(2);
+      if (clave.indexOf('__') > 0) {
+        var base = clave.split('__')[0];
+        var hb = document.getElementById('c_' + base);
+        var cb = hb && hb.parentNode;
+        if (cb && String(cb.className).indexOf('mal') >= 0) {
+          pintarCampo(base);
+        }
+        return;
+      }
       var caja = t.parentNode;
       if ((caja && String(caja.className).indexOf('mal') >= 0)
           || ev.type === 'change') {
@@ -2817,7 +2857,12 @@ function fichaEdadSola() {
     var f = document.querySelector('[name="c_fecha_nacimiento"]');
     var e = document.querySelector('[name="a_edad"]');
     if (!f || !e) return;
-    if (String(e.value === undefined ? '' : e.value).trim() !== '') return;
+    var ahora = String(e.value === undefined ? '' : e.value).trim();
+    var claveAuto = '';
+    try { claveAuto = String(CLAVE) + '_edad_auto'; } catch (x) { claveAuto = ''; }
+    var puesta = null;
+    try { puesta = claveAuto ? window.localStorage.getItem(claveAuto) : null; } catch (x) { puesta = null; }
+    if (ahora !== '' && ahora !== puesta) return;
     var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(f.value || '').trim());
     if (!m) return;
     var A = Number(m[1]), M = Number(m[2]), D = Number(m[3]);
@@ -2830,7 +2875,9 @@ function fichaEdadSola() {
     var dm = (hoy.getMonth() + 1) - M;
     if (dm < 0 || (dm === 0 && hoy.getDate() < D)) a--;
     if (!(a >= 0 && a <= 120)) return;
+    if (ahora === String(a)) return;
     e.value = String(a);
+    try { if (claveAuto) window.localStorage.setItem(claveAuto, String(a)); } catch (x) {}
     try { e.dispatchEvent(new Event('input', { bubbles: true })); } catch (x) {}
     try { e.dispatchEvent(new Event('change', { bubbles: true })); } catch (x) {}
   } catch (e) { }
@@ -2911,6 +2958,10 @@ function fichaOfrecerElHermano() {
         window.localStorage.setItem(CLAVE, mejor.crudo);
         var comp = window.localStorage.getItem(mejor.clave + '_comp');
         if (comp) window.localStorage.setItem(CLAVE + '_comp', comp);
+        var nomape = window.localStorage.getItem(mejor.clave + '_nomape');
+        if (nomape) window.localStorage.setItem(CLAVE + '_nomape', nomape);
+        var eauto = window.localStorage.getItem(mejor.clave + '_edad_auto');
+        if (eauto) window.localStorage.setItem(CLAVE + '_edad_auto', eauto);
       } catch (e) { }
       try { window.location.reload(); } catch (e) { }
     });
@@ -2925,6 +2976,427 @@ function fichaOfrecerElHermano() {
   } catch (e) { }
 }
 try { window.setTimeout(fichaOfrecerElHermano, 0); } catch (e) { }
+
+var FV = { ok: '', tactil: null, altoMax: 0, seAchico: false };
+var FV_MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
+'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+function fvTactil() {
+try {
+if (FV.tactil === null) {
+FV.tactil = !!((window.matchMedia
+&& window.matchMedia('(pointer: coarse)').matches)
+|| (window.innerWidth || 1000) <= 760);
+}
+return FV.tactil;
+} catch (e) { return false; }
+}
+function fvEsTexto(el) {
+try {
+if (!el || !el.tagName) return false;
+var t = String(el.tagName).toUpperCase();
+if (t === 'TEXTAREA') return true;
+if (t !== 'INPUT') return false;
+var ty = String(el.type || 'text').toLowerCase();
+return ty === 'text' || ty === 'number' || ty === 'email' || ty === 'tel'
+|| ty === 'search' || ty === 'url';
+} catch (e) { return false; }
+}
+function fvClase(prender) {
+try {
+var b = document.body;
+if (!b) return;
+var cs = String(b.className || '').split(' ').filter(function (c) {
+return c && c !== 'fv-escribiendo';
+});
+if (prender) cs.push('fv-escribiendo');
+b.className = cs.join(' ');
+} catch (e) {}
+}
+function fvVisible() {
+var top = 0, alto = window.innerHeight || 0;
+try {
+var vv = window.visualViewport;
+if (vv && vv.height > 0) { top = vv.offsetTop || 0; alto = vv.height; }
+} catch (e) {}
+var bajo = top + alto;
+try {
+var barra = document.querySelector('.acciones');
+if (barra && barra.getBoundingClientRect) {
+var rb = barra.getBoundingClientRect();
+if (rb.height > 0 && rb.top < bajo && rb.top > top + 60) bajo = rb.top;
+}
+} catch (e) {}
+return { top: top, bajo: bajo };
+}
+function fvMostrar(el) {
+try {
+if (!el || !el.getBoundingClientRect) return false;
+var v = fvVisible();
+var r = el.getBoundingClientRect();
+var margen = 14;
+if (r.top >= v.top + margen && r.bottom <= v.bajo - margen) return false;
+var meta = v.top + Math.max(margen, Math.round((v.bajo - v.top) * 0.25));
+window.scrollBy(0, Math.round(r.top - meta));
+return true;
+} catch (e) { return false; }
+}
+function fvAlEnfocar(ev) {
+try {
+var t = ev && ev.target;
+if (!fvEsTexto(t)) return;
+FV.seAchico = false;
+if (fvTactil()) fvClase(true);
+fvMostrar(t);
+setTimeout(function () { if (document.activeElement === t) fvMostrar(t); }, 120);
+setTimeout(function () { if (document.activeElement === t) fvMostrar(t); }, 420);
+setTimeout(function () { if (document.activeElement === t) fvMostrar(t); }, 800);
+} catch (e) {}
+}
+function fvAlSoltar() {
+setTimeout(function () {
+try {
+if (!fvEsTexto(document.activeElement)) {
+fvClase(false);
+try { if (typeof ajustarHueco === 'function') ajustarHueco(); } catch (e2) {}
+}
+} catch (e) {}
+}, 150);
+}
+function fvAltoVisible() {
+try {
+var vv = window.visualViewport;
+if (vv && vv.height > 0) return Math.min(vv.height, window.innerHeight || vv.height);
+} catch (e) {}
+return window.innerHeight || 0;
+}
+function fvAlCambiarPantalla() {
+try {
+var alto = fvAltoVisible();
+var a = document.activeElement;
+if (!fvEsTexto(a)) {
+if (alto > (FV.altoMax || 0)) FV.altoMax = alto;
+return;
+}
+if (FV.altoMax && alto < FV.altoMax * 0.85) {
+FV.seAchico = true;
+if (fvTactil()) fvClase(true);
+} else if (FV.seAchico && FV.altoMax && alto >= FV.altoMax * 0.92) {
+FV.seAchico = false;
+fvClase(false);
+try { if (typeof ajustarHueco === 'function') ajustarHueco(); } catch (e2) {}
+return;
+}
+fvMostrar(a);
+} catch (e) {}
+}
+try {
+document.addEventListener('focusin', fvAlEnfocar);
+document.addEventListener('focusout', fvAlSoltar);
+document.addEventListener('input', function (ev) {
+try { if (ev && ev.target === document.activeElement) fvMostrar(ev.target); } catch (e) {}
+});
+if (window.visualViewport && window.visualViewport.addEventListener) {
+window.visualViewport.addEventListener('resize', fvAlCambiarPantalla);
+}
+window.addEventListener('resize', fvAlCambiarPantalla);
+} catch (e) {}
+function fvLimpio(s) {
+return String(s || '').replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '');
+}
+function fvNomPartes() {
+return { nom: document.getElementById('c_nombre__nom'),
+ape: document.getElementById('c_nombre__ape'),
+oculto: document.getElementById('c_nombre') };
+}
+function fvNomClave() {
+return (typeof CLAVE === 'string' ? CLAVE : 'bioanalyst') + '_nomape';
+}
+function fvNomArmar() {
+try {
+var p = fvNomPartes();
+if (!p.nom || !p.ape || !p.oculto) return;
+var n = fvLimpio(p.nom.value), a = fvLimpio(p.ape.value);
+var todo = fvLimpio(n + ' ' + a);
+try { window.localStorage.setItem(fvNomClave(), JSON.stringify({ n: n, a: a, t: todo })); } catch (e) {}
+if (p.oculto.value === todo) return;
+p.oculto.value = todo;
+var ev;
+try { ev = new Event('change', { bubbles: true }); }
+catch (e2) { ev = document.createEvent('Event'); ev.initEvent('change', true, true); }
+p.oculto.dispatchEvent(ev);
+} catch (e) {}
+}
+function fvNomRepartir() {
+try {
+var p = fvNomPartes();
+if (!p.nom || !p.ape || !p.oculto) return;
+if (fvLimpio(p.nom.value) || fvLimpio(p.ape.value)) return;
+var todo = fvLimpio(p.oculto.value);
+if (!todo) return;
+var g = null;
+try { g = JSON.parse(window.localStorage.getItem(fvNomClave()) || 'null'); } catch (e) { g = null; }
+if (g && g.t === todo) { p.nom.value = g.n || ''; p.ape.value = g.a || ''; return; }
+var r = fvNomCortar(todo);
+p.nom.value = r[0];
+p.ape.value = r[1];
+} catch (e) {}
+}
+var FV_ENLACES = { de: 1, del: 1, la: 1, las: 1, los: 1, y: 1, da: 1, das: 1,
+dos: 1, di: 1, van: 1, von: 1 };
+function fvNomCortar(todo) {
+var w = fvLimpio(todo).split(' '), g = [], pend = [];
+for (var i = 0; i < w.length; i++) {
+if (!w[i]) continue;
+pend.push(w[i]);
+if (!FV_ENLACES[String(w[i]).toLowerCase()]) { g.push(pend.join(' ')); pend = []; }
+}
+if (pend.length) {
+if (g.length) g[g.length - 1] = g[g.length - 1] + ' ' + pend.join(' ');
+else g.push(pend.join(' '));
+}
+if (g.length <= 1) return [g.join(' '), ''];
+var k = g.length - Math.floor(g.length / 2);
+if (g.length === 3) k = 2;
+return [g.slice(0, k).join(' '), g.slice(k).join(' ')];
+}
+function fvNomEnchufar() {
+try {
+var p = fvNomPartes();
+if (!p.nom || !p.ape) return;
+fvNomRepartir();
+var cada = [p.nom, p.ape];
+for (var i = 0; i < cada.length; i++) {
+cada[i].addEventListener('input', fvNomArmar);
+cada[i].addEventListener('change', fvNomArmar);
+cada[i].addEventListener('blur', function () {
+fvNomArmar();
+try { if (typeof pintarCampo === 'function') pintarCampo('nombre'); } catch (e) {}
+});
+}
+} catch (e) {}
+}
+function fvFechaPartes(iso) {
+var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
+if (!m) return null;
+return { a: Number(m[1]), m: Number(m[2]), d: Number(m[3]) };
+}
+function fvFechaLetras(iso) {
+var p = fvFechaPartes(iso);
+if (!p || p.m < 1 || p.m > 12) return '';
+return p.d + ' de ' + FV_MESES[p.m - 1] + ' de ' + p.a;
+}
+function fvEdad(iso, hoy) {
+var p = fvFechaPartes(iso);
+if (!p) return null;
+hoy = hoy || new Date();
+var e = hoy.getFullYear() - p.a;
+var mh = hoy.getMonth() + 1;
+if (mh < p.m || (mh === p.m && hoy.getDate() < p.d)) e = e - 1;
+return e;
+}
+try {
+if (typeof revisarCampo === 'function') {
+var _fvRevisarCampoBase = revisarCampo;
+revisarCampo = function (clave) {
+var r = _fvRevisarCampoBase(clave);
+try {
+if (clave === 'nombre') {
+var p = fvNomPartes();
+if (p.nom && p.ape) {
+var n = fvLimpio(p.nom.value), a = fvLimpio(p.ape.value);
+if (!n && !a) return r;
+if (n.length < 2) return { mal: 'Escribí tu nombre en el primer casillero.' };
+if (a.length < 2) return { mal: 'Escribí tu apellido en el segundo casillero, como figura en tu documento.' };
+return { bien: 'Anotado: ' + fvLimpio(n + ' ' + a) };
+}
+return r;
+}
+if (clave === 'fecha_nacimiento' && r && r.bien) {
+var el = document.getElementById('c_fecha_nacimiento');
+var iso = el ? String(el.value || '') : '';
+var ed = fvEdad(iso);
+if (ed !== null && ed < 0) {
+return { mal: 'Esa fecha todavía no llegó. Fijate el año.' };
+}
+if (ed !== null && ed > 110) {
+return { mal: 'Con esa fecha tendrías ' + ed + ' años. Fijate el año.' };
+}
+var letras = fvFechaLetras(iso);
+if (letras) {
+return { bien: 'Naciste el ' + letras + (ed !== null ? ' (' + ed + ' años)' : '') + '.' };
+}
+}
+} catch (e) {}
+return r;
+};
+}
+} catch (e) {}
+function fvTxt(id) {
+try {
+var el = document.getElementById(id);
+return el ? fvLimpio(el.value) : '';
+} catch (e) { return ''; }
+}
+function fvDatos() {
+var p = fvNomPartes();
+var iso = fvTxt('c_fecha_nacimiento');
+var d = {
+nombre: p.nom ? fvLimpio(p.nom.value) : '',
+apellido: p.ape ? fvLimpio(p.ape.value) : '',
+completo: fvTxt('c_nombre'),
+fecha: fvFechaLetras(iso),
+edad: fvEdad(iso),
+email: fvTxt('c_email'),
+whatsapp: fvTxt('c_whatsapp')
+};
+try {
+if (d.whatsapp && typeof telLimpio === 'function' && typeof telLindo === 'function') {
+d.whatsapp = telLindo(telLimpio(d.whatsapp), d.whatsapp) || d.whatsapp;
+}
+} catch (e) {}
+d.huella = [d.completo, iso, d.email, d.whatsapp].join('|');
+return d;
+}
+function fvSePuedeRevisar() {
+try {
+if (typeof revisarCampo !== 'function') return false;
+var rn = revisarCampo('nombre'), rf = revisarCampo('fecha_nacimiento');
+return !(rn && rn.mal) && !(rf && rf.mal) && !!fvTxt('c_nombre')
+&& !!fvTxt('c_fecha_nacimiento');
+} catch (e) { return false; }
+}
+function fvCerrar() {
+try {
+var c = document.getElementById('fv-revisa');
+if (c && c.parentNode) c.parentNode.removeChild(c);
+} catch (e) {}
+}
+function fvRenglon(dl, que, valor, faltaTxt) {
+var dt = document.createElement('dt');
+dt.textContent = que;
+var dd = document.createElement('dd');
+if (valor) dd.textContent = valor;
+else { dd.textContent = faltaTxt || 'No lo pusiste'; dd.className = 'fv-falta'; }
+dl.appendChild(dt);
+dl.appendChild(dd);
+}
+function fvRevisarDatos(d) {
+fvCerrar();
+var fondo = document.createElement('div');
+fondo.id = 'fv-revisa';
+fondo.setAttribute('role', 'dialog');
+fondo.setAttribute('aria-modal', 'true');
+var caja = document.createElement('div');
+caja.className = 'fv-caja';
+var h = document.createElement('h3');
+h.textContent = 'Revisá tus datos';
+caja.appendChild(h);
+var intro = document.createElement('p');
+intro.className = 'fv-intro';
+intro.textContent = 'Con tu nombre y tu fecha de nacimiento hago tu estudio. '
++ 'Fijate que estén bien escritos antes de mandármela.';
+caja.appendChild(intro);
+var dl = document.createElement('dl');
+fvRenglon(dl, 'Nombre', d.nombre || (d.apellido ? '' : d.completo));
+fvRenglon(dl, 'Apellido', d.apellido);
+fvRenglon(dl, 'Fecha de nacimiento', d.fecha);
+fvRenglon(dl, 'Edad', d.edad !== null && d.edad !== undefined ? (d.edad + ' años') : '');
+fvRenglon(dl, 'Mail', d.email);
+fvRenglon(dl, 'WhatsApp', d.whatsapp);
+caja.appendChild(dl);
+var bot = document.createElement('div');
+bot.className = 'fv-botones';
+var si = document.createElement('button');
+si.type = 'button';
+si.className = 'primario';
+si.id = 'fv-enviar';
+si.textContent = 'Está bien, enviar';
+si.onclick = function () {
+FV.ok = d.huella;
+fvCerrar();
+try { guardar(); } catch (e) {}
+};
+var no = document.createElement('button');
+no.type = 'button';
+no.className = 'secundario';
+no.id = 'fv-corregir';
+no.textContent = 'Corregir';
+no.onclick = function () {
+fvCerrar();
+try {
+var pc = (typeof pasoDelPrefijo === 'function') ? pasoDelPrefijo('c_') : -1;
+if (pc >= 0 && typeof mostrarPaso === 'function') mostrarPaso(pc);
+} catch (e) {}
+try {
+var est = document.getElementById('estado');
+if (est) est.textContent = 'Corregí lo que esté mal y volvé al botón verde del final.';
+} catch (e) {}
+try {
+var c = document.getElementById('c_nombre__nom') || document.getElementById('c_nombre');
+if (c && c.scrollIntoView) c.scrollIntoView({ block: 'center' });
+} catch (e) {}
+};
+bot.appendChild(si);
+bot.appendChild(no);
+caja.appendChild(bot);
+fondo.appendChild(caja);
+document.body.appendChild(fondo);
+try { si.focus({ preventScroll: true }); } catch (e) {}
+return true;
+}
+function fvAntesDeMandar() {
+try {
+if (!fvSePuedeRevisar()) return false;
+var d = fvDatos();
+if (FV.ok && FV.ok === d.huella) return false;
+return fvRevisarDatos(d);
+} catch (e) { return false; }
+}
+function fvApretoElVerde() {
+try { if (fvAntesDeMandar()) return false; } catch (e) {}
+try { guardar(); } catch (e2) {}
+return false;
+}
+function fvEnchufarBoton() {
+try {
+var f = document.getElementById('finales');
+var b = (f && f.querySelector) ? f.querySelector('button.primario') : null;
+if (b) b.onclick = fvApretoElVerde;
+} catch (e) {}
+}
+function fvEnchufarCartel() {
+try {
+var c = document.getElementById('envio-cartel');
+var b = (c && c.querySelector) ? c.querySelector('button') : null;
+if (b) b.onclick = fvApretoElVerde;
+} catch (e) {}
+}
+try {
+if (typeof envioCartel === 'function') {
+var _fvCartelBase = envioCartel;
+envioCartel = function () {
+var r = _fvCartelBase.apply(this, arguments);
+fvEnchufarCartel();
+return r;
+};
+}
+} catch (e) {}
+try {
+setTimeout(function () {
+try { FV.altoMax = fvAltoVisible(); } catch (e0) {}
+fvEnchufarBoton();
+fvEnchufarCartel();
+fvNomEnchufar();
+try {
+var c = document.getElementById('c_nombre');
+if (c && String(c.value || '').replace(/\s/g, '') && typeof pintarCampo === 'function') {
+pintarCampo('nombre');
+}
+var f = document.getElementById('c_fecha_nacimiento');
+if (f && f.value && typeof pintarCampo === 'function') pintarCampo('fecha_nacimiento');
+} catch (e) {}
+}, 0);
+} catch (e) {}
 
 
 try {

@@ -1,0 +1,16 @@
+/* ============================================================
+   ACADEMIA CUÁNTICA · styles.css
+   Entrada global del sistema de diseño.
+   Linkeá ESTE archivo desde cualquier pieza para tener
+   la paleta de 6 colores, las fuentes offline y la escala
+   tipográfica semántica completa.
+
+       <link rel="stylesheet" href="styles.css">
+
+   Las hojas contextuales NO se importan acá a propósito
+   (se cargan sólo donde hacen falta, para no inflar cada
+   consumidor ni arriesgar colisiones de clases):
+     · slides/cuantica-deck.css  → framework de presentaciones
+     · tienda/tensor/tensor.css  → sección de tienda TENSOR
+   ============================================================ */
+@import url("colors_and_type.css");

@@ -1,0 +1,122 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": [
+          {
+            "group": [
+              "slides/**",
+              "tienda/tensor/**"
+            ],
+            "message": "Import design-system components from 'index.js', not component internals."
+          }
+        ]
+      }
+    ],
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var()."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Anton|Cormorant|Cormorant SC|Inter|MuseoModerno|Cormorant Garamond))/i]",
+        "message": "Font not provided by the design system. Available: Anton, Cormorant, Cormorant SC, Inter, MuseoModerno, Cormorant Garamond."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/index.js"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "x-omelette": {
+    "components": {},
+    "tokens": [
+      "--base",
+      "--bone",
+      "--copper",
+      "--copper-soft",
+      "--cyan",
+      "--ease",
+      "--ease-soft",
+      "--fade-dur",
+      "--font-accent",
+      "--font-body",
+      "--font-display",
+      "--font-editorial",
+      "--font-impact",
+      "--font-quote",
+      "--glow-copper",
+      "--glow-cyan",
+      "--glow-green",
+      "--green",
+      "--green-deep",
+      "--ok",
+      "--panel-bg",
+      "--panel-blur",
+      "--panel-border",
+      "--panel-radius",
+      "--teal-bright",
+      "--tshadow",
+      "--tshadow-deep",
+      "--tshadow-glow",
+      "--white"
+    ],
+    "tokenKinds": {
+      "--base": "color",
+      "--green": "color",
+      "--copper": "color",
+      "--cyan": "color",
+      "--bone": "color",
+      "--white": "color",
+      "--teal-bright": "color",
+      "--ok": "color",
+      "--green-deep": "color",
+      "--copper-soft": "color",
+      "--glow-cyan": "color",
+      "--glow-copper": "color",
+      "--glow-green": "color",
+      "--tshadow": "shadow",
+      "--tshadow-deep": "shadow",
+      "--tshadow-glow": "color",
+      "--panel-bg": "color",
+      "--panel-border": "other",
+      "--panel-radius": "radius",
+      "--panel-blur": "other",
+      "--font-display": "font",
+      "--font-quote": "font",
+      "--font-body": "font",
+      "--font-impact": "font",
+      "--font-accent": "font",
+      "--font-editorial": "font",
+      "--ease": "other",
+      "--ease-soft": "other",
+      "--fade-dur": "other"
+    },
+    "fontFamilies": [
+      "Anton",
+      "Cormorant",
+      "Cormorant Garamond",
+      "Cormorant SC",
+      "Inter",
+      "MuseoModerno"
+    ]
+  }
+}

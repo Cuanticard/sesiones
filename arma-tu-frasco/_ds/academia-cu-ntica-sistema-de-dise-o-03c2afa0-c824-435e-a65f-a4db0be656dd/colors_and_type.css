@@ -1,0 +1,174 @@
+/* ============================================================
+   ACADEMIA CUÁNTICA · colors_and_type.css
+   Foundational tokens for the cinematic presentation system.
+   Paleta de 6 colores + 4 fuentes (no negociable).
+   url() paths resolve relative to THIS file (project root),
+   so /fonts works from any HTML that links here.
+   ============================================================ */
+
+/* ---------- FONTS (latin subset, offline woff2) ----------
+   Cormorant & Inter & Anton are variable; one file covers
+   the weight range. Latin subset covers español rioplatense
+   (á é í ó ú ñ ¿ ¡). */
+@font-face{ font-family:'Anton'; font-style:normal; font-weight:400; font-display:swap;
+  src:url('fonts/Anton-Latin.woff2') format('woff2'); }
+
+@font-face{ font-family:'Cormorant'; font-style:italic; font-weight:400 600; font-display:swap;
+  src:url('fonts/Cormorant-Italic-Latin.woff2') format('woff2'); }
+@font-face{ font-family:'Cormorant'; font-style:normal; font-weight:400 500; font-display:swap;
+  src:url('fonts/Cormorant-Latin.woff2') format('woff2'); }
+
+@font-face{ font-family:'Cormorant SC'; font-style:normal; font-weight:500; font-display:swap;
+  src:url('fonts/CormorantSC-500-Latin.woff2') format('woff2'); }
+@font-face{ font-family:'Cormorant SC'; font-style:normal; font-weight:600; font-display:swap;
+  src:url('fonts/CormorantSC-600-Latin.woff2') format('woff2'); }
+
+@font-face{ font-family:'Inter'; font-style:normal; font-weight:300 600; font-display:swap;
+  src:url('fonts/Inter-Latin.woff2') format('woff2'); }
+
+/* ---------- SISTEMA EDITORIAL SECUNDARIO (self-hosted ttf) ----------
+   Fuentes del Manual de Marca v2.1 para piezas NO-presentación:
+   PDFs anexos, carruseles IG, story covers, packaging.
+   NO usar en las presentaciones cinematográficas (esas usan
+   las 4 fuentes de arriba). MuseoModerno = acento/labels/datos;
+   Cormorant Garamond = cuerpo editorial largo. */
+@font-face{ font-family:'MuseoModerno'; font-style:normal; font-weight:100; font-display:swap; src:url('fonts/MuseoModerno-100.ttf') format('truetype'); }
+@font-face{ font-family:'MuseoModerno'; font-style:normal; font-weight:200; font-display:swap; src:url('fonts/MuseoModerno-200.ttf') format('truetype'); }
+@font-face{ font-family:'MuseoModerno'; font-style:normal; font-weight:300; font-display:swap; src:url('fonts/MuseoModerno-300.ttf') format('truetype'); }
+@font-face{ font-family:'MuseoModerno'; font-style:normal; font-weight:400; font-display:swap; src:url('fonts/MuseoModerno-400.ttf') format('truetype'); }
+@font-face{ font-family:'MuseoModerno'; font-style:normal; font-weight:500; font-display:swap; src:url('fonts/MuseoModerno-500.ttf') format('truetype'); }
+@font-face{ font-family:'MuseoModerno'; font-style:normal; font-weight:600; font-display:swap; src:url('fonts/MuseoModerno-600.ttf') format('truetype'); }
+@font-face{ font-family:'MuseoModerno'; font-style:normal; font-weight:700; font-display:swap; src:url('fonts/MuseoModerno-700.ttf') format('truetype'); }
+@font-face{ font-family:'MuseoModerno'; font-style:normal; font-weight:800; font-display:swap; src:url('fonts/MuseoModerno-800.ttf') format('truetype'); }
+@font-face{ font-family:'MuseoModerno'; font-style:normal; font-weight:900; font-display:swap; src:url('fonts/MuseoModerno-900.ttf') format('truetype'); }
+
+@font-face{ font-family:'Cormorant Garamond'; font-style:normal; font-weight:300; font-display:swap; src:url('fonts/CormorantGaramond-300.ttf') format('truetype'); }
+@font-face{ font-family:'Cormorant Garamond'; font-style:normal; font-weight:400; font-display:swap; src:url('fonts/CormorantGaramond-400.ttf') format('truetype'); }
+@font-face{ font-family:'Cormorant Garamond'; font-style:normal; font-weight:500; font-display:swap; src:url('fonts/CormorantGaramond-500.ttf') format('truetype'); }
+@font-face{ font-family:'Cormorant Garamond'; font-style:normal; font-weight:600; font-display:swap; src:url('fonts/CormorantGaramond-600.ttf') format('truetype'); }
+@font-face{ font-family:'Cormorant Garamond'; font-style:normal; font-weight:700; font-display:swap; src:url('fonts/CormorantGaramond-700.ttf') format('truetype'); }
+
+:root{
+  /* ---------- PALETA OBLIGATORIA · 6 colores ---------- */
+  --base:   #0A0F0F;   /* obsidiana · fondo principal      */
+  --green:  #006B64;   /* verde mar profundo · primario    */
+  --copper: #C47A35;   /* cobre cálido · acentos warm      */
+  --cyan:   #3CE7E1;   /* cyan eléctrico · highlights/glow */
+  --bone:   #F5EDE0;   /* hueso pearl · texto secundario   */
+  --white:  #FFFFFF;   /* blanco puro · títulos            */
+
+  /* ---------- ACENTOS DERIVADOS (uso medido) ----------
+     Variaciones tonales tomadas del north star L03.
+     Nunca introducir colores fuera de esta familia. */
+  --teal-bright: #1FC9BE;  /* verde brillante para texto sobre oscuro */
+  --ok:          #2FD9A0;  /* check afirmativo (verde-mar luminoso)   */
+  --green-deep:  #003C38;  /* verde oscuro de soporte (manual v2.1)   */
+  --copper-soft: #E5A06A;  /* cobre claro de soporte (manual v2.1)    */
+
+  /* ---------- GLOWS / SOMBRAS DE COLOR ---------- */
+  --glow-cyan:   rgba(60,231,225,.45);
+  --glow-copper: rgba(196,122,53,.55);
+  --glow-green:  rgba(31,201,190,.50);
+
+  /* protección de texto sobre imagen — dual shadow obligatorio */
+  --tshadow:      0 2px 8px rgba(0,0,0,.85), 0 0 24px rgba(0,0,0,.55);
+  --tshadow-deep: 0 4px 40px rgba(0,0,0,.85), 0 2px 8px rgba(0,0,0,.9);
+  --tshadow-glow: 0 0 60px var(--glow-cyan), 0 4px 40px rgba(0,0,0,.85), 0 2px 8px rgba(0,0,0,.9);
+
+  /* panel frosted que ancla texto denso sobre fotografía */
+  --panel-bg:     rgba(10,15,15,.40);
+  --panel-border: 1px solid rgba(60,231,225,.15); /* @kind other */
+  --panel-radius: 14px;
+  --panel-blur:   blur(8px); /* @kind other */
+
+  /* ---------- FAMILIAS ---------- */
+  --font-display: 'Cormorant SC', serif;   /* títulos editoriales · SIEMPRE italic */
+  --font-quote:   'Cormorant', serif;      /* quotes y citas · italic 400          */
+  --font-body:    'Inter', sans-serif;     /* cuerpo, datos, eyebrows              */
+  --font-impact:  'Anton', sans-serif;     /* números enormes                      */
+  /* sistema editorial secundario (PDFs / redes — no presentaciones) */
+  --font-accent:    'MuseoModerno', sans-serif;      /* labels, datos, captions     */
+  --font-editorial: 'Cormorant Garamond', serif;     /* cuerpo editorial largo      */
+
+  /* ---------- EASINGS CINEMÁTICOS ---------- */
+  --ease:      cubic-bezier(.22,.61,.36,1); /* @kind other */
+  --ease-soft: cubic-bezier(.4,0,.2,1); /* @kind other */
+  --fade-dur:  1100ms; /* @kind other */ /* nunca cortes duros entre slides */
+}
+
+/* ============================================================
+   ESCALA TIPOGRÁFICA SEMÁNTICA  (valores @1920×1080)
+   Aplicá estas clases directamente o copiá los valores.
+   ============================================================ */
+
+/* EYEBROW · ahora en MuseoModerno (peso grueso) — acento de marca.
+   MuseoModerno es más ancha que Inter, así que el tracking baja a .40em. */
+.eyebrow{
+  font-family:var(--font-accent); font-weight:600; font-size:21px;
+  letter-spacing:.40em; text-transform:uppercase;
+  color:var(--cyan); opacity:.92;
+}
+
+/* ---------- MUSEOMODERNO BRAND ACCENT ----------
+   La fuente que más representa la marca. Usar SOLO pesos gruesos
+   (600–900) — NUNCA los pesos finos (100–300 "palitos angostos").
+   .brand-tag = label/CTA con carácter · .hook = palabra de impacto. */
+.brand-tag{
+  font-family:var(--font-accent); font-weight:700; font-size:24px;
+  letter-spacing:.30em; text-transform:uppercase; color:var(--cyan);
+  text-shadow:0 0 24px rgba(60,231,225,.45), 0 2px 12px rgba(0,0,0,.9);
+}
+.hook{
+  font-family:var(--font-accent); font-weight:800; font-size:140px;
+  line-height:.9; letter-spacing:-.01em; color:var(--white);
+  text-shadow:0 0 70px var(--glow-cyan), 0 6px 44px rgba(0,0,0,.85), 0 2px 10px rgba(0,0,0,.9);
+}
+.hero-title{
+  font-family:var(--font-display); font-style:italic; font-weight:500;
+  font-size:132px; line-height:.94; color:var(--white);
+  text-shadow:var(--tshadow-glow);
+}
+.section-title{
+  font-family:var(--font-display); font-style:italic; font-weight:500;
+  font-size:200px; line-height:.92; color:var(--white);
+  text-shadow:0 0 70px var(--glow-cyan), 0 6px 48px rgba(0,0,0,.85), 0 2px 10px rgba(0,0,0,.9);
+}
+.big-number{
+  font-family:var(--font-impact); font-weight:400;
+  font-size:240px; color:var(--white); line-height:.86; letter-spacing:.01em;
+  text-shadow:0 0 80px rgba(60,231,225,.5), 0 6px 44px rgba(0,0,0,.85), 0 2px 10px rgba(0,0,0,.9);
+}
+.subtitle{
+  font-family:var(--font-body); font-weight:300; font-size:40px;
+  letter-spacing:.01em; color:var(--bone);
+  text-shadow:0 2px 22px rgba(0,0,0,.9);
+}
+.body-row{
+  font-family:var(--font-body); font-weight:300; font-size:30px; line-height:1.34;
+  color:var(--bone); text-shadow:0 2px 14px rgba(0,0,0,.92);
+}
+.body-row strong{ font-weight:500; color:var(--white); }
+.quote{
+  font-family:var(--font-quote); font-style:italic; font-weight:400;
+  font-size:100px; line-height:1.12; color:var(--white);
+  text-shadow:0 0 60px rgba(60,231,225,.4), 0 4px 40px rgba(0,0,0,.85), 0 2px 8px rgba(0,0,0,.9);
+}
+.cite{
+  font-family:var(--font-display); font-style:italic; font-weight:400;
+  font-size:32px; letter-spacing:.06em; color:var(--bone);
+  text-shadow:0 2px 16px rgba(0,0,0,.9);
+}
+.cite-soft{
+  font-family:var(--font-quote); font-style:italic; font-weight:400;
+  font-size:34px; color:var(--bone); text-shadow:0 2px 16px rgba(0,0,0,.9);
+}
+
+/* color helpers */
+.t-cyan{ color:var(--cyan); } .t-copper{ color:var(--copper); }
+.t-green{ color:var(--teal-bright); } .t-bone{ color:var(--bone); } .t-white{ color:var(--white); }
+
+/* frosted panel */
+.panel{
+  backdrop-filter:var(--panel-blur); -webkit-backdrop-filter:var(--panel-blur);
+  background:var(--panel-bg); border:var(--panel-border); border-radius:var(--panel-radius);
+}

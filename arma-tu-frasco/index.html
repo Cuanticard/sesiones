@@ -129,6 +129,7 @@
 </ol>
 <h2>Precios</h2>
 <ul><li>1 frasco: $44.000 + envío</li><li>2 frascos: $79.000, envío incluido</li><li>3 frascos: $109.000, envío incluido</li></ul>
+<p>En Uruguay: 1 frasco $U 1.250, 2 frascos $U 2.200, 3 frascos $U 3.000 (se cobra en pesos argentinos al cambio de tu tarjeta).</p>
 <p>Para armar tu frasco hace falta activar JavaScript en el navegador.</p>
 </div>
 </noscript>
@@ -539,13 +540,18 @@ input::placeholder{color:rgba(245,237,224,.38)}
     <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:stretch;">
       <div style="flex:1 1 420px;min-height:280px;border-radius:14px;overflow:hidden;background:#0A0F0F url('assets/kits-tres-frascos.jpg') 72% center / cover no-repeat;border:1px solid rgba(196,122,53,.18);"></div>
       <div style="flex:2 1 520px;display:flex;flex-direction:column;gap:14px;">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+        <span style="font-family:var(--font-body);font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,237,224,.6);">Precios en</span>
+        <button onClick="{{ monAR }}" aria-pressed="{{ isAR }}" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;cursor:pointer;font:inherit;font-family:var(--font-body);font-weight:600;font-size:12px;color:{{ monARc }};border:{{ monARb }};background:transparent;"><img src="assets/iconos/bandera-argentina.webp" alt="" style="width:16px;height:16px;border-radius:50%;object-fit:cover;transform:scale(1.55);display:block;">Pesos argentinos</button>
+        <button onClick="{{ monUY }}" aria-pressed="{{ isUY }}" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;cursor:pointer;font:inherit;font-family:var(--font-body);font-weight:600;font-size:12px;color:{{ monUYc }};border:{{ monUYb }};background:transparent;"><img src="assets/iconos/bandera-uruguay.webp" alt="" style="width:16px;height:16px;border-radius:50%;object-fit:cover;transform:scale(1.55);display:block;">Pesos uruguayos</button>
+      </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
         <button onClick="{{ pickKit1 }}" style-hover="transform:translateY(-1px);" style="position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:22px;text-align:left;cursor:pointer;border-radius:14px;border:{{ k1.border }};box-shadow:{{ k1.glow }};background:{{ k1.bg }};font:inherit;color:inherit;transition:box-shadow 300ms ease, border-color 300ms ease, transform 160ms ease;">
           <sc-if value="{{ k1.on }}" hint-placeholder-val="{{ true }}">
             <div style="position:absolute;top:14px;right:16px;font-family:var(--font-body);font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#E5A06A;">✓ Elegido</div>
           </sc-if>
           <div style="font-family:var(--font-display);font-style:italic;font-weight:600;font-size:26px;color:#fff;">1 frasco</div>
-          <div style="font-family:var(--font-impact);font-size:36px;color:#F5EDE0;">$44.000</div>
+          <div style="font-family:var(--font-impact);font-size:36px;color:#F5EDE0;">{{ p1 }}</div>
           <div style="font-size:17px;color:rgba(245,237,224,.7);">+ envío</div>
         </button>
         <button onClick="{{ pickKit2 }}" style-hover="transform:translateY(-1px);" style="position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:22px;text-align:left;cursor:pointer;border-radius:14px;border:{{ k2.border }};box-shadow:{{ k2.glow }};background:{{ k2.bg }};font:inherit;color:inherit;transition:box-shadow 300ms ease, border-color 300ms ease, transform 160ms ease;">
@@ -554,7 +560,7 @@ input::placeholder{color:rgba(245,237,224,.38)}
             <div style="position:absolute;top:14px;right:16px;font-family:var(--font-body);font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#E5A06A;">✓ Elegido</div>
           </sc-if>
           <div style="font-family:var(--font-display);font-style:italic;font-weight:600;font-size:26px;color:#fff;">2 frascos</div>
-          <div style="font-family:var(--font-impact);font-size:36px;color:#E5A06A;text-shadow:0 0 18px rgba(196,122,53,.45);">$79.000</div>
+          <div style="font-family:var(--font-impact);font-size:36px;color:#E5A06A;text-shadow:0 0 18px rgba(196,122,53,.45);">{{ p2 }}</div>
           <div style="font-size:17px;color:rgba(245,237,224,.7);">envío incluido</div>
         </button>
         <button onClick="{{ pickKit3 }}" style-hover="transform:translateY(-1px);" style="position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:22px;text-align:left;cursor:pointer;border-radius:14px;border:{{ k3.border }};box-shadow:{{ k3.glow }};background:{{ k3.bg }};font:inherit;color:inherit;transition:box-shadow 300ms ease, border-color 300ms ease, transform 160ms ease;">
@@ -562,11 +568,14 @@ input::placeholder{color:rgba(245,237,224,.38)}
             <div style="position:absolute;top:14px;right:16px;font-family:var(--font-body);font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#E5A06A;">✓ Elegido</div>
           </sc-if>
           <div style="font-family:var(--font-display);font-style:italic;font-weight:600;font-size:26px;color:#fff;">3 frascos</div>
-          <div style="font-family:var(--font-impact);font-size:36px;color:#F5EDE0;">$109.000</div>
+          <div style="font-family:var(--font-impact);font-size:36px;color:#F5EDE0;">{{ p3 }}</div>
           <div style="font-size:17px;color:rgba(245,237,224,.7);">envío incluido</div>
         </button>
       </div>
         <p style="margin:0;display:flex;gap:8px;align-items:flex-start;font-family:var(--font-body);font-size:12px;line-height:1.45;color:rgba(245,237,224,.72);text-wrap:pretty;"><span style="display:inline-flex;gap:4px;flex:none;vertical-align:middle;"><img src="assets/iconos/bandera-argentina.webp" alt="Argentina" style="width:18px;height:18px;border-radius:50%;object-fit:cover;transform:scale(1.55);display:block;"><img src="assets/iconos/bandera-uruguay.webp" alt="Uruguay" style="width:18px;height:18px;border-radius:50%;object-fit:cover;transform:scale(1.55);display:block;"></span><span>Envíos a Argentina y Uruguay. En Uruguay el envío internacional tarda de 12 a 15 días.</span></p>
+        <sc-if value="{{ isUY }}" hint-placeholder-val="{{ false }}">
+          <p style="margin:0;font-family:var(--font-body);font-size:12px;line-height:1.45;color:#E5A06A;text-wrap:pretty;">En la tienda el cobro figura en pesos argentinos: tu tarjeta lo pasa sola a pesos uruguayos al pagar.</p>
+        </sc-if>
       </div>
     </div>
   </section>
@@ -596,6 +605,8 @@ class Component extends DCLogic {
   static ESTUDIO = 'https://sesiones.cuantica-card.com/';      // link de "Ver el estudio"
   static CATALOGO = 'catalogo.json';
   static MAX = 5;
+  static PRECIOS = { AR: ['$44.000', '$79.000', '$109.000'], UY: ['$U 1.250', '$U 2.200', '$U 3.000'] };   // lo que se muestra; el cobro siempre es en ARS
+  static AHORRO = { AR: { 2: '$9.000', 3: '$23.000' }, UY: { 2: '$U 300', 3: '$U 750' } };
   static PASO = 300;                                                  // cuantas se muestran juntas adentro de la caja
 
   static GRUPOS = [
@@ -611,12 +622,21 @@ class Component extends DCLogic {
     ['peso','peso'],['menopausia','menopausia'],['ciclo','ciclo'],['prostata','próstata'],['mujer','mujer'],['hombre','hombre'],['chicos','chicos']];
 
   state = { cat: null, tab: 'armar', sel: [], grupos: [], efectos: [], q: '', open: null, limit: 300,
-            sound: false, flash: false, w: 1200, filtersOpen: false, added: false, kit: 1, done: 0 };
+            sound: false, flash: false, w: 1200, filtersOpen: false, added: false, kit: 1, done: 0, mon: 'AR' };
 
   componentDidMount() {
     const C = Component;
     this.onResize = () => this.setState({ w: window.innerWidth });
     this.onResize(); window.addEventListener('resize', this.onResize);
+    try {
+      let mon = localStorage.getItem('cq-mon');
+      if (mon !== 'AR' && mon !== 'UY') {
+        const tz = (Intl.DateTimeFormat().resolvedOptions() || {}).timeZone || '';
+        const langs = (navigator.languages || [navigator.language || '']).join(',');
+        mon = tz === 'America/Montevideo' || /es-UY/i.test(langs) ? 'UY' : 'AR';
+      }
+      this.setState({ mon });
+    } catch (e) {}
     try {
       const kt = JSON.parse(localStorage.getItem('cq-kit') || '{}');
       let kit = [1, 2, 3].includes(kt.kit) ? kt.kit : 1, done = Math.max(0, kt.done | 0), added = false;
@@ -720,13 +740,21 @@ class Component extends DCLogic {
     document.body.appendChild(f); f.submit();
   }
 
+  monVals() {
+    const S = this.state, uy = S.mon === 'UY', P = Component.PRECIOS[uy ? 'UY' : 'AR'];
+    const set = mon => () => { this.setState({ mon }); try { localStorage.setItem('cq-mon', mon); } catch (e) {} };
+    const on = '1px solid #E5A06A', off = '1px solid rgba(245,237,224,.18)';
+    return { p1: P[0], p2: P[1], p3: P[2], isUY: uy, isAR: !uy, monAR: set('AR'), monUY: set('UY'),
+      monARb: uy ? off : on, monUYb: uy ? on : off, monARc: uy ? 'rgba(245,237,224,.6)' : '#fff', monUYc: uy ? '#fff' : 'rgba(245,237,224,.6)' };
+  }
+
   kitVals() {
     const S = this.state, kit = S.kit, done = S.done, cur = done + 1;
     const pick = k => () => { this.setState({ kit: k }); this.saveKit(k, this.state.done); setTimeout(() => this.scrollToBuilder(false), 80); };
     const card = k => ({ on: kit === k, border: kit === k ? '1px solid #E5A06A' : (k === 2 ? '1px solid rgba(196,122,53,.6)' : '1px solid rgba(245,237,224,.14)'),
       glow: kit === k ? '0 0 0 1px rgba(196,122,53,.5), 0 0 26px rgba(229,160,106,.35)' : 'none',
       bg: kit === k ? 'linear-gradient(180deg, rgba(196,122,53,.2), rgba(196,122,53,.03))' : (k === 2 ? 'linear-gradient(180deg, rgba(196,122,53,.1), rgba(196,122,53,0))' : 'transparent') });
-    const ahorro = { 2: '$9.000', 3: '$23.000' }[kit];
+    const ahorro = (Component.AHORRO[S.mon] || Component.AHORRO.AR)[kit];
     const plural = n => n === 1 ? '1 frasco' : n + ' frascos';
     return {
       pickKit1: pick(1), pickKit2: pick(2), pickKit3: pick(3), k1: card(1), k2: card(2), k3: card(3),
@@ -810,6 +838,7 @@ class Component extends DCLogic {
       cartUrl: C.CART, studyUrl: C.ESTUDIO, added: S.added,
       another: () => { this.setState({ sel: [], added: false, tab: 'armar' }, () => setTimeout(() => this.scrollToBuilder(false), 60)); },
       goPay: () => { this.saveKit(S.kit, 0); },
+      ...this.monVals(),
       ...this.kitVals(),
       heroMobileShade: S.w < 760 ? 'linear-gradient(0deg, rgba(10,15,15,.95) 0%, rgba(10,15,15,.6) 45%, rgba(10,15,15,0) 75%)' : 'none' };
     if (!cat) return { ...base, loading: true, showBuilder: false, combos: [], cards: [], grupoOpts: [], efectoOpts: [], slots: [], chosen: [] };

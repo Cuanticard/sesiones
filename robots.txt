@@ -3,3 +3,5 @@ Allow: /
 Disallow: /tu-ficha-k9m4x7.html
 Disallow: /tu-temporada-5zcrwl.html
 Sitemap: https://sesiones.cuantica-card.com/sitemap.xml
+Disallow: /tu-control-r7p2q5.html
+Disallow: /tu-recorrido-h4w8k2.html

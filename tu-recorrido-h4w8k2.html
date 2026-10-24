@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>En qué paso está tu proceso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@500;600&family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Paleta CUANTICA. Plantilla de la app (en_que_paso_esta.py): NO se
+     publica sola. Los datos van adentro, en el bloque "datos-del-paso". */
+  :root {
+    --verde: #003C38;
+    --teal: #006B64;
+    --cobre: #C47A35;
+    --crema: #EAE3D2;
+    --tinta: #1f2a28;
+    --suave: #6b736f;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--crema);
+    color: var(--tinta);
+    font-family: "EB Garamond", Garamond, Georgia, serif;
+    font-size: 19px;
+    line-height: 1.5;
+  }
+  .marco {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 32px 16px 48px;
+  }
+  .marca {
+    font-family: "Cormorant SC", "EB Garamond", serif;
+    color: var(--verde);
+    letter-spacing: .14em;
+    font-size: 15px;
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .tarjeta {
+    background: #fbf8f1;
+    border: 1px solid rgba(0, 60, 56, .14);
+    border-radius: 14px;
+    padding: 26px 22px 22px;
+  }
+  .rotulo {
+    font-family: "Cormorant SC", serif;
+    color: var(--teal);
+    font-size: 15px;
+    letter-spacing: .08em;
+    margin: 0 0 4px;
+  }
+  h1 {
+    font-family: "Cormorant SC", serif;
+    font-weight: 600;
+    color: var(--verde);
+    font-size: 30px;
+    line-height: 1.15;
+    margin: 0 0 14px;
+  }
+  .frase { margin: 0 0 26px; }
+  ol.linea {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  ol.linea li {
+    position: relative;
+    padding: 0 0 18px 36px;
+    color: var(--suave);
+  }
+  ol.linea li:last-child { padding-bottom: 0; }
+  ol.linea li::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 7px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 107, 100, .45);
+    background: #fbf8f1;
+  }
+  ol.linea li::after {
+    content: "";
+    position: absolute;
+    left: 13px;
+    top: 23px;
+    bottom: 1px;
+    width: 2px;
+    background: rgba(0, 107, 100, .25);
+  }
+  ol.linea li:last-child::after { display: none; }
+  ol.linea li.hecho { color: var(--teal); }
+  ol.linea li.hecho::before {
+    background: var(--teal);
+    border-color: var(--teal);
+  }
+  ol.linea li.hecho::after { background: var(--teal); }
+  ol.linea li.actual {
+    color: var(--verde);
+    font-weight: 500;
+  }
+  ol.linea li.actual::before {
+    left: 3px;
+    top: 4px;
+    width: 18px;
+    height: 18px;
+    background: var(--cobre);
+    border-color: var(--cobre);
+    box-shadow: 0 0 0 5px rgba(196, 122, 53, .18);
+  }
+  .actual .ahora {
+    display: inline-block;
+    margin-left: 8px;
+    font-family: "Cormorant SC", serif;
+    font-size: 13px;
+    letter-spacing: .08em;
+    color: var(--cobre);
+  }
+  .envio {
+    margin: -8px 0 24px;
+    padding: 12px 14px;
+    border: 1px solid rgba(196, 122, 53, .45);
+    border-radius: 10px;
+    background: rgba(196, 122, 53, .07);
+  }
+  .envio[hidden] { display: none; }
+  .envio .numero {
+    font-family: "Cormorant SC", serif;
+    letter-spacing: .06em;
+    color: var(--verde);
+    font-size: 20px;
+    word-break: break-all;
+  }
+  .envio a {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: var(--teal);
+    color: #fff;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  .envio .ayuda {
+    font-size: 16px;
+    color: var(--suave);
+    margin-top: 4px;
+  }
+  .envio button {
+    margin: 8px 8px 0 0;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--teal);
+    background: #fff;
+    color: var(--teal);
+    font: inherit;
+    font-size: 17px;
+    cursor: pointer;
+  }
+  .pie {
+    text-align: center;
+    color: var(--suave);
+    font-size: 15px;
+    margin-top: 22px;
+  }
+  .lema {
+    text-align: center;
+    font-style: italic;
+    color: var(--verde);
+    margin-top: 30px;
+    font-size: 17px;
+  }
+</style>
+</head>
+<body>
+<main class="marco">
+  <div class="marca">CUÁNTICA</div>
+  <section class="tarjeta" aria-live="polite">
+    <p class="rotulo">Tu proceso</p>
+    <h1 id="titulo">Un momento…</h1>
+    <p class="frase" id="frase"></p>
+    <div class="envio" id="envio" hidden>
+      <div>Tu número de seguimiento</div>
+      <div class="numero" id="numero"></div>
+      <div class="ayuda">Copiá este número y pegalo en la página del Correo.</div>
+      <button type="button" id="copiar">Copiar el número</button>
+      <a id="seguir" href="#" target="_blank" rel="noopener noreferrer">Abrir la página de Correo Argentino</a>
+    </div>
+    <ol class="linea" id="linea"></ol>
+  </section>
+  <p class="pie" id="pie"></p>
+  <p class="lema">No tratamos el síntoma. Ajustamos la frecuencia que lo causa.</p>
+</main>
+<script type="application/json" id="datos-del-paso">null</script>
+<script type="application/json" id="textos-del-paso">{"titulos": {"esperando_ficha": "Esperando tu ficha", "ficha_recibida": "Ficha recibida", "en_cola": "Esperando tu an\u00e1lisis", "en_terapia": "En sesi\u00f3n", "analizado": "An\u00e1lisis hecho", "frecuencias_enviadas": "Frecuencias enviadas", "generando_informes": "Generando tus informes", "informe_enviado": "Informes enviados", "preparando_remedio": "Preparando tu remedio", "despachado": "Remedio despachado", "en_etapa": "Tu etapa", "completado": "Proceso completo", "devolucion": "Pago devuelto"}, "frases": {"esperando_ficha": "Para arrancar me falta tu ficha. Cuando la completes, te pongo en la fila para tu an\u00e1lisis.", "ficha_recibida": "Ya tengo tu ficha. Me falta tu fecha de nacimiento para poder hacer tu an\u00e1lisis: mand\u00e1mela por WhatsApp y te pongo en la fila.", "en_cola": "Ya tengo todo lo que necesito. Tu an\u00e1lisis est\u00e1 en la fila.", "en_terapia": "Estoy haciendo tu sesi\u00f3n en este momento.", "analizado": "Tu an\u00e1lisis ya est\u00e1 hecho. Ahora lo estoy leyendo para armar tus informes.", "frecuencias_enviadas": "Ya te envi\u00e9 las frecuencias. Ahora estoy armando tus informes.", "generando_informes": "Estoy terminando tus informes. En cuanto est\u00e9n, te los mando.", "informe_enviado": "Ya te mand\u00e9 tus informes. Si no los encontr\u00e1s en tu mail, mir\u00e1 en correo no deseado.", "preparando_remedio": "Ya ten\u00e9s tus informes. Ahora estoy preparando tu remedio frecuencial.", "despachado": "Tu remedio frecuencial ya sali\u00f3. Cuando te llegue, arranc\u00e1s con tu planilla.", "en_etapa": "Ya ten\u00e9s todo para tu etapa: segu\u00ed tu planilla d\u00eda a d\u00eda. Cuando la termines, vemos juntos c\u00f3mo seguir.", "completado": "Tu proceso est\u00e1 completo: ya ten\u00e9s todo para seguir tu plan. Cualquier cosa, escribime.", "devolucion": "Te devolv\u00ed el pago. Si quer\u00e9s retomar, escribime.", "remedio_listo": "Ya ten\u00e9s tus informes. Tu remedio frecuencial ya est\u00e1 listo y sale en estos d\u00edas.", "remedio_listo_presencial": "Ya ten\u00e9s tus informes. Tu remedio frecuencial ya est\u00e1 listo: te lo doy en mano.", "despachado_numero": "Tu remedio frecuencial ya sali\u00f3 por Correo Argentino. Copi\u00e1 tu n\u00famero de seguimiento y pegalo en la p\u00e1gina del Correo: ah\u00ed lo pod\u00e9s seguir hasta que te llegue. Cuando lo tengas, arranc\u00e1s con tu planilla.", "en_etapa_n": "Ya ten\u00e9s todo para tu etapa %d: segu\u00ed tu planilla d\u00eda a d\u00eda. Cuando la termines, vemos juntos c\u00f3mo seguir.", "etapa_pasada": "Ya pas\u00f3 el mes de tu etapa %d. Escribime y vemos juntos c\u00f3mo seguir.", "en_cola_presencial": "Ya tengo todo lo que necesito para tu sesi\u00f3n."}, "puntos": {"pago": "Pago recibido", "ficha": "Tu ficha", "sesion": "Tu escaneo", "informes": "Tus informes", "remedio": "Tu remedio", "envio": "En camino", "listo": "Completo"}, "cola": [" Sos el pr\u00f3ximo turno.", " Hay 1 persona antes que vos.", " Hay %d personas antes que vos."], "no_activo": "Este enlace no est\u00e1 activo. Escribime y te paso uno nuevo.", "dias_vieja": 10, "dias_vence": 60, "correo": "https://www.correoargentino.com.ar/seguimiento-de-envios"}</script>
+<script>
+(function () {
+  "use strict";
+  var d = {}, T = {};
+  try {
+    d = JSON.parse(document.getElementById("datos-del-paso").textContent) || {};
+  } catch (e) { d = {}; }
+  try {
+    T = JSON.parse(document.getElementById("textos-del-paso").textContent) || {};
+  } catch (e) { T = {}; }
+  var NO_ACTIVO = T.no_activo || "Este enlace no está activo. Escribime y te paso uno nuevo.";
+  // LA PAGINA PUBLICADA (tu-recorrido-*.html) no trae datos adentro: los lee
+  // de lo que va despues del # del link, que el navegador no le manda a
+  // ningun servidor. El link NO trae textos: solo el paso, el nombre de la
+  // frase y el estado de cada punto. Los textos salen de la tabla fija de
+  // esta pagina (T), asi un link armado a mano no le hace decir otra cosa.
+  // La MISMA cuenta esta en en_que_paso_esta.desde_el_link (los tests las
+  // comparan).
+  /*ARMAR*/
+  function armar(x, T, hoy) {
+    var no = {ok: false, frase: T.no_activo};
+    var claves = ["paso", "f", "pasos", "n", "t", "antes", "seg", "act", "dia"];
+    function entero(v, tope) {
+      if (typeof v !== "number" || Math.floor(v) !== v || v < 0 || v > tope) {
+        throw new Error("numero");
+      }
+      return v;
+    }
+    function etapaT(n, t) { return "Etapa " + n + (t ? " de " + t : ""); }
+    try {
+      if (!x || typeof x !== "object" || Array.isArray(x)) { return no; }
+      for (var k in x) {
+        if (Object.prototype.hasOwnProperty.call(x, k) && claves.indexOf(k) < 0) { return no; }
+      }
+      var own = function (o, k) { return Object.prototype.hasOwnProperty.call(o, k); };
+      var paso = x.paso, fid = x.f;
+      if (typeof paso !== "string" || !own(T.titulos, paso)) { return no; }
+      if (typeof fid !== "string" || !own(T.frases, fid)) { return no; }
+      var n = entero(own(x, "n") ? x.n : 0, 12);
+      var t = entero(own(x, "t") ? x.t : 0, 12);
+      var antes = (own(x, "antes") && x.antes !== null) ? entero(x.antes, 999) : null;
+      var seg = x.seg || "";
+      if (seg && !/^[A-Z]{2}\d{9}[A-Z]{2}$/.test(String(seg))) { return no; }
+      var act = x.act || "";
+      if (act && !/^\d{2}\/\d{2} \d{2}:\d{2}$/.test(String(act))) { return no; }
+      var dia = x.dia || "";
+      if (dia && !/^\d{4}-\d{2}-\d{2}$/.test(String(dia))) { return no; }
+      var viejo = 0;
+      if (dia) {
+        var p = dia.split("-");
+        var d0 = Date.UTC(+p[0], +p[1] - 1, +p[2]);
+        var h = hoy || new Date();
+        var d1 = Date.UTC(h.getFullYear(), h.getMonth(), h.getDate());
+        viejo = Math.floor((d1 - d0) / 864e5);
+        if (viejo > T.dias_vence) { return no; }
+      }
+      var titEt = n ? etapaT(n, t >= n ? t : 0) : "";
+      var titulo = (paso === "en_etapa" && n) ? titEt : T.titulos[paso];
+      var pasos = [], lista = x.pasos || [];
+      if (!Array.isArray(lista)) { return no; }
+      for (var i = 0; i < lista.length; i++) {
+        var q = lista[i];
+        if (!Array.isArray(q) || q.length !== 2
+            || ["hecho", "actual", "pendiente"].indexOf(q[1]) < 0
+            || !((typeof q[0] === "string" && own(T.puntos, q[0])) || (q[0] === "etapa" && n))) {
+          return no;
+        }
+        var tp = q[1] === "actual" ? titulo : (q[0] === "etapa" ? titEt : T.puntos[q[0]]);
+        pasos.push({clave: q[0], titulo: tp, estado: q[1]});
+      }
+      var frase = T.frases[fid];
+      if (frase.indexOf("%d") >= 0) { frase = frase.replace("%d", String(n)); }
+      var antesCola = paso === "en_cola" ? antes : null;
+      if (fid === "en_cola" && antesCola !== null) {
+        frase += antesCola === 0 ? T.cola[0]
+          : (antesCola === 1 ? T.cola[1] : T.cola[2].replace("%d", String(antesCola)));
+      }
+      return {ok: true, paso: paso, titulo: titulo, frase: frase,
+              seguimiento: seg || null, pasos: pasos,
+              personas_antes: antesCola,
+              lugar_en_fila: antesCola !== null ? antesCola + 1 : null,
+              actualizado: act || null, dia: dia || null, dias: viejo};
+    } catch (e) { return no; }
+  }
+  /*FIN-ARMAR*/
+  function delHash() {
+    var m = /[#&]r=([A-Za-z0-9_\-]+)/.exec(location.hash || "");
+    if (!m) { return null; }
+    try {
+      var t = m[1].replace(/-/g, "+").replace(/_/g, "/");
+      while (t.length % 4) { t += "="; }
+      var bin = atob(t), bytes = [];
+      for (var i = 0; i < bin.length; i++) {
+        bytes.push("%" + ("0" + bin.charCodeAt(i).toString(16)).slice(-2));
+      }
+      return armar(JSON.parse(decodeURIComponent(bytes.join(""))), T);
+    } catch (e) { return null; }
+  }
+  if (!d || typeof d !== "object" || !("ok" in d)) {
+    d = delHash() || {ok: false, frase: NO_ACTIVO};
+  }
+  function texto(id, t) {
+    var el = document.getElementById(id);
+    if (el) { el.textContent = t || ""; }
+  }
+  if (!d.ok) {
+    texto("titulo", "Tu proceso");
+    texto("frase", d.frase || NO_ACTIVO);
+    return;
+  }
+  texto("titulo", d.titulo);
+  texto("frase", d.frase);
+  // El numero del correo: solo si tiene la forma de uno de Correo Argentino.
+  // La pagina del Correo NO toma el numero por el link: se copia y se pega.
+  var seg = String(d.seguimiento || "").toUpperCase();
+  if (/^[A-Z]{2}\d{9}[A-Z]{2}$/.test(seg)) {
+    texto("numero", seg);
+    document.getElementById("seguir").href =
+      T.correo || "https://www.correoargentino.com.ar/seguimiento-de-envios";
+    var b = document.getElementById("copiar");
+    b.addEventListener("click", function () {
+      function listo() { b.textContent = "Copiado"; }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(seg).then(listo, function () {});
+          return;
+        }
+      } catch (e) { /* sigue abajo */ }
+      try {
+        var r = document.createRange();
+        r.selectNodeContents(document.getElementById("numero"));
+        var s = window.getSelection();
+        s.removeAllRanges(); s.addRange(r);
+        if (document.execCommand("copy")) { listo(); }
+      } catch (e) { /* queda el numero a la vista para copiarlo a mano */ }
+    });
+    document.getElementById("envio").hidden = false;
+  }
+  var ol = document.getElementById("linea");
+  (Array.isArray(d.pasos) ? d.pasos : []).forEach(function (p) {
+    p = p || {};
+    var li = document.createElement("li");
+    li.className = p.estado === "hecho" ? "hecho"
+      : (p.estado === "actual" ? "actual" : "pendiente");
+    li.appendChild(document.createTextNode(p.titulo || ""));
+    if (p.estado === "actual") {
+      var s = document.createElement("span");
+      s.className = "ahora";
+      s.textContent = "ahora";
+      li.appendChild(s);
+    }
+    ol.appendChild(li);
+  });
+  if (d.dia && d.dias > (T.dias_vieja || 10)) {
+    var f = d.dia.split("-");
+    texto("pie", "Así estaba el " + f[2] + "/" + f[1] + "/" + f[0] +
+          ". Escribime y te cuento cómo sigue.");
+  } else if (d.actualizado) {
+    texto("pie", "Actualizado el " + d.actualizado);
+  }
+})();
+</script>
+</body>
+</html>

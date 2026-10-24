@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tu control - CUANTICA</title>
+<!--
+  EL CONTROL DE LA ETAPA, PARA QUE LA PERSONA LO CONTESTE SOLA (30/09/2026).
+  Una sola pagina para todos. Lo de cada persona viaja DESPUES DEL # del link
+  (el navegador no se lo manda a ningun servidor): los nombres de los
+  remedios de su receta, sus sintomas en sus palabras, las practicas de la
+  etapa y lo que viene en una frase. Nada de hallazgos.
+
+  13/10/2026 (Jose): personal y por MAIL. La respuesta sale por el correo de
+  la persona hacia la casilla de Jose, con un renglon de codigo (con el sello
+  firmado de la app) que la app reconoce y carga sola. El WhatsApp queda
+  como segunda opcion. No usa el programita de Google de la ficha.
+
+  16/10/2026 (P7 del portal): abierta ADENTRO del portal (con "&portal=1",
+  en un marco del mismo sitio), la respuesta se le pasa al portal, que la
+  sella con la clave de su link y la manda por la entrada unica. Si el
+  portal no contesta ok, aparecen el mail y el WhatsApp de siempre. Abierta
+  sola (el link del WhatsApp), todo igual que antes.
+-->
+<style>
+  :root {
+    --verde: #003C38; --teal: #006B64; --cobre: #C47A35; --crema: #EAE3D2;
+    --cyan: #3CE7E1; --tinta: #1d2b2a; --suave: #5d6f6c; --linea: #d8cfba;
+    --fondo: #f6f2e8; --tarjeta: #fffdf7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --tinta: #eae3d2; --suave: #a9b8b4; --linea: #1f4a46;
+      --fondo: #03201e; --tarjeta: #062b28;
+    }
+  }
+  :root[data-theme="dark"] {
+    --tinta: #eae3d2; --suave: #a9b8b4; --linea: #1f4a46;
+    --fondo: #03201e; --tarjeta: #062b28;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--fondo); color: var(--tinta);
+    font-family: "Cormorant Garamond", Garamond, Georgia, serif;
+    font-size: 19px; line-height: 1.45;
+  }
+  header { background: var(--verde); color: var(--crema); padding: 22px 16px 18px; }
+  header h1 { font-family: "Cormorant SC", "Cormorant Garamond", Georgia, serif;
+              font-weight: 600; letter-spacing: .06em; margin: 0; font-size: 26px; }
+  header p { margin: 6px 0 0; opacity: .9; }
+  main { max-width: 640px; margin: 0 auto; padding: 16px; }
+  .tarjeta { background: var(--tarjeta); border: 1px solid var(--linea);
+             border-radius: 14px; padding: 14px 14px 12px; margin: 0 0 14px; }
+  .tarjeta h2 { font-size: 21px; margin: 0 0 8px; color: var(--teal); }
+  .tarjeta h3 { font-size: 19px; margin: 12px 0 2px; }
+  :root[data-theme="dark"] .tarjeta h2 { color: var(--cyan); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .tarjeta h2 { color: var(--cyan); }
+  }
+  .pregunta { margin: 10px 0 4px; }
+  .antes { color: var(--suave); font-size: 16px; margin: 2px 0 4px; }
+  .opciones { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opciones button {
+    font: inherit; font-size: 17px; padding: 8px 12px; border-radius: 10px;
+    border: 1px solid var(--linea); background: transparent; color: var(--tinta);
+    cursor: pointer; min-height: 44px;
+  }
+  .opciones button[aria-pressed="true"] {
+    background: var(--teal); border-color: var(--teal); color: #fff;
+  }
+  .escala { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
+  .escala button { padding: 8px 0; min-width: 0; }
+  textarea { width: 100%; font: inherit; font-size: 17px; padding: 10px;
+             border-radius: 10px; border: 1px solid var(--linea);
+             background: transparent; color: var(--tinta); min-height: 70px; }
+  .enviar { display: block; width: 100%; font: inherit; font-size: 20px;
+            padding: 14px; border: 0; border-radius: 12px;
+            background: var(--cobre); color: #fff; cursor: pointer; }
+  .secundario { background: transparent; color: var(--teal);
+                border: 1px solid var(--teal); margin-top: 8px; font-size: 17px; }
+  .nota { color: var(--suave); font-size: 16px; }
+  .error { color: var(--cobre); }
+  .frase { font-size: 20px; color: var(--teal); margin: 4px 0 10px; }
+  /* En oscuro el teal sobre el fondo verde no se lee (contraste 2,7:1):
+     la frase de la etapa que sigue y los botones del WhatsApp y de copiar
+     van en cyan, como los titulos (verificacion 13/10). */
+  :root[data-theme="dark"] .frase,
+  :root[data-theme="dark"] .secundario { color: var(--cyan); border-color: var(--cyan); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .frase,
+    :root:not([data-theme="light"]) .secundario { color: var(--cyan); border-color: var(--cyan); }
+  }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header>
+  <h1>CUANTICA</h1>
+  <p id="saludo">Tu control</p>
+</header>
+<main>
+  <p id="sin-datos" class="error" hidden>
+    Este link está incompleto. Pedime que te lo vuelva a mandar.
+  </p>
+  <div id="formulario" hidden>
+    <p id="intro">Contestame esto antes de que hablemos: con lo que me cuentes
+       armo tu etapa que sigue. Son tres minutos.</p>
+    <p id="frase" class="frase" hidden></p>
+    <div id="remedios"></div>
+    <div id="sintomas"></div>
+    <div id="practicas"></div>
+    <div id="siguiente"></div>
+    <section class="tarjeta">
+      <h2>Del 1 al 10</h2>
+      <p class="pregunta">¿Cuánto pudiste sostener de lo que te di?</p>
+      <div class="opciones escala" id="sostener" role="group"
+           aria-label="Del 1 al 10"></div>
+    </section>
+    <section class="tarjeta">
+      <h2>Lo que se te hizo cuesta arriba</h2>
+      <textarea id="cuesta" maxlength="400"
+        placeholder="Por ejemplo: me olvidaba la toma de la noche"></textarea>
+    </section>
+    <section class="tarjeta">
+      <h2>¿Algo más que quieras contarme?</h2>
+      <textarea id="novedades" maxlength="600"
+        placeholder="Algo que hayas notado, un estudio nuevo, un cambio en tu vida"></textarea>
+    </section>
+    <button type="button" class="enviar" id="por-portal" hidden>Mandarme las respuestas</button>
+    <button type="button" class="enviar" id="por-mail" hidden>Mandarme las respuestas por mail</button>
+    <button type="button" class="enviar" id="mandar">Mandármelo por WhatsApp</button>
+    <button type="button" class="enviar secundario" id="copiar">Copiar el texto</button>
+    <p class="nota" id="aviso" role="status"></p>
+  </div>
+  <p id="listo-portal" class="frase" role="status" hidden>Listo, tus respuestas ya salieron hacia mí. Las voy a leer. Ya podés volver a tu portal.</p>
+</main>
+<script>
+// ---- PURO-INICIO (lo prueba backend/tests/test_control_de_etapa.py con node)
+var CONTROL = (function () {
+  function b64aTexto(t) {
+    t = String(t || '').replace(/[^A-Za-z0-9_\-]/g, '');
+    t = t.replace(/-/g, '+').replace(/_/g, '/');
+    while (t.length % 4) t += '=';
+    var bin = (typeof atob === 'function') ? atob(t)
+      : Buffer.from(t, 'base64').toString('binary');
+    var bytes = [];
+    for (var i = 0; i < bin.length; i++) bytes.push(bin.charCodeAt(i));
+    return decodeURIComponent(bytes.map(function (b) {
+      return '%' + ('0' + b.toString(16)).slice(-2);
+    }).join(''));
+  }
+  function textoAb64(s) {
+    var utf8 = unescape(encodeURIComponent(s));
+    var b = (typeof btoa === 'function') ? btoa(utf8)
+      : Buffer.from(utf8, 'binary').toString('base64');
+    return b.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function lista(v, n) { return Array.isArray(v) ? v.slice(0, n) : []; }
+  function leerHash(hash) {
+    try {
+      var m = /[#&]c=([A-Za-z0-9_\-]+)/.exec(String(hash || ''));
+      if (!m) return null;
+      var d = JSON.parse(b64aTexto(m[1]));
+      if (!d || typeof d !== 'object') return null;
+      d.r = lista(d.r, 10).map(String);
+      d.q = lista(d.q, 8);
+      d.p = lista(d.p, 4).map(String);
+      d.w = lista(d.w, 2).filter(function (x) {
+        return Array.isArray(x) && x[0] && x[1];
+      });
+      d.f = typeof d.f === 'string' ? d.f.slice(0, 200) : '';
+      d.t = typeof d.t === 'string' ? d.t.slice(0, 80) : '';
+      if (!d.r.length && !d.q.length && !d.p.length) return null;
+      return d;
+    } catch (e) { return null; }
+  }
+  // Lo que se contesta -> el renglon de codigo que lee la app de Jose.
+  function codigo(datos, est) {
+    var a = datos.r.map(function (_n, i) {
+      var x = est.remedios[i] || {};
+      return [x.consiguio || null, x.sostuvo || null, x.cayo_mal || null,
+              x.cambio || null];
+    });
+    var d = { v: datos.v || 1, s: datos.s, e: datos.e, r: datos.r, a: a,
+              q: est.sintomas || {}, n: est.sostener || null,
+              c: (est.cuesta || '').slice(0, 1500),
+              x: (est.novedades || '').slice(0, 1500) };
+    if (datos.t) d.t = datos.t;
+    // CODIGO CORTO (13/10): ni los nombres de las practicas ni las
+    // preguntas viajan de vuelta; la app las tiene en el formulario.
+    if ((datos.p || []).length) {
+      d.p = datos.p.map(function (_n, i) {
+        return (est.practicas || [])[i] || null;
+      });
+    }
+    var w = {}, hay = false;
+    (datos.w || []).forEach(function (q) {
+      var v = String((est.siguiente || {})[q[0]] || '').trim().slice(0, 600);
+      if (v) { w[q[0]] = v; hay = true; }
+    });
+    if (hay) d.w = w;
+    return textoAb64(JSON.stringify(d));
+  }
+  var DICE = {
+    consiguio: { si: 'lo conseguí', no: 'no lo conseguí' },
+    sostuvo: { si: 'lo tomé todos los días', a_medias: 'lo tomé a veces',
+               no: 'casi no lo tomé' },
+    cayo_mal: { si: 'me cayó mal', no: 'me cayó bien' },
+    cambio: { cedio: 'se me fue lo que tenía', algo: 'noté algo',
+              nada: 'no noté cambio todavía' },
+    como: { mejor: 'mejor', igual: 'igual', peor: 'peor' },
+    hizo: { si: 'la hice casi todos los días', a_veces: 'la hice a veces',
+            no: 'no la hice' }
+  };
+  function mensaje(datos, est, corto) {
+    var L = ['Mi control de la Etapa ' + (datos.e || 1) + ':'];
+    if (corto) {
+      // El mail largo no entra en el link del correo: va solo el codigo,
+      // que trae todo (la app lo lee y Jose lo ve entero en su pantalla).
+      L.push('Te mando mis respuestas.');
+      L.push('');
+      L.push('CODIGO-CONTROL ' + codigo(datos, est));
+      L.push('FIN-CODIGO');
+      return L.join('\n');
+    }
+    datos.r.forEach(function (n, i) {
+      var x = est.remedios[i] || {};
+      var p = ['consiguio', 'sostuvo', 'cayo_mal', 'cambio']
+        .filter(function (k) { return x[k]; })
+        .map(function (k) { return DICE[k][x[k]]; });
+      if (p.length) L.push('- ' + n + ': ' + p.join(', '));
+    });
+    datos.q.forEach(function (q) {
+      var v = (est.sintomas || {})[q[0]];
+      if (v) L.push('- ' + (q[2] || q[1]) + ': ' + DICE.como[v]);
+    });
+    (datos.p || []).forEach(function (n, i) {
+      var v = (est.practicas || [])[i];
+      if (v) L.push('- ' + n + ': ' + DICE.hizo[v]);
+    });
+    (datos.w || []).forEach(function (q) {
+      var v = String((est.siguiente || {})[q[0]] || '').trim();
+      if (v) L.push('- ' + q[1] + ' ' + v);
+    });
+    if (est.sostener) L.push('Pude sostener: ' + est.sostener + ' de 10');
+    if (est.cuesta) L.push('Cuesta arriba: ' + est.cuesta);
+    if (est.novedades) L.push('Novedades: ' + est.novedades);
+    L.push('');
+    L.push('CODIGO-CONTROL ' + codigo(datos, est));
+    L.push('FIN-CODIGO');
+    return L.join('\n');
+  }
+  // El mail que se le abre: a la casilla de Jose, con el asunto que la app
+  // reconoce ("Mi control de la Etapa N").
+  // Varios correos (Outlook de escritorio) cortan el link del mail cerca de
+  // los 2.000 caracteres, y con el corte se pierde el codigo (13/10). Si el
+  // mail entero pasa de LIMITE_MAILTO, va el corto (solo el codigo); si
+  // tampoco entra, la pagina no abre el correo: lo copia y le dice como
+  // mandarlo (o por WhatsApp).
+  var LIMITE_MAILTO = 1800;
+  function mailto(datos, est, mail) {
+    if (!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(String(mail || ''))) return '';
+    var arranque = 'mailto:' + mail + '?subject=' +
+      encodeURIComponent('Mi control de la Etapa ' + (datos.e || 1)) +
+      '&body=';
+    var url = arranque + encodeURIComponent(mensaje(datos, est));
+    if (url.length > LIMITE_MAILTO)
+      url = arranque + encodeURIComponent(mensaje(datos, est, true));
+    return url;
+  }
+  function entraEnElMail(url) {
+    return !!url && url.length <= LIMITE_MAILTO;
+  }
+  // EL CONTROL ADENTRO DEL PORTAL (16/10, P7). Abierto en la hoja del
+  // portal (un marco del mismo sitio, con "&portal=1"), la respuesta no sale
+  // por el correo: se le pasa al portal, que la sella con la clave de SU link
+  // y la manda por la entrada unica. Va el codigo (el corto): trae todo.
+  var MENSAJE_CONTROL = 'cuantica-control', MENSAJE_LISTO = 'cuantica-control-listo';
+  function enElPortal(hash, enMarco) {
+    return !!enMarco && /[#&]portal=1(?:&|$)/.test(String(hash || ''));
+  }
+  function paraElPortal(datos, est) {
+    return { tipo: MENSAJE_CONTROL, v: 1, texto: mensaje(datos, est, true) };
+  }
+  function esRespuestaDelPortal(d) {
+    return !!d && typeof d === 'object' && d.tipo === MENSAJE_LISTO &&
+      d.v === 1 && typeof d.ok === 'boolean';
+  }
+  // (16/10, ataque) Contesto al menos una cosa (la misma cuenta que
+  // control_de_etapa.hay_respuesta). Sin nada, adentro del portal no se
+  // manda: la app lo rechazaria y el boton del portal quedaba trabado.
+  function hayRespuesta(datos, est) {
+    var e = est || {}, d = datos || {};
+    var t = function (v) { return typeof v === 'string' && !!v.trim(); };
+    if ((e.remedios || []).some(function (x) {
+      return !!x && !!(x.consiguio || x.sostuvo || x.cayo_mal || x.cambio);
+    })) return true;
+    var q = e.sintomas || {};
+    if (Object.keys(q).some(function (k) { return !!q[k]; })) return true;
+    if (e.sostener !== null && e.sostener !== undefined) return true;
+    if (t(e.cuesta) || t(e.novedades)) return true;
+    if ((e.practicas || []).some(function (v) { return !!v; })) return true;
+    var w = e.siguiente || {};
+    return (d.w || []).some(function (x) { return t(w[x[0]]); });
+  }
+  return { leerHash: leerHash, codigo: codigo, mensaje: mensaje,
+           mailto: mailto, entraEnElMail: entraEnElMail,
+           LIMITE_MAILTO: LIMITE_MAILTO,
+           enElPortal: enElPortal, paraElPortal: paraElPortal,
+           esRespuestaDelPortal: esRespuestaDelPortal,
+           hayRespuesta: hayRespuesta,
+           MENSAJE_CONTROL: MENSAJE_CONTROL, MENSAJE_LISTO: MENSAJE_LISTO,
+           textoAb64: textoAb64, b64aTexto: b64aTexto };
+})();
+if (typeof module !== 'undefined') module.exports = CONTROL;
+// ---- PURO-FIN
+
+(function () {
+  if (typeof document === 'undefined') return;
+  var WSP = '5493434518981';
+  var MAIL = 'tarjetacuantica0@gmail.com';
+  var datos = CONTROL.leerHash(location.hash);
+  if (!datos) { document.getElementById('sin-datos').hidden = false; return; }
+  document.getElementById('formulario').hidden = false;
+  var e = datos.e || 1;
+  if (datos.h) document.getElementById('saludo').textContent =
+    'Hola ' + datos.h + ', este es tu control';
+  document.getElementById('intro').textContent =
+    (datos.h ? 'Hola ' + datos.h + '! ' : 'Hola! ') +
+    'Antes de seguir quiero saber cómo te fue con tu Etapa ' + e + '. ' +
+    'Contestame esto: con lo que me cuentes sé qué reforzar y qué aliviar ' +
+    'en la que sigue. Son tres minutos.';
+  if (datos.f) {
+    var fr = document.getElementById('frase');
+    fr.textContent = datos.f; fr.hidden = false;
+  }
+  var est = { remedios: datos.r.map(function () { return {}; }),
+              sintomas: {}, sostener: null, cuesta: '', novedades: '',
+              practicas: datos.p.map(function () { return null; }),
+              siguiente: {} };
+
+  function grupo(pregunta, opciones, alElegir) {
+    var cont = document.createElement('div');
+    var p = document.createElement('p');
+    p.className = 'pregunta'; p.textContent = pregunta; cont.appendChild(p);
+    var ops = document.createElement('div');
+    ops.className = 'opciones'; ops.setAttribute('role', 'group');
+    ops.setAttribute('aria-label', pregunta);
+    opciones.forEach(function (o) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = o[1];
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function () {
+        Array.prototype.forEach.call(ops.children, function (x) {
+          x.setAttribute('aria-pressed', 'false');
+        });
+        b.setAttribute('aria-pressed', 'true');
+        alElegir(o[0]);
+      });
+      ops.appendChild(b);
+    });
+    cont.appendChild(ops);
+    return cont;
+  }
+  function tarjeta(titulo) {
+    var s = document.createElement('section');
+    s.className = 'tarjeta';
+    var h = document.createElement('h2'); h.textContent = titulo; s.appendChild(h);
+    return s;
+  }
+
+  if (datos.r.length) {
+    var sr = tarjeta('Tus remedios de la Etapa ' + e);
+    datos.r.forEach(function (nombre, i) {
+      var h = document.createElement('h3'); h.textContent = nombre; sr.appendChild(h);
+      var x = est.remedios[i];
+      var resto = document.createElement('div');
+      sr.appendChild(grupo('¿Lo pudiste conseguir?', [['si', 'Sí'], ['no', 'No lo conseguí']],
+        function (v) { x.consiguio = v; resto.hidden = (v === 'no'); }));
+      resto.appendChild(grupo('¿Lo pudiste tomar?', [['si', 'Todos los días'],
+        ['a_medias', 'A veces'], ['no', 'Casi nada']], function (v) { x.sostuvo = v; }));
+      resto.appendChild(grupo('¿Cómo te cayó?', [['no', 'Bien'], ['si', 'Me cayó mal']],
+        function (v) { x.cayo_mal = v; }));
+      resto.appendChild(grupo('¿Notaste algún cambio con esto?', [
+        ['cedio', 'Se me fue lo que tenía'], ['algo', 'Algo'], ['nada', 'Nada todavía']],
+        function (v) { x.cambio = v; }));
+      sr.appendChild(resto);
+    });
+    document.getElementById('remedios').appendChild(sr);
+  }
+
+  if (datos.q.length) {
+    var ss = tarjeta('Lo que me contaste');
+    var ANTES = { mejor: 'mejor', igual: 'igual', peor: 'peor' };
+    datos.q.forEach(function (q) {
+      var dice = q[2] ? '«' + q[2] + '»' : q[1];
+      var g = grupo(dice + ': ¿cómo estás con eso?',
+        [['mejor', 'Mejor'], ['igual', 'Igual'], ['peor', 'Peor']],
+        function (v) { est.sintomas[q[0]] = v; });
+      if (ANTES[q[3]]) {
+        var a = document.createElement('p'); a.className = 'antes';
+        a.textContent = 'La vez pasada me dijiste: ' + ANTES[q[3]] + '.';
+        g.insertBefore(a, g.children[1]);
+      }
+      ss.appendChild(g);
+    });
+    document.getElementById('sintomas').appendChild(ss);
+  }
+
+  if (datos.p.length) {
+    var sp = tarjeta('Tus prácticas de la Etapa ' + e);
+    datos.p.forEach(function (n, i) {
+      sp.appendChild(grupo(n + ': ¿la pudiste hacer?',
+        [['si', 'Casi todos los días'], ['a_veces', 'A veces'], ['no', 'No']],
+        function (v) { est.practicas[i] = v; }));
+    });
+    document.getElementById('practicas').appendChild(sp);
+  }
+
+  if (datos.w.length) {
+    var sw = tarjeta('Para lo que viene');
+    datos.w.forEach(function (q) {
+      var p = document.createElement('p'); p.className = 'pregunta';
+      p.textContent = q[1]; sw.appendChild(p);
+      var t = document.createElement('textarea'); t.maxLength = 400;
+      t.addEventListener('input', function () { est.siguiente[q[0]] = t.value; });
+      sw.appendChild(t);
+    });
+    document.getElementById('siguiente').appendChild(sw);
+  }
+
+  var esc = document.getElementById('sostener');
+  for (var k = 1; k <= 10; k++) (function (n) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = String(n);
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(esc.children, function (x) {
+        x.setAttribute('aria-pressed', 'false');
+      });
+      b.setAttribute('aria-pressed', 'true');
+      est.sostener = n;
+    });
+    esc.appendChild(b);
+  })(k);
+
+  function texto() {
+    est.cuesta = document.getElementById('cuesta').value.trim();
+    est.novedades = document.getElementById('novedades').value.trim();
+    return CONTROL.mensaje(datos, est);
+  }
+  var aviso = document.getElementById('aviso');
+  // (16/10, ataque) Adentro de la hoja del portal, el mail y el WhatsApp se
+  // abren AFUERA del marco (una ventana nueva): el marco esta bajo el CSP
+  // del portal (frame-src 'self'), y navegarlo lo dejaba en blanco y se
+  // perdia lo que habia escrito. Abierta sola, como siempre.
+  var enMarco = false;
+  try { enMarco = window.parent && window.parent !== window; } catch (err) { enMarco = false; }
+  var adentro = CONTROL.enElPortal(location.hash, enMarco);
+  function irA(url) {
+    if (!adentro) { window.location.href = url; return true; }
+    try {
+      var w = window.open(url, '_blank');
+      if (w) { try { w.opener = null; } catch (err) { /* nada */ } return true; }
+    } catch (err) { /* sin ventana nueva */ }
+    return false;
+  }
+  var hayMail = /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(MAIL);
+  var bMail = document.getElementById('por-mail');
+  var bWsp = document.getElementById('mandar');
+  if (hayMail) {
+    bMail.hidden = false;
+    bWsp.textContent = 'Si el mail no se te abre, mandámelo por WhatsApp';
+    bWsp.className = 'enviar secundario';
+  }
+  bMail.addEventListener('click', function () {
+    texto();
+    var url = CONTROL.mailto(datos, est, MAIL);
+    if (!url) { aviso.textContent = 'Mandámelo por WhatsApp.'; return; }
+    if (!CONTROL.entraEnElMail(url)) {
+      var t = texto();
+      var dile = 'Me escribiste mucho, y es tan largo que el correo no lo ' +
+        'abre solo. Ya te lo copié: abrí un mail nuevo a ' + MAIL +
+        ', pegalo y mandámelo. O mandámelo por WhatsApp.';
+      try {
+        navigator.clipboard.writeText(t).then(function () {
+          aviso.textContent = dile;
+        }, function () { aviso.textContent = t; });
+      } catch (err) { aviso.textContent = t; }
+      return;
+    }
+    if (!irA(url)) {
+      aviso.textContent = 'No se me abrió el correo. Tocá Copiar el texto y mandámelo por mail o por WhatsApp.';
+      return;
+    }
+    aviso.textContent = 'Se te abrió el correo con todo escrito: solo tocá Enviar. ' +
+      'Me llega directo a mí.';
+  });
+  bWsp.addEventListener('click', function () {
+    var t = texto();
+    if (WSP && /^\d{8,}$/.test(WSP)) {
+      if (!irA('https://wa.me/' + WSP + '?text=' + encodeURIComponent(t)))
+        aviso.textContent = 'No se me abrió WhatsApp. Tocá Copiar el texto y pegámelo ahí.';
+    } else {
+      aviso.textContent = 'Copiá el texto y mandámelo por WhatsApp.';
+    }
+  });
+  document.getElementById('copiar').addEventListener('click', function () {
+    var t = texto();
+    try {
+      navigator.clipboard.writeText(t).then(function () {
+        aviso.textContent = 'Listo, copiado. Pegámelo en un mail o en WhatsApp.';
+      }, function () { aviso.textContent = t; });
+    } catch (err) { aviso.textContent = t; }
+  });
+  // ADENTRO DEL PORTAL (16/10, P7): un solo boton, que se lo pasa al portal.
+  // Si el portal no contesta ok (o no contesta), aparecen el mail, el
+  // WhatsApp y copiar, como siempre.
+  if (adentro) {
+    var bPortal = document.getElementById('por-portal');
+    var bCopiar = document.getElementById('copiar');
+    var mandando = false, espera = null;
+    bPortal.hidden = false;
+    bMail.hidden = true; bWsp.hidden = true; bCopiar.hidden = true;
+    var otraVia = function () {
+      mandando = false;
+      if (espera) { clearTimeout(espera); espera = null; }
+      bPortal.disabled = false;
+      bPortal.textContent = 'Probar de nuevo';
+      bMail.hidden = !hayMail; bWsp.hidden = false; bCopiar.hidden = false;
+      aviso.textContent = 'No me llegó solo. Mandámelo por mail o por WhatsApp con estos botones.';
+    };
+    var nadaTodavia = function () {
+      mandando = false;
+      if (espera) { clearTimeout(espera); espera = null; }
+      bPortal.disabled = false;
+      bPortal.textContent = 'Mandarme las respuestas';
+      aviso.textContent = 'Contestame al menos una cosa antes de mandármelo.';
+    };
+    window.addEventListener('message', function (ev) {
+      if (ev.source !== window.parent || ev.origin !== location.origin) return;
+      if (!mandando || !CONTROL.esRespuestaDelPortal(ev.data)) return;
+      if (!ev.data.ok && ev.data.motivo === 'vacio') { nadaTodavia(); return; }
+      if (!ev.data.ok) { otraVia(); return; }
+      mandando = false;
+      if (espera) { clearTimeout(espera); espera = null; }
+      document.getElementById('formulario').hidden = true;
+      document.getElementById('listo-portal').hidden = false;
+    });
+    bPortal.addEventListener('click', function () {
+      if (mandando) return;
+      texto();
+      if (!CONTROL.hayRespuesta(datos, est)) { nadaTodavia(); return; }
+      mandando = true;
+      bPortal.disabled = true;
+      bPortal.textContent = 'Mandándotelo…';
+      aviso.textContent = '';
+      try {
+        window.parent.postMessage(CONTROL.paraElPortal(datos, est), '/');
+      } catch (err) { otraVia(); return; }
+      espera = setTimeout(function () { if (mandando) otraVia(); }, 30000);
+    });
+  }
+})();
+</script>
+</body>
+</html>

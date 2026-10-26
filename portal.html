@@ -1,0 +1,3209 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-sHxyBTF75xXKWMUAT+GnTo+XlkeU5w0Y+J/YpqM/1Kw='; style-src 'sha256-rnMbDF4nRz5uNsWBi84u5o/MIbhSOuJFL6kFjbLqsSY=' 'sha256-LNFFEjYU6Ef9fdCUO2qY9qmmbzs/mZmshQHNC51eWBA='; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
+<meta name="theme-color" content="#050606">
+<meta name="color-scheme" content="dark">
+<title>Tu portal · CUÁNTICA</title>
+<link rel="icon" type="image/webp" href="imagenes/simbolo-adn.webp">
+<link rel="manifest" href="portal.webmanifest">
+<link rel="apple-touch-icon" href="imagenes/icono-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CUÁNTICA">
+<style>
+  /* EL PORTAL DEL PACIENTE (portal_paciente.py). Una sola pagina igual para
+     todos: no lleva datos de nadie. Lo de cada paciente viaja despues del #
+     del link, cifrado y firmado. Nada de terceros: ni fuentes de Google ni
+     analitica (cualquier script de afuera podria leer el #).
+
+     EL PORTAL NUEVO (14/10, fase P1a del PLAN-PORTAL-VIVO). Jose lo armo con
+     Claude Design; el export de Design se usa SOLO como plano (no viaja: trae
+     codigo armado en el momento y cosas de unpkg). Lo de aca es codigo
+     propio, con el look nuevo:
+       - fondo negro profundo #050606 con un brillo verde petroleo arriba;
+       - iconos, lineas y titulos en BLANCO; el cobre #C47A35 SOLO para la
+         accion (el boton que se toca); el verde petroleo #003C38 / #006B64
+         para lo elegido (la etapa de ahora, la zona tocada);
+       - mucho aire y lineas finas en vez de cajas;
+       - dos familias: Cormorant (titulos, rotulos en versalitas y texto
+         largo) y MuseoModerno (numeros y botones), servidas por la pagina.
+         Nada en MAYUSCULAS de MuseoModerno: su G parece una Q;
+       - pantallas con la barra de abajo: Inicio, Cuerpo, Estudio, Remedios
+         y Contacto (en la compu se ven todas juntas, el cuerpo a un costado);
+       - lo unico que se mueve sin parar: el pulso de la etapa de ahora y la
+         respiracion suave de la figura entera (6 s). "Menos movimiento" lo
+         apaga todo. */
+  @font-face { font-family: "Cormorant SC"; src: url("fuentes/cormorant-sc-600.woff2") format("woff2"), url("fuentes/cormorant-sc-bold.woff") format("woff"); font-weight: 600 700; font-display: swap; }
+  @font-face { font-family: "Cormorant Garamond"; src: url("fuentes/cormorant-garamond.woff") format("woff"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "MuseoModerno"; src: url("fuentes/museomoderno-400.woff") format("woff"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "MuseoModerno"; src: url("fuentes/museomoderno-500.woff") format("woff"); font-weight: 500; font-display: swap; }
+  @font-face { font-family: "MuseoModerno"; src: url("fuentes/museomoderno-600.woff") format("woff"); font-weight: 600 700; font-display: swap; }
+  :root {
+    /* Los colores de la casa, como variables (asi P2 cambia una sola). */
+    --fondo: #050606;
+    --verde: #003C38;
+    --teal: #006B64;
+    --cobre: #C47A35;
+    --cobre-claro: #E5A06A;
+    --cyan: #3CE7E1;
+    --crema: #EAE3D2;
+    --hueso: #F4F1EA;
+    --blanco: #FFFFFF;
+    --tenue: rgba(255, 255, 255, .7);
+    --apagado: rgba(255, 255, 255, .64);
+    --linea: rgba(255, 255, 255, .12);
+    --linea-fuerte: rgba(255, 255, 255, .24);
+    /* El punto de una zona SIN nivel: gris y quieto. */
+    --gris: #6B7472;
+    /* (P2) Los 4 tramos del cuerpo: los pone pagina() desde
+       portal_paciente.ESCALA_CUERPO (la escala del diseno, la unica). */
+    --nivel-1: #FFFFFF; --nivel-2: #E5A06A; --nivel-3: #C47A35; --nivel-4: #8B4A23;
+    --sc: "Cormorant SC", Georgia, serif;
+    --dato: "MuseoModerno", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --texto: "Cormorant Garamond", Georgia, serif;
+    /* Los tiempos de la casa (los mismos de los videos). */
+    --rebote: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --asienta: cubic-bezier(0.16, 1, 0.3, 1);
+    --sale: cubic-bezier(0.32, 0, 0.67, 0);
+    --abajo: 84px;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; background: var(--fondo); }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh;
+    background: var(--fondo);
+    color: var(--hueso);
+    font-family: var(--dato);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+  }
+  [hidden] { display: none !important; }
+  ::selection { background: rgba(196, 122, 53, .35); color: #fff; }
+  button { font: inherit; color: inherit; }
+
+  /* EL BRILLO DE ARRIBA: un velo verde petroleo que se apaga hacia abajo. */
+  .brillo-arriba { position: absolute; top: 0; left: 0; right: 0; height: 440px; z-index: 0; pointer-events: none; background: radial-gradient(90% 70% at 50% -20%, rgba(0, 60, 56, .55), transparent 70%); }
+  /* LA ONDA: una linea fina debajo de la cabecera. Se dibuja UNA vez. */
+  canvas.ondas { position: absolute; top: 0; left: 0; width: 100%; height: 300px; z-index: 0; pointer-events: none; }
+  .puerta, .marco, .abriendo { position: relative; z-index: 1; }
+
+  .marco { max-width: 560px; margin: 0 auto; padding: 18px 16px calc(var(--abajo) + 40px); padding-bottom: calc(var(--abajo) + 40px + env(safe-area-inset-bottom)); }
+
+  /* LA CABECERA: el logo oficial, chico, con su brillo. */
+  .cabecera { text-align: center; margin: 4px 0 44px; }
+  .logo { display: block; width: 116px; height: auto; margin: 0 auto; filter: drop-shadow(0 0 12px rgba(60, 231, 225, 0.5)); user-select: none; -webkit-user-drag: none; }
+  .cabecera .marca-txt { margin-top: 8px; font-family: var(--sc); font-weight: 700; font-size: 11px; letter-spacing: .5em; padding-left: .5em; color: var(--tenue); }
+
+  /* LOS ROTULOS Y LOS TITULOS */
+  .rotulo { font-family: var(--sc); font-weight: 700; font-size: 13px; letter-spacing: .3em; color: var(--tenue); text-transform: uppercase; margin: 0; }
+  .rotulo.centro { text-align: center; padding-left: .3em; }
+  .titulo-portal { font-family: var(--sc); font-style: italic; color: var(--blanco); font-weight: 600; font-size: 42px; line-height: 1; margin: 12px 0 0; letter-spacing: .005em; }
+  .titulo-portal.entra { animation: titulo 450ms var(--asienta) both; }
+  h2 { font-family: var(--sc); font-style: italic; color: var(--blanco); font-weight: 600; font-size: 26px; line-height: 1.1; margin: 0 0 10px; }
+  .titulo-pant { font-size: 42px; line-height: 1; margin: 12px 0 0; }
+  .bajada { color: var(--crema); font-family: var(--texto); font-size: 19px; margin: 12px 0 0; line-height: 1.45; opacity: .86; }
+  .encabezado { margin-bottom: 36px; }
+  .nota-chica { font-family: var(--dato); font-size: 12px; line-height: 1.5; color: var(--tenue); margin: 10px 0 0; }
+
+  /* LAS PANTALLAS: en el celular se ve una sola (la barra de abajo elige). */
+  .pantalla { display: none; }
+  .pantalla.activa { display: block; animation: aparece 450ms var(--asienta) both; }
+  .bloque { margin: 0 0 40px; }
+  .js .revela { opacity: 0; transform: translateY(14px) scale(.98); }
+  .js .revela.visto { animation: entra 220ms var(--rebote) forwards; }
+
+  /* EL SALUDO: el nombre lo escribe el paciente una vez y queda en su celular. */
+  .nombre-caja { margin-top: 14px; }
+  .nombre-fila { display: flex; gap: 10px; }
+  .campo { font: inherit; font-family: var(--dato); font-size: 16px; flex: 1; min-width: 0; padding: 10px 14px; min-height: 48px; border-radius: 12px; border: 1px solid var(--linea-fuerte); background: transparent; color: var(--blanco); }
+  .campo::placeholder { color: var(--apagado); }
+  .campo:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  .boton-3 { font-family: var(--dato); font-weight: 600; font-size: 15px; letter-spacing: .02em; flex: none; padding: 0 18px; min-height: 48px; border-radius: 12px; border: 1px solid var(--teal); background: var(--verde); color: var(--blanco); cursor: pointer; }
+  .boton-3:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  /* AHORA: el arco de la etapa (la cupula del diseno) y lo que toca. */
+  .hero { position: relative; border: 1px solid var(--linea-fuerte); border-bottom: 0; border-radius: 180px 180px 0 0; padding: 40px 0 0; background: linear-gradient(180deg, rgba(0, 60, 56, .42), rgba(5, 6, 6, 0) 78%); }
+  .anillo { position: relative; width: 100%; max-width: 260px; margin: 14px auto 0; }
+  .anillo svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .anillo .pista { fill: none; stroke: var(--linea-fuerte); stroke-width: 1.2; }
+  .anillo .arco { fill: none; stroke: var(--blanco); stroke-width: 1.8; stroke-linecap: round; stroke-dasharray: 276.46; stroke-dashoffset: 276.46; transition: stroke-dashoffset 900ms var(--asienta); }
+  .anillo .punta { fill: var(--blanco); opacity: 0; transition: opacity 300ms 700ms; }
+  .anillo.lleno .punta { opacity: 1; }
+  .anillo-centro { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: baseline; justify-content: center; gap: 10px; line-height: 1; }
+  .anillo-palabra, .anillo-de { font-family: var(--sc); font-style: italic; font-weight: 600; font-size: 24px; color: rgba(255, 255, 255, .85); }
+  .anillo-num { font-family: var(--dato); font-weight: 600; font-size: 72px; line-height: .9; color: var(--blanco); font-variant-numeric: tabular-nums lining-nums; }
+  #ahora { text-align: center; padding: 14px 18px 0; }
+  .hero h2 { font-size: 22px; margin: 0; color: var(--blanco); }
+  .hero p { margin: 6px auto 0; max-width: 24em; color: var(--crema); font-family: var(--texto); font-size: 18px; line-height: 1.45; opacity: .86; }
+
+  /* EL CAMINO EN LA HEBRA: largo variable (1 a 12), un punto por etapa. */
+  svg.hebra { display: block; width: 100%; height: auto; margin-top: 20px; overflow: visible; }
+  .hebra-1 { fill: none; stroke: rgba(255, 255, 255, .18); stroke-width: 1.2; }
+  .hebra-2 { fill: none; stroke: var(--teal); stroke-width: 1.2; }
+  .hebra-avance { fill: none; stroke: var(--blanco); stroke-width: 1.6; stroke-linecap: round; }
+  .peldano { stroke: var(--blanco); stroke-width: .7; opacity: .16; }
+  .etapa-punto { fill: var(--fondo); stroke: rgba(255, 255, 255, .4); stroke-width: 1.2; }
+  .etapa-punto.hecho { fill: var(--blanco); stroke: var(--blanco); }
+  .etapa-punto.actual { fill: var(--teal); stroke: var(--blanco); }
+  .etapa-anillo { fill: none; stroke: var(--blanco); stroke-width: 1; transform-box: fill-box; transform-origin: center; animation: pulso 2.8s ease-out infinite; }
+  .hebra-rotulos { position: relative; height: 34px; margin-top: 6px; }
+  .etapa-rotulo { position: absolute; top: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 2px; white-space: nowrap; font-family: var(--dato); font-weight: 600; font-size: 10px; letter-spacing: .08em; color: var(--apagado); }
+  .etapa-rotulo.actual { color: var(--blanco); }
+  .etapa-rotulo .ya { font-family: var(--sc); font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--blanco); }
+
+  /* LAS CIFRAS: tres numeros entre lineas finas, sin cajas. */
+  .cifras { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0 0 40px; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); }
+  .cifras.dos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cifra { padding: 16px 10px 14px; min-width: 0; text-align: center; }
+  .cifra + .cifra { border-left: 1px solid var(--linea); }
+  .cifra .num { display: block; font-family: var(--dato); font-weight: 600; font-size: 28px; line-height: 1; color: var(--blanco); font-variant-numeric: tabular-nums lining-nums; }
+  .cifra .que { display: block; margin-top: 8px; font-size: 11px; line-height: 1.3; color: var(--tenue); }
+
+  /* EL PROXIMO ENCUENTRO: la fecha en su arco verde petroleo. */
+  .encuentro { display: flex; gap: 18px; align-items: center; padding: 20px 0; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); }
+  .encuentro .fecha-arco { flex: none; width: 64px; height: 76px; border-radius: 32px 32px 6px 6px; background: var(--verde); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; }
+  .fecha-arco .dia, .fecha-arco .mes { font-family: var(--sc); font-weight: 700; font-size: 11px; letter-spacing: .2em; padding-left: .2em; color: rgba(255, 255, 255, .72); text-transform: uppercase; }
+  .fecha-arco .num { font-family: var(--dato); font-weight: 600; font-size: 28px; line-height: 1; color: var(--blanco); }
+  .encuentro .que-es { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .encuentro .hora { font-family: var(--sc); font-style: italic; font-weight: 600; font-size: 23px; color: var(--blanco); line-height: 1.15; }
+  .encuentro .hora-ar { font-size: 12px; color: var(--tenue); }
+
+  /* LO QUE ESTAMOS TRABAJANDO: las zonas con algo, de un toque al cuerpo. */
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    font: inherit; font-size: 14px; font-weight: 500; line-height: 1.2; text-align: left; display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 16px; min-height: 48px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--linea-fuerte); background: transparent; color: var(--blanco);
+    transition: background 220ms, border-color 220ms, transform 220ms var(--rebote);
+  }
+  .pill .punto { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--blanco); }
+  .pill:active { transform: scale(.97); }
+  .pill[aria-pressed="true"] { background: var(--verde); border-color: var(--teal); }
+  .pill:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+  /* EL CAMINO, ETAPA POR ETAPA: una linea fina que se llena en blanco. */
+  .camino-caja { position: relative; margin-top: 6px; }
+  ol.camino { list-style: none; margin: 0; padding: 0; position: relative; z-index: 2; }
+  .camino-caja::before { content: ""; position: absolute; z-index: 0; left: 15px; top: 16px; bottom: 16px; width: 1px; background: var(--linea-fuerte); }
+  .riel { position: absolute; z-index: 1; left: 15px; top: 16px; width: 1px; height: 0; background: var(--blanco); transition: height 900ms var(--asienta); }
+  ol.camino > li { position: relative; padding: 0 0 26px 50px; }
+  .js ol.camino > li { opacity: 0; transform: translateY(8px); }
+  .js ol.camino > li.visto { animation: entra 220ms var(--rebote) forwards; }
+  ol.camino > li:last-child { padding-bottom: 2px; }
+  .nodo {
+    position: absolute; z-index: 2; left: 0; top: 0; width: 31px; height: 31px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--fondo); border: 1px solid var(--linea-fuerte);
+    font-family: var(--dato); font-size: 13px; font-weight: 600; color: var(--tenue); font-variant-numeric: lining-nums;
+  }
+  .nodo svg { width: 14px; height: 14px; }
+  li.hecho .nodo { border-color: var(--blanco); color: var(--blanco); }
+  li.actual .nodo { background: var(--teal); border-color: var(--blanco); color: var(--blanco); line-height: 1; }
+  li.hito .nodo, li.marca-dia .nodo { width: 11px; height: 11px; left: 10px; top: 8px; }
+  li.hito.hecho .nodo { background: var(--blanco); }
+  .cual { font-family: var(--sc); font-size: 13px; letter-spacing: .24em; color: var(--tenue); font-weight: 600; line-height: 1.8; text-transform: uppercase; }
+  li.actual .cual { color: var(--blanco); }
+  .tit { font-family: var(--sc); font-style: italic; font-size: 21px; line-height: 1.2; color: var(--blanco); font-weight: 600; margin-top: 2px; }
+  li.pendiente .tit { color: var(--tenue); }
+  .fecha { font-size: 12.5px; color: var(--tenue); margin-top: 4px; }
+  .ahora-chip { display: inline-block; margin-left: 8px; padding: 0 9px; border-radius: 999px; background: var(--verde); border: 1px solid var(--teal); color: var(--blanco); font-family: var(--dato); font-size: 9px; letter-spacing: .2em; line-height: 1.9; vertical-align: 1px; }
+  .precio { display: inline-block; margin-top: 10px; padding: 4px 0; border-top: 1px solid var(--linea); font-size: 13px; color: var(--crema); }
+  .nota { font-family: var(--texto); font-size: 18px; line-height: 1.45; color: var(--crema); margin-top: 2px; }
+
+  /* TU CUERPO: la figura de la ficha, los puntos sobre la linea del medio. */
+  .cuerpo-caja { display: grid; grid-template-columns: minmax(0, 54%) minmax(0, 1fr); gap: 10px; align-items: center; }
+  .figura { position: relative; width: 100%; aspect-ratio: 492 / 880; margin: 0 auto; animation: respira 6s ease-in-out infinite; }
+  .figura img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; mix-blend-mode: screen; transition: opacity 450ms; user-select: none; -webkit-user-drag: none; }
+  .figura.todo img { opacity: 1; }
+  .figura::after { content: ""; position: absolute; inset: 4% 8%; border-radius: 48% 48% 40% 40%; border: 1px solid transparent; transition: border-color 450ms var(--asienta); pointer-events: none; }
+  .figura.todo::after { border-color: var(--teal); }
+  svg.silueta { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; touch-action: manipulation; }
+  .silueta .z .punto { fill: var(--gris); }
+  .silueta .z .halo { fill: rgba(5, 6, 6, .55); stroke: var(--linea-fuerte); stroke-width: 1.5; }
+  .silueta .z .toque { fill: transparent; }
+  .silueta .z.con { cursor: pointer; }
+  .silueta .z.con .halo { stroke: rgba(255, 255, 255, .7); }
+  .silueta .z.elegida .halo { fill: var(--verde); stroke: var(--blanco); stroke-width: 2.2; }
+  .silueta .z:focus { outline: none; }
+  /* (P2) EL NIVEL DE LA ZONA: el punto toma el color de su tramo (solo con
+     lamina; sin ella queda gris). Si la escala no llega, cae al gris. */
+  .silueta .z.t1 .punto { fill: var(--nivel-1, var(--gris)); }
+  .silueta .z.t2 .punto { fill: var(--nivel-2, var(--gris)); }
+  .silueta .z.t3 .punto { fill: var(--nivel-3, var(--gris)); }
+  .silueta .z.t4 .punto { fill: var(--nivel-4, var(--gris)); }
+  /* (P2) LATE SOLO LO QUE SE TRABAJA AHORA: el anillo, solo en las zonas
+     con un remedio de la etapa en curso. El resto, quieto. */
+  .silueta .z .late { fill: none; stroke: var(--blanco); stroke-width: 1.4; opacity: 0; transform-box: fill-box; transform-origin: center; pointer-events: none; }
+  .silueta .z.trabaja .late { opacity: .8; animation: pulso 2.8s ease-out infinite; }
+  /* (16/10, decision de Jose) EL GRIS QUE IGUAL SE TRABAJA: la zona sin
+     nivel con un remedio de la etapa de ahora titila suave (el punto, no un
+     anillo: no insinua nivel). La gris sin remedio queda quieta. Con menos
+     movimiento, un borde punteado quieto. */
+  .silueta .z.titila .punto { animation: titila 3.6s ease-in-out infinite; }
+  /* (16/10, ataque) el aro de la que se trabaja nunca mas tenue que el de
+     una gris que solo se toca (.z.con .halo, .7) */
+  .silueta .z.titila .halo { stroke: rgba(255, 255, 255, .85); }
+  .nota-titila { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; font-size: 12.5px; line-height: 1.3; color: var(--tenue); }
+  .punto-titila { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--gris); box-shadow: 0 0 0 2px rgba(255, 255, 255, .35); animation: titila 3.6s ease-in-out infinite; }
+  /* (16/10, P7) LA HOJA DEL CONTROL: el control de etapa adentro del
+     portal (una pagina del mismo sitio). */
+  .hoja-control { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; background: var(--fondo, #03100E); }
+  .hoja-control .hoja-barra { display: flex; justify-content: flex-start; padding: 10px 16px; border-bottom: 1px solid var(--linea); }
+  .hoja-control .hoja-cerrar { min-height: 44px; background: none; border: 0; color: var(--blanco); font-family: var(--sc); font-style: italic; font-weight: 600; font-size: 17px; cursor: pointer; }
+  .hoja-control .hoja-marco { flex: 1; width: 100%; border: 0; background: #f6f2e8; }
+  .silueta .z:focus-visible .halo { stroke: var(--cyan); stroke-width: 4; }
+  .botones-zona { display: flex; flex-direction: column; }
+  .zona-b { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 4px 0; background: none; border: 0; border-bottom: 1px solid var(--linea); cursor: pointer; text-align: left; font-family: var(--sc); font-style: italic; font-weight: 600; font-size: 17px; line-height: 1.1; color: var(--blanco); }
+  .zona-b .punto { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--gris); }
+  .zona-b:disabled { cursor: default; color: var(--apagado); }
+  .zona-b .medidor { margin-left: auto; }
+  .t1 > .punto, .t1 .punto-b { background: var(--nivel-1, var(--gris)); }
+  .t2 > .punto, .t2 .punto-b { background: var(--nivel-2, var(--gris)); }
+  .t3 > .punto, .t3 .punto-b { background: var(--nivel-3, var(--gris)); }
+  .t4 > .punto, .t4 .punto-b { background: var(--nivel-4, var(--gris)); }
+  /* LAS RAYITAS del tramo (como en el diseno): se llenan hasta el tramo,
+     con su color. */
+  .medidor { display: inline-flex; gap: 3px; flex: none; }
+  .medidor span { display: block; width: 9px; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, .14); }
+  .t1 .medidor span:nth-child(-n+1) { background: var(--nivel-1, var(--gris)); }
+  .t2 .medidor span:nth-child(-n+2) { background: var(--nivel-2, var(--gris)); }
+  .t3 .medidor span:nth-child(-n+3) { background: var(--nivel-3, var(--gris)); }
+  .t4 .medidor span:nth-child(-n+4) { background: var(--nivel-4, var(--gris)); }
+  .leyenda-caja { margin: 18px 0 0; }
+  ul.leyenda-niveles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 14px; }
+  ul.leyenda-niveles li { display: flex; align-items: center; gap: 8px; font-size: 12.5px; line-height: 1.3; color: var(--tenue); }
+  .nota-gris { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; font-size: 12.5px; line-height: 1.3; color: var(--tenue); }
+  .punto-gris { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--gris); }
+  .nota-late { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; font-size: 12.5px; line-height: 1.3; color: var(--tenue); }
+  .anillo-chico { flex: none; width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--blanco); }
+  .nivel-zona { display: flex; align-items: center; gap: 10px; margin: -6px 0 12px; font-size: 13px; color: var(--crema); }
+  .zona-b[aria-pressed="true"] { color: var(--blanco); border-bottom-color: var(--teal); }
+  .zona-b[aria-pressed="true"] .punto { box-shadow: 0 0 0 3px var(--verde); }
+  .zona-b:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  .panel-zona { margin-top: 28px; padding: 22px 0 6px; border-top: 1px solid var(--teal); animation: entra 220ms var(--rebote) both; }
+  .panel-zona h3 { font-family: var(--sc); font-style: italic; color: var(--blanco); font-size: 28px; font-weight: 600; margin: 0 0 14px; }
+  ul.remedios { list-style: none; padding: 0; margin: 0 0 16px; }
+  ul.remedios li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--linea); color: var(--blanco); font-family: var(--sc); font-style: italic; font-weight: 600; font-size: 19px; }
+  ul.remedios li::before { content: ""; flex: none; width: 5px; height: 5px; border-radius: 50%; background: var(--blanco); }
+  .zona-texto { font-family: var(--texto); font-size: 19px; line-height: 1.45; margin: 0 0 12px; color: var(--crema); }
+  .zona-texto strong { color: var(--blanco); font-weight: 600; }
+  .vacio { color: var(--tenue); font-size: 13.5px; margin: 0 0 10px; }
+  .lamina { font: inherit; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; min-height: 44px; border-radius: 12px; border: 1px solid var(--linea-fuerte); background: transparent; color: var(--crema); }
+  /* LAS LAMINAS PINTADAS (13/10): la de la zona, con su carga. Bajan cifradas y se ven solo si abren bien. */
+  .laminas-zona { margin: 6px 0 4px; }
+  .laminas-zona .que-es { font-family: var(--sc); font-size: 13px; letter-spacing: .3em; text-transform: uppercase; color: var(--tenue); font-weight: 600; margin: 0 0 10px; }
+  .laminas-zona figure { margin: 0 0 14px; }
+  .laminas-zona img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--linea); background: var(--fondo); }
+  .laminas-zona figcaption { font-size: 13px; color: var(--tenue); margin-top: 6px; }
+  /* EL CAMINO DEL ZOOM (13/10): las laminas de adentro, una debajo de la otra, con su flecha. */
+  .laminas-zona .camino { margin: -4px 0 18px; padding-left: 10px; border-left: 1px solid var(--linea-fuerte); }
+  .laminas-zona .camino .flecha { font-size: 13px; color: var(--crema); margin: 4px 0 8px; }
+
+  /* LAS FILAS QUE LLEVAN A OTRA PANTALLA O AFUERA (WhatsApp, mail). */
+  .fila { display: flex; align-items: center; gap: 18px; width: 100%; min-height: 72px; padding: 12px 0; background: none; border: 0; border-bottom: 1px solid var(--linea); cursor: pointer; text-align: left; color: var(--blanco); text-decoration: none; }
+  .fila:first-of-type { border-top: 1px solid var(--linea); }
+  .fila .ic { flex: none; width: 30px; height: 30px; color: var(--blanco); }
+  .fila .que-es { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .fila .t { font-family: var(--sc); font-style: italic; font-weight: 600; font-size: 21px; color: var(--blanco); line-height: 1.15; }
+  .fila .d { font-family: var(--dato); font-weight: 500; font-size: 11.5px; color: var(--tenue); }
+  .fila .flecha-d { flex: none; width: 14px; height: 14px; color: var(--apagado); }
+  .fila:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  /* REMEDIOS Y FLORES */
+  .zona-rem { margin: 0 0 26px; }
+  .zona-rem .rotulo { margin-bottom: 4px; }
+  ul.flores { list-style: none; padding: 0; margin: 0; }
+  ul.flores li { font-family: var(--texto); font-size: 18.5px; line-height: 1.45; color: var(--crema); padding: 12px 0; border-bottom: 1px solid var(--linea); }
+  ul.flores li strong { color: var(--blanco); font-weight: 600; }
+
+  /* LOS DESPLEGABLES */
+  details { border-top: 1px solid var(--linea); }
+  details:last-of-type { border-bottom: 1px solid var(--linea); }
+  details > summary { list-style: none; cursor: pointer; padding: 18px 48px 18px 0; position: relative; font-family: var(--sc); font-style: italic; color: var(--blanco); font-size: 23px; font-weight: 600; line-height: 1.2; min-height: 64px; display: flex; align-items: center; }
+  details > summary::-webkit-details-marker { display: none; }
+  details > summary::after {
+    content: ""; position: absolute; right: 0; top: 50%; width: 30px; height: 30px; margin-top: -15px; border-radius: 50%;
+    border: 1px solid var(--linea-fuerte);
+    background: linear-gradient(var(--blanco), var(--blanco)) center / 11px 1px no-repeat, linear-gradient(var(--blanco), var(--blanco)) center / 1px 11px no-repeat;
+    transition: transform 450ms var(--asienta), background-size 220ms;
+  }
+  details[open] > summary::after { transform: rotate(180deg); background-size: 11px 1px, 1px 0; }
+  details > summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; border-radius: 8px; }
+  details[open] > .dentro { animation: entra 220ms var(--rebote) both; }
+  details .dentro { padding: 0 0 18px; }
+  /* El informe dice "Tiroides: funcionamiento...": bajo su titulo, el texto arranca en mayuscula. */
+  .vimos-texto::first-letter { text-transform: uppercase; }
+  .vimos-texto { margin: 0 0 12px; color: var(--crema); font-family: var(--texto); font-size: 19px; line-height: 1.45; }
+  details details > summary { font-family: var(--sc); font-size: 19px; padding: 14px 48px 14px 0; min-height: 56px; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+  details details > summary::after { width: 26px; height: 26px; margin-top: -13px; }
+  details details:last-of-type { border-bottom: 0; }
+  .etiqueta-zona { font-family: var(--sc); font-style: normal; font-size: 12px; letter-spacing: .26em; text-transform: uppercase; color: var(--tenue); font-weight: 600; }
+  .motivo { white-space: pre-line; color: var(--crema); padding-left: 16px; border-left: 1px solid var(--linea-fuerte); margin: 0; font-family: var(--texto); font-size: 19px; line-height: 1.45; }
+
+  /* HABLEMOS: el unico boton principal de la pantalla (cobre: es la accion). */
+  .hablemos { text-align: center; padding: 32px 0 8px; border-top: 1px solid var(--linea); }
+  .hablemos p { color: var(--crema); font-family: var(--texto); font-size: 18.5px; line-height: 1.45; margin: 10px 0 0; opacity: .86; }
+  .boton {
+    font: inherit; font-family: var(--dato); font-weight: 600; font-size: 16px; letter-spacing: .02em;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; max-width: 380px; padding: 14px 24px; min-height: 56px; border-radius: 14px;
+    border: 0; background: var(--cobre); color: var(--fondo); cursor: pointer; margin-top: 20px; text-decoration: none;
+    transition: transform 220ms var(--rebote), background 220ms;
+  }
+  .boton:hover { background: var(--cobre-claro); }
+  .boton:active { transform: scale(.97); }
+  .boton svg { width: 20px; height: 20px; flex: none; }
+  .boton:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+  .pie { text-align: center; color: var(--apagado); font-size: 11px; margin-top: 8px; }
+  .sello { display: block; width: 22px; height: auto; margin: 40px auto 14px; filter: drop-shadow(0 0 12px rgba(60, 231, 225, 0.5)); }
+  .lema { text-align: center; font-family: var(--sc); font-style: italic; font-weight: 600; color: var(--crema); margin: 0 auto; font-size: 19px; line-height: 1.35; max-width: 20em; }
+
+  /* LA BARRA DE ABAJO: cinco iconos de linea blanca; lo elegido, en verde petroleo. */
+  .nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; justify-content: center; background: rgba(5, 6, 6, .94); border-top: 1px solid var(--linea); padding-bottom: env(safe-area-inset-bottom); }
+  .nav-dentro { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); width: 100%; max-width: 560px; }
+  .nav-b { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; min-height: 64px; padding: 8px 2px 10px; background: none; border: 0; cursor: pointer; color: var(--apagado); font-family: var(--dato); font-weight: 600; font-size: 10px; letter-spacing: .06em; position: relative; }
+  .nav-b svg { width: 24px; height: 24px; }
+  .nav-b.activo { color: var(--blanco); }
+  .nav-b.activo::before { content: ""; position: absolute; top: -1px; left: 26%; right: 26%; height: 2px; background: var(--teal); }
+  .nav-b:focus-visible { outline: 2px solid var(--cyan); outline-offset: -4px; }
+
+  /* LA PUERTA (primera vez), EL AVISO Y EL "ABRIENDO" */
+  .puerta { min-height: 100vh; min-height: 100svh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+  .tarjeta { position: relative; }
+  .puerta .tarjeta { width: 100%; max-width: 420px; text-align: center; padding: 30px 8px; }
+  .puerta .simbolo { display: block; width: 38px; height: auto; margin: 0 auto 6px; filter: drop-shadow(0 0 12px rgba(60, 231, 225, 0.5)); }
+  .puerta .titulo-portal { font-size: 46px; }
+  .puerta p { margin: 16px 0 0; color: var(--crema); font-family: var(--texto); font-size: 19.5px; line-height: 1.45; }
+  .puerta .bajada { margin-top: 14px; font-size: 16.5px; }
+  .abriendo { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; color: var(--tenue); font-size: 13px; letter-spacing: .04em; }
+  .abriendo img { width: 30px; height: auto; filter: drop-shadow(0 0 12px rgba(60, 231, 225, 0.5)); }
+  .abriendo .barra { position: relative; width: 120px; height: 1px; background: var(--linea-fuerte); overflow: hidden; }
+  .abriendo .barra::after { content: ""; position: absolute; inset: 0; background: var(--blanco); transform-origin: left; animation: carga 1.6s var(--asienta) forwards; }
+
+  /* EL PORTAL COMO APP (13/10, portal_como_app.py): la puerta de instalar
+     (obligatoria en el celular, un solo boton), la de "pega tu link" y los
+     dos botones de adentro (secundarios: el principal sigue siendo uno). */
+  .puerta .marca { display: block; width: 112px; height: 112px; margin: 0 auto 10px; border-radius: 26px; box-shadow: 0 0 22px rgba(60, 231, 225, .28); user-select: none; -webkit-user-drag: none; }
+  ol.pasos-ios { list-style: none; margin: 22px 0 0; padding: 0; text-align: left; display: grid; gap: 0; }
+  ol.pasos-ios li { display: grid; grid-template-columns: 52px 1fr; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--linea); color: var(--crema); font-family: var(--texto); font-size: 18px; line-height: 1.35; }
+  ol.pasos-ios li:first-child { border-top: 1px solid var(--linea); }
+  ol.pasos-ios svg { width: 52px; height: 52px; }
+  ol.pasos-ios strong { color: var(--blanco); font-weight: 600; }
+  .puerta .nota-app { margin: 14px 0 0; color: var(--tenue); font-family: var(--dato); font-size: 14px; line-height: 1.45; }
+  .puerta .nota-app:empty { display: none; }
+  .campo-link { font: inherit; font-size: 14px; width: 100%; margin-top: 18px; padding: 12px 14px; min-height: 48px; border-radius: 12px; border: 1px solid var(--linea-fuerte); background: transparent; color: var(--blanco); }
+  .campo-link:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  .link-nuevo { font: inherit; font-size: 13px; background: none; border: 0; padding: 12px 8px; min-height: 44px; color: var(--crema); text-decoration: underline; cursor: pointer; }
+  .link-nuevo:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  .pedidos { display: grid; gap: 10px; }
+  .boton-2 {
+    font: inherit; font-family: var(--dato); font-weight: 600; font-size: 15.5px; letter-spacing: .02em;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 12px 20px; min-height: 56px; border-radius: 14px;
+    border: 1px solid rgba(196, 122, 53, .7); background: transparent; color: var(--cobre-claro); cursor: pointer; text-decoration: none;
+    transition: transform 220ms var(--rebote), background 220ms;
+  }
+  .boton-2:hover { background: rgba(196, 122, 53, .12); }
+  .boton-2:active { transform: scale(.97); }
+  .boton-2:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+  /* (16/10, P5) El formulario de los datos de envio. */
+  .envio-form { display: grid; gap: 10px; margin-top: 14px; }
+  .envio-form label { display: grid; gap: 4px; font-family: var(--dato); font-size: 13px; color: var(--crema); }
+  .envio-form input { font: inherit; font-size: 16px; width: 100%; box-sizing: border-box; padding: 10px 12px; min-height: 44px; border-radius: 10px; border: 1px solid var(--linea-fuerte); background: transparent; color: var(--blanco); }
+  .envio-form input:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  /* EL FESTEJO: sobrio. Un anillo blanco y una linea que lo dice. */
+  .festejo { position: fixed; inset: 0; pointer-events: none; z-index: 50; display: flex; align-items: center; justify-content: center; }
+  .festejo .anillo-f { position: absolute; width: 120px; height: 120px; border-radius: 50%; border: 1px solid var(--blanco); animation: expande 1.4s var(--asienta) forwards; }
+  .festejo .dice { position: absolute; bottom: calc(var(--abajo) + 20px); left: 16px; right: 16px; margin: 0 auto; max-width: 420px; text-align: center; padding: 14px 18px; border-radius: 14px; background: var(--verde); border: 1px solid var(--teal); color: var(--blanco); font-size: 14px; animation: entra 220ms var(--rebote) both; }
+  .festejo .dice.se-va { animation: sale 250ms var(--sale) forwards; }
+
+  /* (14/10, fase P1b) LAS PANTALLAS QUE FALTABAN, con el mismo look. */
+  /* LA ETAPA TERMINA EN X DIAS: una linea, guiada por la etapa (no por el frasquito). */
+  .termina { text-align: center; margin: 16px 0 0; font-family: var(--dato); font-weight: 500; font-size: 13.5px; letter-spacing: .02em; color: var(--crema); }
+  .termina.izq { text-align: left; margin: 0 0 18px; }
+  /* LOS ACCESOS DE INICIO: puertas finas a las otras pantallas, sin cajas. */
+  .accesos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--linea); }
+  .acceso { display: flex; flex-direction: column; gap: 4px; min-width: 0; min-height: 88px; padding: 16px 12px 14px 0; background: none; border: 0; border-bottom: 1px solid var(--linea); text-align: left; cursor: pointer; color: var(--blanco); }
+  .acceso:nth-child(2n) { padding-left: 14px; border-left: 1px solid var(--linea); }
+  .acceso .t { font-family: var(--sc); font-style: italic; font-weight: 600; font-size: 20px; line-height: 1.15; }
+  .acceso .d { font-family: var(--dato); font-size: 11.5px; line-height: 1.35; color: var(--tenue); }
+  .acceso:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  /* TU PROXIMA ETAPA: el precio, si viaja. */
+  .siguiente { padding: 20px 0; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); }
+  .siguiente h2 { margin: 6px 0 4px; }
+  .siguiente .tit-sig { font-family: var(--texto); font-size: 18px; line-height: 1.4; color: var(--crema); margin: 0 0 6px; }
+  .siguiente .precio-sig { font-family: var(--dato); font-weight: 500; font-size: 15px; color: var(--blanco); margin: 0; }
+  /* (P6) EL PAGO DE LA ETAPA QUE VIENE: al lado del candado, y solo abierto. */
+  .pago-sig { margin: 14px 0 0; }
+  .pago-sig .nota-pago { font-family: var(--texto); font-size: 17px; line-height: 1.45; color: var(--crema); margin: 0; }
+  /* LA ZONA: los rotulos de adentro y el remedio de esta etapa marcado. */
+  .sub-rotulo { font-family: var(--sc); font-size: 13px; letter-spacing: .3em; text-transform: uppercase; color: var(--tenue); font-weight: 600; margin: 18px 0 4px; }
+  .chip-etapa { flex: none; margin-left: auto; padding: 0 9px; border-radius: 999px; background: var(--verde); border: 1px solid var(--teal); color: var(--blanco); font-family: var(--dato); font-style: normal; font-weight: 600; font-size: 10px; letter-spacing: .1em; line-height: 1.9; }
+  ul.remedios li .nom { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  ul.remedios li .zona-chica { font-family: var(--sc); font-style: normal; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--tenue); font-weight: 600; }
+  .ver-zona { font: inherit; font-family: var(--dato); font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; min-height: 44px; padding: 8px 16px; margin: 0 0 6px; border-radius: 12px; border: 1px solid var(--teal); background: transparent; color: var(--blanco); cursor: pointer; }
+  .ver-zona:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  /* LAS PESTAÑAS DE TU PLAN: Remedios, Flores y Comidas (la elegida, con su linea cobre). */
+  .pestanas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0 0 28px; border-bottom: 1px solid var(--linea); }
+  .pestana { position: relative; min-height: 48px; padding: 10px 4px; background: none; border: 0; cursor: pointer; font-family: var(--dato); font-weight: 600; font-size: 14px; letter-spacing: .02em; color: var(--apagado); }
+  .pestana[aria-selected="true"] { color: var(--blanco); }
+  .pestana[aria-selected="true"]::after { content: ""; position: absolute; left: 18%; right: 18%; bottom: -1px; height: 2px; background: var(--cobre); }
+  .pestana:focus-visible { outline: 2px solid var(--cyan); outline-offset: -4px; }
+  .panel-tab { animation: aparece 450ms var(--asienta) both; }
+  ul.flores li.num { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 8px; align-items: baseline; }
+  ul.flores li.num .n { font-family: var(--dato); font-weight: 600; font-size: 13px; color: var(--tenue); font-variant-numeric: tabular-nums lining-nums; }
+  .comidas-temporada { font-family: var(--texto); font-size: 19px; line-height: 1.45; color: var(--crema); margin: 0; }
+  .comidas-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+  .comidas-cols .col { min-width: 0; }
+  .comidas-cols ul { list-style: none; margin: 6px 0 0; padding: 0; }
+  .comidas-cols li { padding: 9px 0; border-bottom: 1px solid var(--linea); font-family: var(--texto); font-size: 17.5px; line-height: 1.3; color: var(--crema); overflow-wrap: anywhere; }
+  .comidas-cols .col.pausa li { color: var(--tenue); }
+
+  @keyframes entra { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: none; } }
+  @keyframes aparece { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes titulo { from { opacity: 0; transform: scale(1.25); } to { opacity: 1; transform: none; } }
+  @keyframes sale { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(-40px); } }
+  @keyframes pulso { 0% { transform: scale(.8); opacity: .8; } 100% { transform: scale(2.4); opacity: 0; } }
+  @keyframes titila { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+  @keyframes respira { 0%, 100% { filter: brightness(.85); } 50% { filter: brightness(1); } }
+  @keyframes carga { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes expande { from { transform: scale(.3); opacity: 0; } 30% { opacity: 1; } to { transform: scale(4); opacity: 0; } }
+
+  /* EN LA COMPU: se ven todas las pantallas juntas; el cuerpo, a un costado.
+     SOLO con mouse (15/10, Jose lo abrio en el celular y le salieron dos
+     columnas): un celular que abre la pagina "ancha" (vista de escritorio,
+     o adentro de otra app) tiene pantalla tactil, y ahi va siempre una
+     columna hacia abajo con la barra de abajo. */
+  @media (min-width: 980px) and (hover: hover) and (pointer: fine) {
+    :root { --abajo: 0px; }
+    .nav { display: none; }
+    .marco { max-width: 1120px; padding: 32px 32px 72px; display: grid; grid-template-columns: minmax(0, 1fr) 430px; column-gap: 56px; align-items: start; }
+    .cabecera, .pie, .lema, .sello, #link-nuevo-caja, #nombre-cambiar-caja { grid-column: 1 / -1; }
+    .pantalla { display: block; grid-column: 1; margin-bottom: 56px; }
+    #pant-cuerpo { grid-column: 2; grid-row: 2 / span 4; position: sticky; top: 24px; }
+    .logo { width: 150px; }
+  }
+  @media (max-width: 360px) {
+    .titulo-portal, .titulo-pant { font-size: 36px; }
+    .anillo-num { font-size: 60px; }
+    .cuerpo-caja { grid-template-columns: minmax(0, 50%) minmax(0, 1fr); }
+  }
+
+  /* MENOS MOVIMIENTO: si el telefono lo pide, nada se mueve y todo se ve. */
+  /* (P3) HOY TE TOCA: un renglon por toma, con su tilde. El tilde es del
+     verde de lo elegido; nada en cobre (no es una accion de pago). */
+  .hoy .hoy-cuenta { font-family: var(--dato); font-size: 13px; color: var(--tenue); margin: 2px 0 6px; }
+  .hoy .momento { margin: 14px 0 0; }
+  .hoy .momento .sub-rotulo { margin: 0 0 2px; }
+  ul.tomas { list-style: none; padding: 0; margin: 0; }
+  ul.tomas li { border-bottom: 1px solid var(--linea); }
+  button.toma { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; padding: 10px 0; background: none; border: 0; color: var(--blanco); text-align: left; cursor: pointer; font: inherit; }
+  button.toma:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  button.toma .caja { flex: none; width: 24px; height: 24px; border-radius: 7px; border: 1.5px solid var(--linea-fuerte); display: grid; place-items: center; transition: background .25s var(--asienta), border-color .25s var(--asienta); }
+  button.toma .caja svg { width: 14px; height: 14px; opacity: 0; transform: scale(.6); transition: opacity .2s, transform .25s var(--rebote); }
+  button.toma[aria-checked="true"] .caja { background: var(--teal); border-color: var(--teal); }
+  button.toma[aria-checked="true"] .caja svg { opacity: 1; transform: none; }
+  button.toma .que { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  button.toma .nom { font-family: var(--sc); font-style: italic; font-weight: 600; font-size: 18px; line-height: 1.2; }
+  button.toma .cuanto { font-family: var(--dato); font-size: 13px; color: var(--crema); }
+  button.toma[aria-checked="true"] .nom { color: var(--tenue); }
+  ul.remedios li .dosis { display: block; font-family: var(--dato); font-style: normal; font-weight: 400; font-size: 13px; letter-spacing: 0; color: var(--crema); margin-top: 2px; }
+  .toma-flores { font-family: var(--dato); font-size: 14px; line-height: 1.5; color: var(--crema); margin: 0 0 16px; }
+  /* (P3) EL CANDADO de la etapa que viene: cerrado hasta que se cumple la
+     de ahora; despues se abre (el arco sube) y no obliga a nada. */
+  .sig-cabeza { display: flex; align-items: center; gap: 10px; }
+  .candado { flex: none; width: 24px; height: 28px; color: var(--tenue); }
+  .candado svg { width: 24px; height: 28px; overflow: visible; }
+  .candado .arco-candado { transition: transform .6s var(--rebote); transform-origin: 17px 13px; }
+  .candado.abierto { color: var(--blanco); }
+  .candado.abierto .arco-candado { transform: translate(0, -3px) rotate(28deg); }
+  .siguiente .dura-sig { font-family: var(--dato); font-size: 13.5px; color: var(--crema); margin: 2px 0 6px; }
+  .siguiente .candado-txt { font-family: var(--texto); font-size: 18px; line-height: 1.45; color: var(--blanco); margin: 0 0 8px; }
+  .camino .cual .candado-chico { display: inline-block; width: 12px; height: 14px; margin-left: 8px; vertical-align: -1px; color: var(--tenue); }
+  .camino .cual .candado-chico.abierto { color: var(--blanco); }
+  .candado-chico svg { width: 12px; height: 14px; overflow: visible; }
+  .candado-chico .arco-candado { transform-origin: 17px 13px; }
+  .candado-chico.abierto .arco-candado { transform: translate(0, -3px) rotate(28deg); }
+  ul.remedios li.con-dosis { align-items: flex-start; }
+  ul.remedios li.con-dosis::before { margin-top: 11px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .js .revela, .js ol.camino > li { opacity: 1; transform: none; }
+    .silueta .z.titila .halo { stroke: var(--blanco); stroke-dasharray: 3 3; }
+    .punto-titila { box-shadow: none; outline: 1px dashed var(--blanco); outline-offset: 2px; }
+  }
+</style>
+</head>
+<body>
+<div class="brillo-arriba" aria-hidden="true"></div>
+<canvas class="ondas" id="ondas" aria-hidden="true"></canvas>
+
+<noscript>
+  <style>.abriendo { display: none; } .sin-js { display: flex; }</style>
+  <div class="puerta sin-js">
+    <section class="tarjeta">
+      <img class="simbolo" src="imagenes/simbolo-adn.webp" alt="CUÁNTICA" width="78" height="200">
+      <p>Tu teléfono necesita una versión más nueva del navegador para abrir tu portal. Actualizalo y volvé a tocar el link.</p>
+    </section>
+  </div>
+</noscript>
+<div class="abriendo" id="abriendo" role="status">
+  <img src="imagenes/simbolo-adn.webp" alt="" width="78" height="200">
+  <span>Abriendo tu portal</span>
+  <span class="barra"></span>
+</div>
+
+<!-- EL PORTAL COMO APP (13/10): la puerta de instalar. En el celular, lo
+     unico que se ve es la marca y UN boton. -->
+<div class="puerta" id="instalar" hidden>
+  <section class="tarjeta">
+    <img class="marca" id="instalar-marca" alt="CUÁNTICA" width="192" height="192">
+    <p class="rotulo centro" id="instalar-hola" hidden></p>
+    <h1 class="titulo-portal">Tu portal</h1>
+    <p id="instalar-texto">Tu portal va en la pantalla de tu celular, como una app: lo abrís con un toque, sin buscar el link.</p>
+    <ol class="pasos-ios" id="pasos-ios" hidden>
+      <li><svg viewBox="0 0 52 52" aria-hidden="true"><rect x="1" y="1" width="50" height="50" rx="12" fill="#050606" stroke="#FFFFFF" stroke-opacity=".3"/><path d="M26 11v20M19 18l7-7 7 7" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 23h-5v17h20V23h-5" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Tocá <strong>Compartir</strong>: el cuadradito con la flecha para arriba. Si no lo ves, tocá los tres puntitos (···) y ahí <strong>Compartir</strong>.</span></li>
+      <li><svg viewBox="0 0 52 52" aria-hidden="true"><rect x="1" y="1" width="50" height="50" rx="12" fill="#050606" stroke="#FFFFFF" stroke-opacity=".3"/><rect x="15" y="15" width="22" height="22" rx="5" fill="none" stroke="#FFFFFF" stroke-width="2"/><path d="M26 20v12M20 26h12" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg><span>Elegí <strong>Agregar a inicio</strong> (si no está, tocá <strong>Ver más</strong>) y tocá <strong>Agregar</strong>. Después abrí tu portal desde el ícono CUÁNTICA.</span></li>
+    </ol>
+    <button type="button" class="boton" id="instalar-boton">Instalar en tu celular</button>
+    <input class="campo-link" id="instalar-link" type="text" readonly hidden aria-label="Tu link">
+    <p class="nota-app" id="instalar-nota" hidden aria-live="polite"></p>
+    <p class="nota-app" id="instalar-ayuda"></p>
+  </section>
+</div>
+
+<!-- Abierta desde el icono sin ningun link guardado: tocar el link o pegarlo. -->
+<div class="puerta" id="sin-link" hidden>
+  <section class="tarjeta">
+    <img class="simbolo" src="imagenes/simbolo-adn.webp" alt="CUÁNTICA" width="78" height="200">
+    <h1 class="titulo-portal">Tu portal</h1>
+    <p>Para abrirlo, tocá una vez tu link personal, el que te mandé. O copialo y pegalo acá:</p>
+    <input class="campo-link" id="sin-link-campo" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Pegá tu link acá" aria-label="Tu link">
+    <button type="button" class="boton" id="sin-link-boton">Abrir mi portal</button>
+    <p class="nota-app" id="sin-link-nota" hidden aria-live="polite"></p>
+    <p><button type="button" class="link-nuevo" id="sin-link-volver" hidden>Volver a mi portal</button></p>
+  </section>
+</div>
+
+<div class="puerta" id="puerta" hidden>
+  <section class="tarjeta">
+    <img class="simbolo" src="imagenes/simbolo-adn.webp" alt="CUÁNTICA" width="78" height="200">
+    <h1 class="titulo-portal">Tu portal</h1>
+    <p>Acá está tu proceso conmigo: tus etapas, tus remedios y lo que vimos en tu estudio.</p>
+    <p class="bajada">Se abre solo con tu link personal y se lee en tu teléfono: no queda guardado en ningún servidor. Al entrar, aceptás ver acá tus datos de salud.</p>
+    <button type="button" class="boton" id="entrar">Entrar a mi portal</button>
+  </section>
+</div>
+
+<div class="puerta" id="aviso" hidden>
+  <section class="tarjeta">
+    <img class="simbolo" src="imagenes/simbolo-adn.webp" alt="CUÁNTICA" width="78" height="200">
+    <p id="aviso-texto">Este link no está activo. Escribime y te paso uno nuevo.</p>
+    <a class="boton" href="https://wa.me/5493434518981" rel="noopener noreferrer">Escribime por WhatsApp</a>
+  </section>
+</div>
+
+<main class="marco" id="portal" hidden>
+  <header class="cabecera">
+    <img class="logo" src="imagenes/logo-cuantica.webp" alt="CUÁNTICA" width="560" height="298">
+    <div class="marca-txt">PORTAL DE PACIENTES</div>
+  </header>
+
+  <!-- INICIO -->
+  <section class="pantalla activa" id="pant-inicio" aria-label="Inicio">
+    <div class="encabezado">
+      <p class="rotulo" id="fecha-hoy"></p>
+      <h1 class="titulo-portal" id="saludo">Hola</h1>
+      <p class="bajada" id="saludo-frase">Acá está tu proceso, etapa por etapa.</p>
+      <div class="nombre-caja" id="nombre-caja" hidden>
+        <div class="nombre-fila">
+          <input class="campo" id="nombre-campo" type="text" autocomplete="given-name" autocapitalize="words" maxlength="40" placeholder="¿Cómo te llamo?" aria-label="¿Cómo te llamo? Tu nombre">
+          <button type="button" class="boton-3" id="nombre-boton">Listo</button>
+        </div>
+        <p class="nota-chica" id="nombre-nota" hidden aria-live="polite"></p>
+        <p class="nota-chica">Tu nombre queda guardado solo en tu celular.</p>
+      </div>
+    </div>
+
+    <section class="hero bloque revela" id="hero" aria-live="polite">
+      <p class="rotulo centro">Tu camino</p>
+      <div class="anillo" id="anillo" aria-hidden="true">
+        <svg viewBox="0 0 196 104">
+          <path class="pista" d="M10 98 A88 88 0 0 1 186 98"/>
+          <path class="arco" id="anillo-arco" d="M10 98 A88 88 0 0 1 186 98"/>
+          <circle class="punta" id="anillo-punta" cx="10" cy="98" r="3.5"/>
+        </svg>
+        <div class="anillo-centro"><span class="anillo-palabra" id="anillo-palabra">Etapa</span><span class="anillo-num" id="anillo-num">0</span><span class="anillo-de" id="anillo-de"></span></div>
+      </div>
+      <div id="ahora">
+        <h2 id="ahora-titulo"></h2>
+        <p id="ahora-frase"></p>
+      </div>
+      <svg class="hebra" id="hebra" viewBox="0 0 350 70" aria-hidden="true"><g id="hebra-lineas"></g><g id="etapas-puntos"></g></svg>
+      <div class="hebra-rotulos" id="hebra-rotulos" aria-hidden="true"></div>
+      <p class="termina" id="etapa-termina" hidden></p>
+    </section>
+
+    <div class="cifras revela" id="cifras" hidden></div>
+
+    <!-- (P3) HOY TE TOCA: las tomas de su planilla de la etapa en curso,
+         por momento del dia. Los tildes quedan SOLO en el celular. -->
+    <section class="hoy bloque revela" id="sec-hoy" hidden aria-labelledby="hoy-titulo">
+      <p class="rotulo">Hoy te toca</p>
+      <h2 id="hoy-titulo">Tus tomas de hoy</h2>
+      <p class="hoy-cuenta" id="hoy-cuenta" aria-live="polite"></p>
+      <div id="hoy-grupos"></div>
+      <p class="nota-chica">Las mismas de tu planilla. Lo que tildás queda solo en tu celular y mañana arranca de cero.</p>
+    </section>
+
+    <section class="encuentro bloque revela" id="sec-encuentro" hidden>
+      <div class="fecha-arco" aria-hidden="true"><span class="dia" id="enc-dia"></span><span class="num" id="enc-num"></span><span class="mes" id="enc-mes"></span></div>
+      <div class="que-es">
+        <span class="rotulo">Próximo encuentro</span>
+        <span class="hora" id="enc-hora"></span>
+        <span class="hora-ar" id="enc-ar" hidden></span>
+      </div>
+    </section>
+
+    <section class="siguiente bloque revela" id="sec-siguiente" hidden>
+      <p class="rotulo">Tu próxima etapa</p>
+      <div class="sig-cabeza">
+        <span class="candado" id="candado" hidden aria-hidden="true"><svg viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path class="arco-candado" d="M7 13V8.5a5 5 0 0 1 10 0V13"/><rect x="4" y="13" width="16" height="12" rx="2.5"/><path d="M12 18v3"/></svg></span>
+        <h2 id="siguiente-titulo"></h2>
+      </div>
+      <p class="dura-sig" id="siguiente-dura" hidden></p>
+      <p class="candado-txt" id="candado-txt" hidden aria-live="polite"></p>
+      <p class="tit-sig" id="siguiente-que" hidden></p>
+      <p class="precio-sig" id="siguiente-precio"></p>
+      <div class="pago-sig" id="siguiente-pago" hidden aria-live="polite"></div>
+    </section>
+
+    <section class="bloque revela" id="sec-zonas" hidden>
+      <h2>Lo que estamos trabajando</h2>
+      <div class="pills" id="zonas-inicio"></div>
+    </section>
+
+    <section class="bloque revela" id="sec-accesos" hidden aria-label="Tu portal">
+      <div class="accesos" id="accesos"></div>
+    </section>
+
+    <section class="bloque revela" id="sec-camino">
+      <p class="rotulo">Tu proceso</p>
+      <h2>Etapa por etapa</h2>
+      <div class="camino-caja"><span class="riel" id="riel"></span><ol class="camino" id="camino"></ol></div>
+    </section>
+
+    <section class="bloque revela" id="sec-pedir" hidden>
+      <p class="rotulo">Lo que necesites</p>
+      <p class="bajada" id="pedir-bajada">Tocá y se abre tu correo con el pedido escrito: solo tocá Enviar. Me llega a mí y te contesto.</p>
+      <div class="pedidos" id="pedidos"></div>
+    </section>
+
+    <!-- (16/10, P5) TUS DATOS DE ENVIO: solo Argentina, con la llave portal_envio. -->
+    <section class="bloque revela" id="sec-envio" hidden>
+      <p class="rotulo">Tus datos de envío</p>
+      <p class="bajada" id="envio-texto"></p>
+      <div class="pedidos" id="envio-caja"></div>
+      <div class="envio-form" id="envio-form" hidden></div>
+    </section>
+
+    <section class="hablemos revela" id="hablemos">
+      <p class="rotulo centro">Hablemos</p>
+      <p>¿Te quedó una duda con tu etapa? Escribime y lo vemos.</p>
+      <a class="boton" id="contacto" href="https://wa.me/5493434518981" rel="noopener noreferrer">Escribime por WhatsApp</a>
+    </section>
+  </section>
+
+  <!-- TU CUERPO -->
+  <section class="pantalla" id="pant-cuerpo" aria-label="Tu cuerpo">
+    <div class="encabezado">
+      <p class="rotulo">Tu lectura</p>
+      <h2 class="titulo-pant">Tu cuerpo</h2>
+      <p class="bajada" id="cuerpo-bajada">Tocá una zona y te muestro qué la acompaña.</p>
+    </div>
+    <section class="bloque revela" id="sec-cuerpo">
+      <div class="cuerpo-caja">
+        <div class="figura" id="figura">
+          <img src="imagenes/silueta-neutra.webp" alt="" width="492" height="880" loading="eager">
+          <svg class="silueta" id="silueta" viewBox="0 0 492 880" role="group" aria-label="Las zonas del cuerpo">
+            <g class="z" data-z="cabeza"><circle class="toque" cx="246" cy="88" r="34"/><circle class="halo" cx="246" cy="88" r="15"/><circle class="late" cx="246" cy="88" r="11"/><circle class="punto" cx="246" cy="88" r="6"/></g>
+            <g class="z" data-z="cuello"><circle class="toque" cx="246" cy="162" r="30"/><circle class="halo" cx="246" cy="162" r="15"/><circle class="late" cx="246" cy="162" r="11"/><circle class="punto" cx="246" cy="162" r="6"/></g>
+            <g class="z" data-z="pecho"><circle class="toque" cx="246" cy="262" r="38"/><circle class="halo" cx="246" cy="262" r="15"/><circle class="late" cx="246" cy="262" r="11"/><circle class="punto" cx="246" cy="262" r="6"/></g>
+            <g class="z" data-z="abdomen"><circle class="toque" cx="246" cy="372" r="38"/><circle class="halo" cx="246" cy="372" r="15"/><circle class="late" cx="246" cy="372" r="11"/><circle class="punto" cx="246" cy="372" r="6"/></g>
+            <g class="z" data-z="pelvis"><circle class="toque" cx="246" cy="462" r="34"/><circle class="halo" cx="246" cy="462" r="15"/><circle class="late" cx="246" cy="462" r="11"/><circle class="punto" cx="246" cy="462" r="6"/></g>
+            <g class="z" data-z="brazos"><circle class="toque" cx="104" cy="400" r="34"/><circle class="halo" cx="104" cy="400" r="15"/><circle class="late" cx="104" cy="400" r="11"/><circle class="punto" cx="104" cy="400" r="6"/></g>
+            <g class="z" data-z="piernas"><circle class="toque" cx="246" cy="690" r="40"/><circle class="halo" cx="246" cy="690" r="15"/><circle class="late" cx="246" cy="690" r="11"/><circle class="punto" cx="246" cy="690" r="6"/></g>
+            <g class="z" data-z="todo"><circle class="toque" cx="246" cy="864" r="30"/><circle class="halo" cx="246" cy="864" r="15"/><circle class="late" cx="246" cy="864" r="11"/><circle class="punto" cx="246" cy="864" r="6"/></g>
+          </svg>
+        </div>
+        <div class="botones-zona" id="botones-zona"></div>
+      </div>
+      <div class="leyenda-caja" id="leyenda-niveles" hidden>
+        <ul class="leyenda-niveles">
+          <li class="t1"><span class="medidor"><span></span><span></span><span></span><span></span></span><span class="tramo-t">En equilibrio</span></li>
+          <li class="t2"><span class="medidor"><span></span><span></span><span></span><span></span></span><span class="tramo-t">Desequilibrio leve</span></li>
+          <li class="t3"><span class="medidor"><span></span><span></span><span></span><span></span></span><span class="tramo-t">Con carga</span></li>
+          <li class="t4"><span class="medidor"><span></span><span></span><span></span><span></span></span><span class="tramo-t">Carga fuerte</span></li>
+        </ul>
+        <p class="nota-gris" id="nota-gris" hidden><span class="punto-gris"></span><span>Punto gris: esa zona no tiene un nivel para mostrarte.</span></p>
+        <p class="nota-late" id="nota-late" hidden><span class="anillo-chico"></span><span>El anillo que late: lo que trabajamos en esta etapa.</span></p>
+        <p class="nota-titila" id="nota-titila" hidden><span class="punto-titila"></span><span id="nota-titila-t">El punto gris que titila: ahí también trabajamos en esta etapa, aunque no tenga un nivel para mostrarte.</span></p>
+      </div>
+      <div class="panel-zona" id="panel-zona" hidden aria-live="polite">
+        <p class="rotulo">Zona</p>
+        <h3 id="zona-nombre"></h3>
+        <p class="nivel-zona" id="zona-nivel" hidden><span class="medidor"><span></span><span></span><span></span><span></span></span><span id="zona-nivel-t"></span></p>
+        <p class="sub-rotulo" id="zona-acompana" hidden>La acompaña</p>
+        <ul class="remedios" id="zona-remedios"></ul>
+        <p class="vacio" id="zona-sin-remedios" hidden>En esta etapa no hay un remedio propio para esta zona: la acompaña el plan entero.</p>
+        <p class="sub-rotulo" id="zona-lo-que-vi" hidden>Lo que vi</p>
+        <div id="zona-vimos"></div>
+        <div class="laminas-zona" id="zona-laminas" hidden></div>
+      </div>
+    </section>
+    <button type="button" class="fila" id="ir-estudio">
+      <svg class="ic" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 16h5l3-8 4 15 4-12 3 5h7"/></svg>
+      <span class="que-es"><span class="t">Todo tu estudio</span><span class="d">Zona por zona, explicado</span></span>
+      <svg class="flecha-d" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M5 2l5 5-5 5"/></svg>
+    </button>
+  </section>
+
+  <!-- TU ESTUDIO -->
+  <section class="pantalla" id="pant-estudio" aria-label="Tu estudio">
+    <div class="encabezado">
+      <p class="rotulo">Lo que se vio</p>
+      <h2 class="titulo-pant">Tu estudio</h2>
+      <p class="bajada" id="sub">Lo que leímos en tu estudio, zona por zona.</p>
+    </div>
+    <section class="bloque revela" id="sec-mas" hidden>
+      <details id="det-vimos" hidden open>
+        <summary>Lo que vimos, zona por zona</summary>
+        <div class="dentro" id="vimos"></div>
+      </details>
+      <details id="det-motivo" hidden>
+        <summary>Lo que me contaste</summary>
+        <div class="dentro"><p class="motivo" id="motivo"></p></div>
+      </details>
+    </section>
+    <p class="nota-chica" id="estudio-vacio" hidden>Cuando tengas tu informe, acá vas a ver lo que leímos, zona por zona.</p>
+  </section>
+
+  <!-- TUS REMEDIOS -->
+  <section class="pantalla" id="pant-remedios" aria-label="Tu plan">
+    <div class="encabezado">
+      <p class="rotulo">Lo que tomás</p>
+      <h2 class="titulo-pant" id="rem-titulo">Tus remedios</h2>
+    </div>
+    <div class="pestanas" role="tablist" aria-label="Tu plan" id="pestanas">
+      <button type="button" class="pestana" role="tab" id="tab-b-remedios" data-tab="remedios" aria-controls="tab-remedios" aria-selected="true">Remedios</button>
+      <button type="button" class="pestana" role="tab" id="tab-b-flores" data-tab="flores" aria-controls="tab-flores" aria-selected="false" tabindex="-1">Flores</button>
+      <button type="button" class="pestana" role="tab" id="tab-b-comidas" data-tab="comidas" aria-controls="tab-comidas" aria-selected="false" tabindex="-1">Comidas</button>
+    </div>
+    <div class="panel-tab" role="tabpanel" id="tab-remedios" aria-labelledby="tab-b-remedios">
+      <p class="termina izq" id="rem-termina" hidden></p>
+      <p class="bajada bloque" id="rem-bajada">Los de las etapas que ya recibiste, zona por zona.</p>
+      <div class="bloque revela" id="lista-remedios" hidden></div>
+      <p class="nota-chica" id="remedios-vacio" hidden>Tus remedios aparecen acá cuando recibís tu etapa.</p>
+    </div>
+    <div class="panel-tab" role="tabpanel" id="tab-flores" aria-labelledby="tab-b-flores" hidden>
+      <p class="toma-flores" id="flores-toma" hidden></p>
+      <section class="bloque revela" id="sec-flores" hidden>
+        <details id="det-flores" hidden open>
+          <summary>Tu mezcla del gotero</summary>
+          <div class="dentro"><ul class="flores" id="flores"></ul></div>
+        </details>
+      </section>
+      <p class="nota-chica" id="flores-vacio" hidden>Tus flores aparecen acá cuando tu papel las trae.</p>
+    </div>
+    <div class="panel-tab" role="tabpanel" id="tab-comidas" aria-labelledby="tab-b-comidas" hidden>
+      <p class="comidas-temporada" id="comidas-temporada" hidden></p>
+      <div class="comidas-cols" id="comidas-cols" hidden>
+        <div class="col suma" id="col-suma" hidden><p class="sub-rotulo">Sumá</p><ul id="comidas-suma"></ul></div>
+        <div class="col pausa" id="col-pausa" hidden><p class="sub-rotulo">Por ahora, pausá</p><ul id="comidas-pausa"></ul></div>
+      </div>
+      <p class="nota-chica" id="comidas-detalle" hidden>El detalle, con tus reemplazos y tu día, está en tu plan de comidas.</p>
+      <p class="nota-chica" id="comidas-vacio" hidden>Cuando tengas tu plan de comidas, acá vas a ver qué sumar y qué pausar.</p>
+    </div>
+  </section>
+
+  <!-- CONTACTO: WhatsApp y mail (sin Instagram). -->
+  <section class="pantalla" id="pant-contacto" aria-label="Contacto">
+    <div class="encabezado">
+      <p class="rotulo">Hablemos</p>
+      <h2 class="titulo-pant">Acá estoy</h2>
+      <p class="bajada">Elegí por dónde, según lo que necesites.</p>
+    </div>
+    <div class="bloque">
+      <a class="fila" id="contacto-wa" href="https://wa.me/5493434518981" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 25l1.6-5A10 10 0 1 1 10 23.4z"/><path d="M11.5 10.5c.3 3.4 3.7 7 8 8l1.5-2-2.4-1.3-1 1c-1.5-.6-3-2.1-3.6-3.6l1-1-1.3-2.4z"/></svg>
+        <span class="que-es"><span class="t">WhatsApp</span><span class="d">Para consultas cortas. Te contesto yo.</span></span>
+        <svg class="flecha-d" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M5 2l5 5-5 5"/></svg>
+      </a>
+      <a class="fila" id="contacto-mail" href="mailto:tarjetacuantica0@gmail.com?subject=Consulta%20desde%20mi%20portal" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="7" width="23" height="16" rx="2"/><path d="M4 8l11 8 11-8"/></svg>
+        <span class="que-es"><span class="t">Mail</span><span class="d">Para contarme cómo vas. Lo leo y lo sumo a tu caso.</span></span>
+        <svg class="flecha-d" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M5 2l5 5-5 5"/></svg>
+      </a>
+      <p class="pie"><button type="button" class="link-nuevo" id="contacto-link-nuevo">¿Te mandé un link nuevo? Pegalo acá</button></p>
+    </div>
+  </section>
+
+  <p class="pie" id="pie"></p>
+  <p class="pie" id="nombre-cambiar-caja" hidden><button type="button" class="link-nuevo" id="nombre-cambiar">Cambiar cómo te saludo</button></p>
+  <p class="pie" id="link-nuevo-caja" hidden><button type="button" class="link-nuevo" id="link-nuevo">¿Te mandé un link nuevo? Pegalo acá</button></p>
+  <img class="sello" src="imagenes/simbolo-adn.webp" alt="" width="78" height="200">
+  <p class="lema">No tratamos el síntoma · Ajustamos la frecuencia que lo CAUSA</p>
+
+  <nav class="nav" id="nav" aria-label="Secciones de tu portal">
+    <div class="nav-dentro">
+      <button type="button" class="nav-b activo" data-p="inicio" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21V11a6 6 0 0 1 12 0v10"/><path d="M3.5 21h17"/></svg><span>Inicio</span></button>
+      <button type="button" class="nav-b" data-p="cuerpo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.5" r="2.2"/><path d="M12 7.5v7M7 10l5-1.5 5 1.5M9.5 22l2.5-7.5 2.5 7.5"/></svg><span>Cuerpo</span></button>
+      <button type="button" class="nav-b" data-p="estudio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13h4l2.5-6 3.5 12 3.5-9 2 3H22"/></svg><span>Estudio</span></button>
+      <button type="button" class="nav-b" data-p="remedios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2.5h4M10.5 2.5v3h3v-3M9 5.5h6l1 3v11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-11z"/><path d="M8 12h8"/></svg><span>Remedios</span></button>
+      <button type="button" class="nav-b" data-p="contacto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Contacto</span></button>
+    </div>
+  </nav>
+</main>
+
+<div class="hoja-control" id="hoja-control" role="dialog" aria-modal="true" aria-label="Tu control" hidden>
+  <div class="hoja-barra"><button type="button" class="hoja-cerrar" id="hoja-cerrar">← Volver a mi portal</button></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  // LA CLAVE PUBLICA DE LA NOTEBOOK: solo se muestra lo que ella firmo.
+  var CLAVE = {"kty":"EC","crv":"P-256","x":"8uybCJO61wAry8jFXs2rpAH1KMbGtz8waPuKy53ILV8","y":"5ta0I5KakphErVyEaKII3DhjSuL4g1PfTu-ao8H3qm0"};
+  // Solo el ejemplo que se mira en la notebook trae el paquete adentro.
+  var LOCAL = null;
+  // EL PORTAL COMO APP (13/10, portal_como_app.py). Con la llave apagada,
+  // COMO_APP es false y MAIL vacio: todo sigue como antes.
+  var COMO_APP = true;
+  var MAIL = "tarjetacuantica0@gmail.com";
+  // (15/10, P6) EL PAGO DE LA ETAPA DESDE EL PORTAL (pago_etapa_portal.py).
+  // Con la llave apagada queda en false: la vuelta del pago no se lee.
+  var PAGO_ETAPA = true;
+  var PAGO_AVISADO = "cuantica-portal-pago-";
+  var VUELTA_PAGO = 0;
+  // LA ENTRADA UNICA DEL PORTAL (15/10, P4, portal_relay.py). Con la llave
+  // apagada RELAY es "" y los pedidos siguen por el mail de hoy.
+  var RELAY = "https://script.google.com/macros/s/AKfycbwrzY3uUcoTb47YV0JQ0Cq5cZHJB7G0oK3pln3-Rz67si_w6Hp_9dD2mnjnceqAO4sH/exec";
+  // (16/10, P7) LAS PREGUNTAS ADENTRO DEL PORTAL (portal_preguntas.py): el
+  // control se abre en una hoja del portal y la respuesta va por el relay.
+  // Con la llave apagada (o sin relay) queda en false: como antes.
+  var PREGUNTAS_PORTAL = false;
+  // (16/10, decision de Jose) El punto gris que igual se trabaja en la etapa
+  // de ahora titila. Con la llave apagada queda en false: gris quieto.
+  var GRIS_TITILA = false;
+  var NO_ACTIVO = "Este link no está activo. Escribime y te paso uno nuevo.";
+  var VIEJO = "Tu teléfono necesita una versión más nueva del navegador para abrir tu portal. Actualizalo y volvé a tocar el link.";
+  var ZONAS = ["cabeza", "cuello", "pecho", "abdomen", "pelvis", "brazos", "piernas", "todo"];
+  var NOMBRES = {cabeza: "Cabeza", cuello: "Cuello y garganta", pecho: "Pecho", abdomen: "Abdomen",
+                 pelvis: "Pelvis", brazos: "Brazos y manos", piernas: "Piernas y pies", todo: "Todo el cuerpo"};
+  var CLAVES = ["v", "ahora", "camino", "encuentro", "comidas", "precio", "zonas", "se_vio", "motivo", "fechas", "exterior", "act", "flores", "pedir", "sx", "tomas", "pago", "envio"];
+  var SVG = "http://www.w3.org/2000/svg";
+  // (14/10, portal v3) Las pantallas de la barra de abajo, la figura de Tu
+  // cuerpo segun la ficha, el nombre que escribe el paciente (queda en SU
+  // celular, nunca en el link) y el tope del camino (el mismo de Python).
+  var PANTALLAS = ["inicio", "cuerpo", "estudio", "remedios", "contacto"];
+  var FIGURAS = {mujer: "imagenes/cuerpo-mujer.webp", hombre: "imagenes/cuerpo-hombre.webp", neutra: "imagenes/silueta-neutra.webp"};
+  // El nombre se guarda POR PORTAL (con el kid en la llave): en un celular
+  // compartido, el portal de cada paciente saluda con el suyo.
+  var NOMBRE_GUARDADO = "cuantica-portal-nombre-";
+  // Sin memoria en el navegador (modo privado), el nombre que escribio en
+  // esta visita: saluda igual aunque no quede para la proxima.
+  var nombreDeLaVisita = "";
+  var TOPE_ETAPAS = 12;
+  // (14/10, P1b) Mas dias que esto no es una etapa: es un dato roto (el
+  // mismo tope de Python, portal_paciente.TOPE_DIAS_ETAPA).
+  var TOPE_DIAS_ETAPA = 120;
+  var TABS = ["remedios", "flores", "comidas"];
+  // El estado de la pagina que sobrevive a pintar de nuevo (un link nuevo
+  // pegado adentro): la zona que se elige, la pestaña, y si ya se pinto.
+  var elegirZona = null, pintado = false, escuchando = false, tabActual = "remedios", hayAhoraG = false;
+  // (P3) Las tomas del link (las de la etapa en curso): las lee la pestaña
+  // Remedios para la dosis de cada remedio.
+  var tomasG = null;
+  var quieto = false;
+  try { quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { quieto = false; }
+  // Con JavaScript, las tarjetas esperan su turno para entrar (sin JS, se ven).
+  try { document.documentElement.classList.add("js"); } catch (e) { /* se ve todo de una */ }
+
+  /*ABRIR*/
+  function b64(t) {
+    t = String(t || "").replace(/-/g, "+").replace(/_/g, "/");
+    while (t.length % 4) { t += "="; }
+    var s = atob(t), out = new Uint8Array(s.length);
+    for (var i = 0; i < s.length; i++) { out[i] = s.charCodeAt(i); }
+    return out;
+  }
+  function enc(t) { return new TextEncoder().encode(t); }
+  function inflar(bytes) {
+    if (typeof DecompressionStream === "undefined") { return Promise.reject(new Error("viejo")); }
+    var ds = new DecompressionStream("deflate");
+    var w = ds.writable.getWriter();
+    w.write(bytes); w.close();
+    return new Response(ds.readable).arrayBuffer().then(function (b) { return new Uint8Array(b); });
+  }
+  // EL MISMO CAMINO QUE portal_paciente.abrir (los tests los comparan):
+  // firma de la notebook, descifrado AES-GCM, y la lista cerrada de claves.
+  function abrirPaquete(frag, clave, cripto) {
+    var p = String(frag || "").replace(/^#/, "").split(".");
+    if (p.length !== 5 || p[0] !== "p1" || !/^[A-Za-z0-9_-]{16}$/.test(p[1])) { return Promise.resolve(null); }
+    var kid = p[1], datos, modo;
+    var sub = cripto.subtle;
+    return sub.importKey("jwk", {kty: clave.kty, crv: clave.crv, x: clave.x, y: clave.y, ext: true},
+                         {name: "ECDSA", namedCurve: "P-256"}, false, ["verify"])
+      .then(function (pub) {
+        return sub.verify({name: "ECDSA", hash: "SHA-256"}, pub, b64(p[4]), enc("p1." + kid + "." + p[3]));
+      })
+      .then(function (ok) {
+        if (!ok) { throw new Error("firma"); }
+        datos = b64(p[3]); modo = datos[0];
+        if (modo !== 0 && modo !== 1) { throw new Error("modo"); }
+        return sub.importKey("raw", b64(p[2]), {name: "AES-GCM"}, false, ["decrypt"]);
+      })
+      .then(function (k) {
+        return sub.decrypt({name: "AES-GCM", iv: datos.slice(1, 13), additionalData: enc("p1." + kid + "." + modo)},
+                           k, datos.slice(13));
+      })
+      .then(function (pt) { pt = new Uint8Array(pt); return modo === 1 ? inflar(pt) : pt; })
+      .then(function (pt) {
+        var d = JSON.parse(new TextDecoder().decode(pt));
+        if (!d || typeof d !== "object" || Array.isArray(d)) { return null; }
+        for (var k in d) {
+          if (Object.prototype.hasOwnProperty.call(d, k) && CLAVES.indexOf(k) < 0) { return null; }
+        }
+        if (!Array.isArray(d.camino) || !d.camino.length) { return null; }
+        // La clave del link viaja con el paquete: abre las laminas pintadas.
+        return {kid: kid, d: d, k: p[2]};
+      })
+      .catch(function (e) { if (e && e.message === "viejo") { throw e; } return null; });
+  }
+  function huella(kid, cripto) {
+    return cripto.subtle.digest("SHA-256", enc("portal:" + kid)).then(function (b) {
+      var h = Array.prototype.map.call(new Uint8Array(b), function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
+      return h.slice(0, 32);
+    });
+  }
+  /*FIN-ABRIR*/
+
+  /*APP*/
+  // EL PORTAL COMO APP, EN PURO (los tests lo corren con node).
+  // Donde se abrio: instalada ("app"), compu, Android, iPhone, o adentro de
+  // otra aplicacion (Instagram, Facebook) que no deja instalar.
+  function plataforma(ua, toques, suelta) {
+    ua = String(ua || "");
+    if (suelta) { return "app"; }
+    var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && toques > 1);
+    var android = /Android/.test(ua);
+    if (!ios && !android) { return "compu"; }
+    if (/FBAN|FBAV|FB_IAB|FBIOS|Instagram|Line\/|MicroMessenger|GSA\/|; wv\)/.test(ua)) { return "enapp"; }
+    // En el iPhone solo Safari agrega a inicio con los dos pasos: Chrome,
+    // Firefox, Edge o el navegador de adentro de otra app (sin "Safari/")
+    // tienen que abrirlo en Safari primero.
+    if (ios && (/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua) || !/Safari\//.test(ua))) { return "iosafuera"; }
+    return ios ? "ios" : "android";
+  }
+  // Que pantalla va: el portal, o la puerta de instalar (obligatoria en el
+  // celular). En la compu entra igual: nadie queda afuera.
+  function queMostrar(comoApp, plat) {
+    if (!comoApp || plat === "app" || plat === "compu") { return "portal"; }
+    return (plat === "ios" || plat === "android" || plat === "enapp" || plat === "iosafuera") ? plat : "portal";
+  }
+  // El link se recuerda SOLO en el celular (el icono lo necesita). En la
+  // compu no: en una compu compartida, el que entra despues sin link no ve
+  // el portal de otro (arreglo del 13/10).
+  function recuerdaEn(comoApp, plat) {
+    return !!comoApp && (plat === "app" || plat === "android" || plat === "ios");
+  }
+  // Que links se prueban, en orden. En el navegador: el del # (recien
+  // tocado), el del ejemplo de la notebook y, en el celular, el ultimo bueno
+  // guardado. Abierta como APP: primero el guardado (el iPhone deja en el
+  // icono, para siempre, el link del dia que se instalo; el guardado es el
+  // ultimo que se abrio o se pego ahi adentro) y despues el del #. Si el
+  // primero no abre, se prueba el siguiente.
+  function candidatosLink(hash, local, recordado, comoApp, plat) {
+    var h = String(hash || "").replace(/^#/, "");
+    var rec = (recuerdaEn(comoApp, plat) && typeof recordado === "string" &&
+               /^p1\.[A-Za-z0-9_-]{16}\./.test(recordado)) ? recordado : "";
+    var loc = (typeof local === "string" && local) ? local : "";
+    if (plat !== "app") { var x = h || loc || rec; return x ? [x] : []; }
+    var out = [];
+    [rec, h, loc].forEach(function (y) { if (y && out.indexOf(y) < 0) { out.push(y); } });
+    return out;
+  }
+  function elegirLink(hash, local, recordado, comoApp, plat) {
+    return candidatosLink(hash, local, recordado, comoApp, plat)[0] || "";
+  }
+  // Lo que el paciente pega: el link entero o solo lo de despues del #.
+  function linkPegado(t) {
+    var s = String(t || "").replace(/\s+/g, "");
+    var i = s.indexOf("#");
+    if (i >= 0) { s = s.slice(i + 1); }
+    return /^p1\.[A-Za-z0-9_-]{16}\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(s) ? s : "";
+  }
+  // El link del control de etapa solo vale si es una pagina del mismo sitio.
+  function controlValido(u) {
+    return typeof u === "string" && u.length <= 1900 &&
+      /^https:\/\/sesiones\.cuantica-card\.com\/[a-z0-9-]{3,40}\.html#[A-Za-z0-9_=.-]{1,1800}$/.test(u);
+  }
+  // Los botones de adentro, segun lo que vino FIRMADO en "pedir". El de la
+  // etapa siguiente, recien desde el dia "d" (3 semanas de etapa), contra el
+  // dia del telefono ("hoy", AAAA-MM-DD): sin "d" firmado, no aparece.
+  function botonesPedir(p, mail, hoy) {
+    var out = [];
+    if (!p || typeof p !== "object" || Array.isArray(p) || typeof mail !== "string" || !mail) { return out; }
+    var dia = /^\d{4}-\d{2}-\d{2}$/;
+    if (p.f === 1) { out.push({que: "f", texto: "Pedir otro frasquito", u: ""}); }
+    if (p.e === 1 && typeof p.d === "string" && dia.test(p.d) && typeof hoy === "string" && dia.test(hoy) && hoy >= p.d) {
+      out.push({que: "e", texto: "Pasar a la etapa siguiente", u: controlValido(p.u) ? p.u : ""});
+    }
+    return out;
+  }
+  function hoyLocal(d) {
+    d = d || new Date();
+    return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+  }
+  // El mail del pedido, para Jose: el paciente lo ve escrito y toca Enviar.
+  function mailPedido(mail, que, codigo) {
+    if (!/^[^@\s"<>?&]+@[^@\s"<>?&]+\.[a-z]{2,}$/i.test(String(mail || "")) || !/^[a-f0-9]{10}$/.test(String(codigo || ""))) { return ""; }
+    var asunto, cuerpo;
+    if (que === "f") {
+      asunto = "Quiero otro frasquito";
+      cuerpo = "Hola José, quiero pedirte otro frasquito de mi remedio.";
+    } else if (que === "e") {
+      asunto = "Terminé mi etapa";
+      cuerpo = "Hola José, terminé mi etapa. ¿Coordinamos cómo sigo?";
+    } else { return ""; }
+    cuerpo += "\n\nCODIGO-PORTAL " + codigo + " " + (que === "f" ? "FRASQUITO" : "ETAPA");
+    return "mailto:" + mail + "?subject=" + encodeURIComponent(asunto) + "&body=" + encodeURIComponent(cuerpo);
+  }
+  // El codigo del renglon: identifica el link sin abrir nada (el mismo
+  // calculo que portal_como_app.codigo_de_pedido).
+  function codigoPedido(kid, cripto) {
+    return cripto.subtle.digest("SHA-256", new TextEncoder().encode("pedido:" + kid)).then(function (b) {
+      return Array.prototype.map.call(new Uint8Array(b), function (x) { return ("0" + x.toString(16)).slice(-2); }).join("").slice(0, 10);
+    });
+  }
+  /*FIN-APP*/
+
+  /*RELAY*/
+  // LA ENTRADA UNICA DEL PORTAL, EN PURO (los tests la corren con node). El
+  // pedido viaja al relay de Google con el codigo del link ("pedir"."r") y
+  // SELLADO con la clave propia del link (la que solo tienen este celular y
+  // la notebook). Si el relay no contesta ok, el camino de hoy: el mail.
+  var PEDIDOS_RELAY = ["frasquito", "preguntas", "turno", "envio"];
+  var CAMPOS_ENVIO = ["recibe", "calle", "numero", "piso", "depto", "referencia", "localidad", "provincia", "cp", "telefono", "dni"];
+  var RX_CUANDO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}-03:00$/;
+  function relayValido(u) {
+    return typeof u === "string" && /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/.test(u);
+  }
+  // El codigo del link, solo si es de ESTE link.
+  function firmaRelay(r, kid) {
+    return (typeof r === "string" && /^pt_[A-Za-z0-9_-]{16}\.[0-9a-f]{32}$/.test(r) && r.slice(3, 19) === kid) ? r : "";
+  }
+  // La hora de Argentina, como la lee la notebook.
+  function cuandoAhora(d) {
+    d = d || new Date();
+    return new Date(d.getTime() - 3 * 3600000).toISOString().slice(0, 19) + "-03:00";
+  }
+  function hexDe(b) {
+    return Array.prototype.map.call(b, function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
+  }
+  // El pedido como TEXTO (lo que se sella). Lista cerrada por tipo: lo que
+  // no corresponde, no sale (y entonces no hay pedido).
+  function pedidoTexto(tipo, campos, nonce, cuando) {
+    if (PEDIDOS_RELAY.indexOf(tipo) < 0 || !/^[0-9a-f]{16,32}$/.test(String(nonce || "")) || !RX_CUANDO.test(String(cuando || ""))) { return ""; }
+    var p = {tipo: tipo, n: nonce, cuando: cuando};
+    campos = (campos && typeof campos === "object") ? campos : {};
+    if (tipo === "preguntas") {
+      if (typeof campos.texto !== "string" || !campos.texto || campos.texto.length > 12000) { return ""; }
+      p.texto = campos.texto;
+    } else if (tipo === "turno") {
+      if (typeof campos.turno !== "string" || !RX_CUANDO.test(campos.turno)) { return ""; }
+      p.turno = campos.turno;
+    } else if (tipo === "envio") {
+      var e = {}, n = 0, src = campos.envio;
+      if (!src || typeof src !== "object" || Array.isArray(src)) { return ""; }
+      for (var k in src) {
+        if (!Object.prototype.hasOwnProperty.call(src, k)) { continue; }
+        if (CAMPOS_ENVIO.indexOf(k) < 0 || typeof src[k] !== "string" || src[k].length > 120) { return ""; }
+        if (src[k].trim()) { e[k] = src[k].trim(); n++; }
+      }
+      if (!n) { return ""; }
+      p.envio = e;
+    }
+    return JSON.stringify(p);
+  }
+  function sellarPedido(claveB64, kid, texto, cripto) {
+    return cripto.subtle.importKey("raw", b64(claveB64), {name: "HMAC", hash: "SHA-256"}, false, ["sign"])
+      .then(function (k) { return cripto.subtle.sign("HMAC", k, enc("portal1|" + kid + "|" + texto)); })
+      .then(function (b) { return hexDe(new Uint8Array(b)); });
+  }
+  function sobrePedido(firma, texto, sello) {
+    return JSON.stringify({meta: {origen: "portal_v1", v: 1, firma: firma}, pedido: texto, sello: sello});
+  }
+  function nonceNuevo(cripto) {
+    var a = new Uint8Array(8);
+    cripto.getRandomValues(a);
+    return hexDe(a);
+  }
+  // Manda el sobre. {ok, motivo}; ok SOLO con {ok: true} del relay. Un
+  // tropiezo de red (u "ocupado") se prueba UNA vez mas.
+  function mandarPedido(url, sobreTxt, fetchFn, espera) {
+    if (!relayValido(url) || typeof fetchFn !== "function") { return Promise.resolve({ok: false, motivo: "sin_relay"}); }
+    var una = function () {
+      return Promise.resolve().then(function () {
+        return fetchFn(url, {method: "POST", body: sobreTxt, credentials: "omit", referrerPolicy: "no-referrer"});
+      }).then(function (r) { return r.text(); })
+        .then(function (t) {
+          var j = null;
+          try { j = JSON.parse(t); } catch (e) { j = null; }
+          return (j && j.ok === true) ? {ok: true, motivo: ""} : {ok: false, motivo: (j && typeof j.motivo === "string") ? j.motivo : "rara"};
+        })
+        .catch(function () { return {ok: false, motivo: "red"}; });
+    };
+    return una().then(function (r) {
+      if (r.ok || (r.motivo !== "red" && r.motivo !== "ocupado" && r.motivo !== "rara")) { return r; }
+      return new Promise(function (res) { setTimeout(res, typeof espera === "number" ? espera : 3000); }).then(una);
+    });
+  }
+  // (16/10, P5) LOS DATOS DE ENVIO, EN PURO (los tests los corren con
+  // node). La lista cerrada del portal (portal_envio.CAMPOS, sin el DNI),
+  // en el orden del formulario, con su rotulo.
+  var ENVIO_PORTAL = [["calle", "Calle"], ["numero", "Número"], ["piso", "Piso"], ["depto", "Depto"],
+                      ["localidad", "Localidad"], ["provincia", "Provincia"], ["cp", "Código postal"],
+                      ["recibe", "Quién lo recibe"], ["telefono", "Celular"], ["referencia", "Referencia (opcional)"]];
+  var ENVIO_OBLIGATORIOS = ["calle", "numero", "localidad", "provincia", "cp"];
+  // La direccion en una linea, para leerla de un vistazo. "" sin calle.
+  function envioTexto(d) {
+    if (!d || typeof d !== "object" || Array.isArray(d)) { return ""; }
+    var s = function (k) { return typeof d[k] === "string" ? d[k].trim() : ""; };
+    if (!s("calle")) { return ""; }
+    var l1 = (s("calle") + " " + s("numero")).trim();
+    if (s("piso")) { l1 += ", piso " + s("piso"); }
+    if (s("depto")) { l1 += " " + s("depto"); }
+    var l2 = [s("localidad"), s("provincia")].filter(Boolean).join(", ");
+    if (s("cp")) { l2 += (l2 ? " " : "") + "(" + s("cp") + ")"; }
+    return l1 + (l2 ? " · " + l2 : "");
+  }
+  // Lo que escribio en el formulario, ya limpio: solo la lista cerrada,
+  // texto de hasta 120 letras. {ok, envio, falta}: sin un obligatorio, no
+  // sale (y se dice cual falta).
+  function envioDelFormulario(v) {
+    var out = {}, falta = [];
+    v = (v && typeof v === "object") ? v : {};
+    for (var i = 0; i < ENVIO_PORTAL.length; i++) {
+      var k = ENVIO_PORTAL[i][0], x = typeof v[k] === "string" ? v[k].trim().slice(0, 120) : "";
+      if (x) { out[k] = x; }
+    }
+    for (var j = 0; j < ENVIO_OBLIGATORIOS.length; j++) {
+      if (!out[ENVIO_OBLIGATORIOS[j]]) {
+        for (var m = 0; m < ENVIO_PORTAL.length; m++) { if (ENVIO_PORTAL[m][0] === ENVIO_OBLIGATORIOS[j]) { falta.push(ENVIO_PORTAL[m][1]); } }
+      }
+    }
+    return {ok: falta.length === 0, envio: out, falta: falta};
+  }
+  /*FIN-RELAY*/
+
+  /*PREGUNTAS*/
+  // (16/10, P7) LAS PREGUNTAS DESDE EL PORTAL, EN PURO (los tests las corren
+  // con node). El control de etapa (la misma pagina del WhatsApp, del mismo
+  // sitio) se abre en una hoja del portal; cuando el paciente lo manda, el
+  // control le pasa el texto al portal, y el portal lo SELLA con la clave
+  // propia del link y lo manda por el relay como pedido "preguntas". La
+  // clave nunca sale del portal.
+  var MENSAJE_CONTROL = "cuantica-control", MENSAJE_LISTO = "cuantica-control-listo";
+  var TOPE_SOBRE = 19500;
+  // El link del control para la hoja: solo uno del mismo sitio (el portero
+  // de siempre), con la marca de que se abre adentro del portal.
+  function controlEnElPortal(u) {
+    return controlValido(u) ? u + "&portal=1" : "";
+  }
+  // (16/10, ataque) La hoja se arma solo si el portal se abrio en el MISMO
+  // sitio que el control (en "Ver como lo ve" de la notebook el marco
+  // quedaba en blanco): si no, el link aparte de siempre.
+  function mismoSitio(u, origen) {
+    try { return typeof origen === "string" && !!origen && new URL(u).origin === origen; } catch (e) { return false; }
+  }
+  // (16/10, ataque) El codigo trae al menos una respuesta (la misma cuenta
+  // que control_de_etapa.hay_respuesta). Un control vacio no se manda: la
+  // app lo rechazaria y el boton quedaba trabado en "ya me mandaste".
+  function controlConRespuesta(t) {
+    try {
+      var m = /CODIGO-CONTROL\s+([A-Za-z0-9_\-\s>]{8,}?)\s*FIN-CODIGO/.exec(String(t || ""));
+      if (!m) { return false; }
+      var d = JSON.parse(new TextDecoder().decode(b64(m[1].replace(/[\s>]+/g, ""))));
+      if (!d || typeof d !== "object") { return false; }
+      var hay = function (v) { return v !== null && v !== undefined && v !== "" && v !== false; };
+      var txt = function (v) { return typeof v === "string" && !!v.trim(); };
+      if (Array.isArray(d.a) && d.a.some(function (f) { return Array.isArray(f) && f.some(hay); })) { return true; }
+      if (d.q && typeof d.q === "object" && Object.keys(d.q).some(function (k) { return hay(d.q[k]); })) { return true; }
+      if (hay(d.n) || txt(d.c) || txt(d.x)) { return true; }
+      if (Array.isArray(d.p) && d.p.some(hay)) { return true; }
+      return !!d.w && typeof d.w === "object" && Object.keys(d.w).some(function (k) { return txt(d.w[k]); });
+    } catch (e) { return false; }
+  }
+  // Lo que manda el control: {tipo, v: 1, texto} con su CODIGO-CONTROL
+  // cerrado. Cualquier otra cosa, "".
+  function textoDelControl(data) {
+    if (!data || typeof data !== "object" || Array.isArray(data) || data.tipo !== MENSAJE_CONTROL || data.v !== 1) { return ""; }
+    var t = data.texto;
+    if (typeof t !== "string" || !t || t.length > 12000 || t.indexOf("CODIGO-CONTROL ") < 0 || t.indexOf("FIN-CODIGO") < 0) { return ""; }
+    return t;
+  }
+  // Solo se escucha a la hoja que abrio ESTE portal, del mismo sitio.
+  function deLaHoja(origen, fuente, propioOrigen, marco) {
+    return !!marco && fuente === marco && typeof origen === "string" && origen === propioOrigen;
+  }
+  // El pedido: el mismo texto del control (un segundo toque, o probar de
+  // nuevo) sale con el MISMO pedido; alla cuenta una vez. Uno nuevo si
+  // cambio lo que contesto.
+  function pedidoDelControl(texto, ya, nonce, cuando) {
+    if (ya && typeof ya === "object" && typeof ya.c === "string" && ya.c === texto && typeof ya.t === "string" && ya.t) { return ya.t; }
+    return pedidoTexto("preguntas", {texto: texto}, nonce, cuando);
+  }
+  // El sobre entra en el relay (su tope es 20.000 bytes): si no, el control
+  // ofrece el mail de hoy.
+  function sobreEntra(s) {
+    return typeof s === "string" && !!s && new TextEncoder().encode(s).length <= TOPE_SOBRE;
+  }
+  function respuestaAlControl(ok, motivo) {
+    var r = {tipo: MENSAJE_LISTO, v: 1, ok: ok === true};
+    if (ok !== true && motivo === "vacio") { r.motivo = "vacio"; }
+    return r;
+  }
+  // Si ya lo mando (desde este celular) para ESTE control: el boton lo dice.
+  function yaMandoElControl(ya, u) {
+    return !!ya && typeof ya === "object" && ya.ok === true && typeof u === "string" && !!u && ya.u === u;
+  }
+  /*FIN-PREGUNTAS*/
+
+  /*LAMINAS*/
+  // LAS LAMINAS PINTADAS (13/10). EL MISMO CAMINO QUE portal_carga.abrir_lamina
+  // (los tests los comparan): la huella tiene que ser la que vino FIRMADA en
+  // el paquete, se descifra con la clave del link, y tiene que ser una
+  // imagen. Si algo no cierra, no se muestra nada (la zona queda como hoy).
+  function hex32(b) {
+    return Array.prototype.map.call(new Uint8Array(b), function (x) { return ("0" + x.toString(16)).slice(-2); }).join("").slice(0, 32);
+  }
+  function b64std(bytes) {
+    var s = "";
+    for (var i = 0; i < bytes.length; i += 0x8000) { s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); }
+    return btoa(s);
+  }
+  function b64u(bytes) { return b64std(bytes).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+  function carpetaLaminas(kid, cripto) {
+    return cripto.subtle.digest("SHA-256", enc("laminas:" + kid)).then(hex32);
+  }
+  function laminaValida(c) {
+    return !!c && typeof c.id === "string" && /^[a-f0-9]{24}$/.test(c.id) &&
+      typeof c.h === "string" && /^[A-Za-z0-9_-]{43}$/.test(c.h) && typeof c.t === "string";
+  }
+  function abrirLamina(datos, clave, kid, c, cripto) {
+    var sub = cripto.subtle;
+    if (!laminaValida(c) || !datos || datos.length < 13) { return Promise.resolve(null); }
+    return sub.digest("SHA-256", datos).then(function (h) {
+      if (b64u(new Uint8Array(h)) !== c.h) { throw new Error("huella"); }
+      return sub.importKey("raw", b64(clave), {name: "AES-GCM"}, false, ["decrypt"]);
+    }).then(function (k) {
+      return sub.decrypt({name: "AES-GCM", iv: datos.slice(0, 12), additionalData: enc("p1." + kid + ".lam." + c.id)},
+                         k, datos.slice(12));
+    }).then(function (pt) {
+      pt = new Uint8Array(pt);
+      var tipo = "";
+      if (pt.length > 12 && pt[0] === 0x52 && pt[1] === 0x49 && pt[2] === 0x46 && pt[3] === 0x46 &&
+          pt[8] === 0x57 && pt[9] === 0x45 && pt[10] === 0x42 && pt[11] === 0x50) { tipo = "image/webp"; }
+      else if (pt.length > 8 && pt[0] === 0x89 && pt[1] === 0x50 && pt[2] === 0x4E && pt[3] === 0x47) { tipo = "image/png"; }
+      if (!tipo) { return null; }
+      return "data:" + tipo + ";base64," + b64std(pt);
+    }).catch(function () { return null; });
+  }
+  /*FIN-LAMINAS*/
+
+  /*CAMINO*/
+  // EL CAMINO DEL ZOOM (13/10, camino_del_zoom.py). Los pasos que vinieron
+  // FIRMADOS en el paquete, en el orden en que se leen (de afuera hacia
+  // adentro, rama por rama). Cada uno con su profundidad (para la sangria),
+  // de donde se entro (el titulo del paso de arriba) y el numero de la marca
+  // (0 = sin marca: no se sabe el lugar con seguridad). Un paso que cuelga de
+  // uno que no vale, no sale. Lo mismo que _camino_publico en Python (los
+  // tests lo comparan con node).
+  function ordenCamino(pasos, tituloAfuera) {
+    var out = [], mapa = {};
+    if (!Array.isArray(pasos)) { return out; }
+    for (var k = 0; k < pasos.length && k < 24; k++) {
+      var s = pasos[k];
+      if (!laminaValida(s) || typeof s.p !== "number" || typeof s.n !== "number" ||
+          s.p % 1 !== 0 || s.n % 1 !== 0 || s.n < 0 || s.n > 9) { continue; }
+      var prof = 0, desde = tituloAfuera || "", pi = -1;
+      if (s.p !== -1) {
+        if (mapa[s.p] === undefined) { continue; }
+        pi = mapa[s.p];
+        prof = out[pi].prof + 1;
+        desde = out[pi].t;
+      }
+      mapa[k] = out.length;
+      out.push({id: s.id, h: s.h, t: s.t, n: s.n, prof: prof, desde: desde, pi: pi});
+    }
+    return out;
+  }
+  function textoPaso(s) {
+    return s.n ? "Por la marca " + s.n + " de «" + s.desde + "» entré a:" : "Desde «" + s.desde + "» entré a:";
+  }
+  /*FIN-CAMINO*/
+
+  function el(id) { return document.getElementById(id); }
+  // (P2) las 4 rayitas del tramo (se llenan por CSS segun la clase tN)
+  function medidor() {
+    var m = document.createElement("span");
+    m.className = "medidor";
+    for (var i = 0; i < 4; i++) { m.appendChild(document.createElement("span")); }
+    return m;
+  }
+  function texto(id, t) { var e = el(id); if (e) { e.textContent = t || ""; } }
+  function nuevo(tag, clase, t) {
+    var e = document.createElement(tag);
+    if (clase) { e.className = clase; }
+    if (t !== undefined && t !== null) { e.textContent = String(t); }
+    return e;
+  }
+  function str(v) { return typeof v === "string" ? v : ""; }
+  function listo() { var a = el("abriendo"); if (a) { a.hidden = true; } }
+  function avisar(t) {
+    listo();
+    el("puerta").hidden = true; el("portal").hidden = true;
+    el("instalar").hidden = true; el("sin-link").hidden = true;
+    texto("aviso-texto", textoDelAviso(t, VUELTA_PAGO, NO_ACTIVO)); el("aviso").hidden = false;
+  }
+  function guardado(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } }
+  function guardar(k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* sin memoria: no pasa nada */ } }
+  // EL CAMINO, EN PURO (los tests lo corren aparte): hasta que item se
+  // pinta el riel. La etapa de ahora; si no hay, la ultima hecha; si
+  // tampoco, ninguno (-1).
+  function hastaDelRiel(clases, iActual) {
+    if (iActual >= 0) { return iActual; }
+    for (var i = clases.length - 1; i >= 0; i--) {
+      if ((" " + clases[i] + " ").indexOf(" hecho ") >= 0) { return i; }
+    }
+    return -1;
+  }
+  // EL FESTEJO, EN PURO: solo si hay una etapa nueva Y el telefono se
+  // acuerda de lo que vio (si la memoria esta bloqueada, festejaria en
+  // cada visita).
+  function hayQueFestejar(hechos, antes, memoria) {
+    return !!memoria && hechos > antes;
+  }
+  // EL ANILLO, EN PURO: que etapa se muestra y cuanto se llena. La de
+  // ahora; si no hay, la ultima hecha; si tampoco, ninguna (0). Nunca pasa
+  // de lleno, y una etapa pendiente no lo llena.
+  function avance(camino) {
+    var total = 0, n = 0, hecha = 0;
+    (Array.isArray(camino) ? camino : []).forEach(function (e) {
+      if (!e || typeof e.n !== "number") { return; }
+      total++;
+      if (e.estado === "actual") { n = e.n; }
+      if (e.estado === "hecho" && e.n > hecha) { hecha = e.n; }
+    });
+    if (!n) { n = hecha; }
+    return {n: n, total: total, frac: total ? Math.min(1, n / total) : 0};
+  }
+  // LAS CIFRAS, EN PURO: etapas recibidas (con fecha), zonas en foco y
+  // remedios distintos. Solo las que tienen algo. Los remedios son los de
+  // TODAS las etapas ya entregadas (no solo la de ahora): por eso dice
+  // "en tu plan" y no "en tu etapa" (ataque del 07/10, pacientes 9 y 13).
+  function cifras(d, zonasConAlgo) {
+    var out = [], recibidas = 0, rem = {};
+    (Array.isArray(d.camino) ? d.camino : []).forEach(function (e) { if (e && str(e.el)) { recibidas++; } });
+    (Array.isArray(d.zonas) ? d.zonas : []).forEach(function (z) {
+      (z && Array.isArray(z.remedios) ? z.remedios : []).forEach(function (r) { if (str(r)) { rem[r.toLowerCase()] = 1; } });
+    });
+    var nr = Object.keys(rem).length;
+    if (recibidas) { out.push({n: recibidas, que: recibidas === 1 ? "Etapa recibida" : "Etapas recibidas"}); }
+    if (zonasConAlgo) { out.push({n: zonasConAlgo, que: zonasConAlgo === 1 ? "Zona en foco" : "Zonas en foco"}); }
+    if (nr) { out.push({n: nr, que: nr === 1 ? "Remedio en tu plan" : "Remedios en tu plan"}); }
+    return out;
+  }
+  function memoriaAnda() {
+    try {
+      var k = "cuantica-portal-prueba", v = String(new Date().getTime());
+      window.localStorage.setItem(k, v);
+      var ok = window.localStorage.getItem(k) === v;
+      window.localStorage.removeItem(k);
+      return ok;
+    } catch (e) { return false; }
+  }
+
+  // LOS NUMEROS QUE CUENTAN: de 0 a su valor, una vez. Quieto: de una.
+  function contar(e, hasta) {
+    if (!e) { return; }
+    if (quieto || !window.requestAnimationFrame || !(hasta > 0)) { e.textContent = String(hasta || 0); return; }
+    var t0 = null, dur = 700;
+    var paso = function (ts) {
+      if (t0 === null) { t0 = ts; }
+      var u = Math.min(1, (ts - t0) / dur), f = 1 - Math.pow(1 - u, 3);
+      e.textContent = String(Math.round(hasta * f));
+      if (u < 1) { window.requestAnimationFrame(paso); }
+    };
+    e.textContent = "0";
+    window.requestAnimationFrame(paso);
+  }
+
+  // CADA COSA ENTRA CUANDO LLEGA A LA PANTALLA (una animacion por cosa).
+  // Sin el vigia del navegador, o quieto, se ve todo de una.
+  var vigia = null;
+  function revelar(e, alVer) {
+    if (!e) { return; }
+    var ya = function () { e.classList.add("visto"); if (alVer) { try { alVer(); } catch (x) { /* sigue */ } } };
+    if (quieto || typeof IntersectionObserver === "undefined") { ya(); return; }
+    try {
+      if (!vigia) {
+        vigia = new IntersectionObserver(function (vistos) {
+          vistos.forEach(function (v) {
+            if (v.isIntersecting) { vigia.unobserve(v.target); if (v.target.__ver) { v.target.__ver(); } }
+          });
+        }, {rootMargin: "0px 0px -8% 0px", threshold: 0.08});
+      }
+      e.__ver = ya;
+      vigia.observe(e);
+    } catch (x) { ya(); }
+  }
+
+  // LA ONDA: el espectro de un instrumento, que se dibuja UNA vez de
+  // izquierda a derecha al abrir el portal y queda quieto. Con "menos
+  // movimiento" se dibuja entera de una. Si algo falla, no hay onda.
+  function ondas() {
+    try {
+      var cv = el("ondas"), cx = cv && cv.getContext && cv.getContext("2d");
+      if (!cx) { return; }
+      var W = 0, H = 0, r = Math.min(window.devicePixelRatio || 1, 2), hecho = 0;
+      var capas = [
+        {f: 1.6, a: 14, c: "rgba(255,255,255,.32)", w: 1},
+        {f: 2.3, a: 11, c: "rgba(255,255,255,.12)", w: .8},
+        {f: 3.4, a: 8, c: "rgba(0,107,100,.8)", w: 1},
+        {f: 5.2, a: 5, c: "rgba(255,255,255,.08)", w: .6}
+      ];
+      var medir = function () {
+        W = cv.clientWidth; H = cv.clientHeight;
+        cv.width = Math.round(W * r); cv.height = Math.round(H * r);
+        cx.setTransform(r, 0, 0, r, 0, 0);
+      };
+      var pintarOndas = function (p) {
+        cx.clearRect(0, 0, W, H);
+        var mid = H * .62;
+        try {
+          var cab = document.querySelector("#portal:not([hidden]) .cabecera");
+          if (cab) { mid = Math.min(H - 30, cab.getBoundingClientRect().bottom + window.scrollY + 16); }
+        } catch (e) { /* queda donde estaba */ }
+        var hasta = W * p;
+        // las marcas del instrumento
+        cx.fillStyle = "rgba(255,255,255,.14)";
+        for (var x = 8; x < hasta; x += 16) { cx.fillRect(x, mid + 26, 1, x % 64 < 16 ? 6 : 3); }
+        capas.forEach(function (k, i) {
+          cx.beginPath(); cx.lineWidth = k.w; cx.strokeStyle = k.c;
+          for (var px = 0; px <= hasta; px += 3) {
+            var u = px / W, env = Math.exp(-Math.pow((u - .5) / .26, 2));
+            var y = mid + env * (k.a * Math.sin(u * Math.PI * 2 * k.f * 2 + i)
+                                 + k.a * .35 * Math.sin(u * Math.PI * 2 * k.f * 5.3));
+            if (px === 0) { cx.moveTo(px, y); } else { cx.lineTo(px, y); }
+          }
+          cx.stroke();
+        });
+      };
+      medir();
+      window.addEventListener("resize", function () { medir(); pintarOndas(1); });
+      if (quieto || !window.requestAnimationFrame) { pintarOndas(1); }
+      if (quieto) { return; }
+      var t0 = null;
+      var cuadro = function (ts) {
+        if (t0 === null) { t0 = ts; }
+        var u = Math.min(1, (ts - t0) / 1100);
+        hecho = 1 - Math.pow(1 - u, 3);
+        pintarOndas(hecho);
+        if (u < 1) { window.requestAnimationFrame(cuadro); }
+      };
+      window.requestAnimationFrame(cuadro);
+    } catch (e) { /* sin onda */ }
+  }
+
+  function horas(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) { return null; }
+    var op = {weekday: "long", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false};
+    try {
+      var mia = new Intl.DateTimeFormat("es-AR", op).format(d);
+      op.timeZone = "America/Argentina/Buenos_Aires";
+      var ar = new Intl.DateTimeFormat("es-AR", op).format(d);
+      return {mia: mia, ar: ar, igual: mia === ar};
+    } catch (e) {
+      return {mia: d.toLocaleString(), ar: "", igual: true};
+    }
+  }
+
+  function tilde() {
+    var s = document.createElementNS(SVG, "svg");
+    s.setAttribute("viewBox", "0 0 16 16"); s.setAttribute("aria-hidden", "true");
+    var p = document.createElementNS(SVG, "path");
+    p.setAttribute("d", "M3 8.5l3.2 3L13 4.5"); p.setAttribute("fill", "none");
+    p.setAttribute("stroke", "currentColor"); p.setAttribute("stroke-width", "2");
+    p.setAttribute("stroke-linecap", "round"); p.setAttribute("stroke-linejoin", "round");
+    s.appendChild(p);
+    return s;
+  }
+
+  // EL FESTEJO: un anillo cobre y una linea. Nada de papelitos.
+  function festejo() {
+    if (quieto) { return; }
+    try {
+      var caja = nuevo("div", "festejo");
+      caja.setAttribute("aria-hidden", "true");
+      caja.appendChild(nuevo("span", "anillo-f"));
+      var dice = nuevo("div", "dice", "Tenés una etapa nueva en tu camino.");
+      caja.appendChild(dice);
+      document.body.appendChild(caja);
+      window.setTimeout(function () { dice.classList.add("se-va"); }, 3200);
+      window.setTimeout(function () { if (caja.parentNode) { caja.parentNode.removeChild(caja); } }, 3600);
+    } catch (e) { /* sin festejo */ }
+  }
+
+  // LAS LAMINAS DE UNA ZONA: se bajan del mismo sitio de la pagina (nada de
+  // terceros), se abren con la clave del link y se muestran solo las que
+  // abren bien. Abierta desde un archivo (sin sitio), no se intenta.
+  var laminasAbiertas = {}, carpetaLam = null, zonaVista = "";
+  function mostrarLaminas(caja, cargas, kid, clave, z) {
+    try {
+      if (!clave || !window.fetch || !(location.protocol === "http:" || location.protocol === "https:")) { return; }
+      var cripto = window.crypto;
+      if (!cripto || !cripto.subtle) { return; }
+      if (!carpetaLam) { carpetaLam = carpetaLaminas(kid, cripto); }
+      var validas = cargas.filter(laminaValida);
+      if (!validas.length) { return; }
+      var titulo = nuevo("p", "que-es", validas.length === 1 ? "La lámina de esta zona" : "Las láminas de esta zona");
+      var puestas = 0;
+      validas.forEach(function (c) {
+        var url = laminasAbiertas[c.id];
+        var abrir = url !== undefined ? Promise.resolve(url) : carpetaLam.then(function (carpeta) {
+          return fetch("laminas/" + carpeta + "/" + c.id + ".bin", {credentials: "omit"})
+            .then(function (x) { return x.ok ? x.arrayBuffer() : undefined; })
+            .then(function (b) { return b ? abrirLamina(new Uint8Array(b), clave, kid, c, cripto) : undefined; });
+        }).catch(function () { return undefined; });
+        abrir.then(function (u) {
+          // Un corte de red (undefined) se vuelve a intentar la proxima vez
+          // que toca la zona; una huella mala (null) queda como fallida.
+          if (u !== undefined) { laminasAbiertas[c.id] = u || null; }
+          if (!u || zonaVista !== z) { return; }
+          if (!puestas) { caja.appendChild(titulo); caja.hidden = false; }
+          puestas++;
+          var fig = nuevo("figure");
+          var img = document.createElement("img");
+          img.alt = "Lámina " + c.t + ", pintada con su carga";
+          img.src = u;
+          fig.appendChild(img);
+          fig.appendChild(nuevo("figcaption", null, c.t));
+          caja.appendChild(fig);
+          if (Array.isArray(c.c) && c.c.length) { mostrarCamino(caja, fig, c, clave, kid, cripto, z); }
+        });
+      });
+    } catch (e) { /* sin laminas: la zona queda como hoy */ }
+  }
+
+  // EL CAMINO DEL ZOOM DE UNA LAMINA: las laminas de adentro debajo de la de
+  // afuera, cada una con su flecha. Los lugares se reservan en orden y cada
+  // imagen aparece cuando abre bien (si no abre, ese paso no se ve).
+  function mostrarCamino(caja, fig, c, clave, kid, cripto, z) {
+    try {
+      var pasos = ordenCamino(c.c, c.t);
+      if (!pasos.length) { return; }
+      var bloque = nuevo("div", "camino");
+      bloque.hidden = true;
+      bloque.appendChild(nuevo("p", "que-es", "Por dónde entré"));
+      var lugares = pasos.map(function (s) {
+        var f = nuevo("figure", "paso");
+        f.hidden = true;
+        f.style.marginLeft = (Math.min(s.prof, 3) * 14) + "px";
+        bloque.appendChild(f);
+        return f;
+      });
+      if (fig.nextSibling) { caja.insertBefore(bloque, fig.nextSibling); } else { caja.appendChild(bloque); }
+      // Un paso se muestra solo si el paso del que cuelga ya se mostro: si la
+      // lamina de arriba no abrio, no se nombra algo que no esta en pantalla.
+      var mostrados = [];
+      pasos.forEach(function (s, i) {
+        var url = laminasAbiertas[s.id];
+        var abrir = url !== undefined ? Promise.resolve(url) : carpetaLam.then(function (carpeta) {
+          return fetch("laminas/" + carpeta + "/" + s.id + ".bin", {credentials: "omit"})
+            .then(function (x) { return x.ok ? x.arrayBuffer() : undefined; })
+            .then(function (b) { return b ? abrirLamina(new Uint8Array(b), clave, kid, s, cripto) : undefined; });
+        }).catch(function () { return undefined; });
+        var arriba = s.pi === -1 ? Promise.resolve(true) : (mostrados[s.pi] || Promise.resolve(false));
+        mostrados[i] = Promise.all([abrir, arriba]).then(function (r) {
+          var u = r[0];
+          if (u !== undefined) { laminasAbiertas[s.id] = u || null; }
+          if (!u || !r[1] || zonaVista !== z) { return false; }
+          var f = lugares[i];
+          f.appendChild(nuevo("p", "flecha", textoPaso(s)));
+          var img = document.createElement("img");
+          img.alt = "Lámina " + s.t;
+          img.src = u;
+          f.appendChild(img);
+          f.appendChild(nuevo("figcaption", null, s.t));
+          f.hidden = false;
+          bloque.hidden = false;
+          return true;
+        }).catch(function () { return false; });
+      });
+    } catch (e) { /* sin camino: la lamina queda como hoy */ }
+  }
+  /*V3*/
+  // LO NUEVO DEL PORTAL V3, EN PURO (los tests lo corren con node).
+  // La figura de Tu cuerpo: la de la ficha ("f" o "m"); sin ese dato, la
+  // NEUTRA (nunca la de mujer por defecto: era de mujer para todos).
+  function figuraDe(sx) {
+    if (sx === "f") { return "mujer"; }
+    if (sx === "m") { return "hombre"; }
+    return "neutra";
+  }
+  // El nombre que escribe el paciente: letras de cualquier alfabeto (con
+  // tildes), espacios, apostrofo, guion y punto. Lo que mete el teclado del
+  // celular (emojis, la coma o el signo del final) se va antes de mirar; los
+  // espacios de mas tambien. Cada palabra con mayuscula, salvo de/del/la/
+  // las/los/y cuando no van primero; hasta 30 letras, cortando en la ultima
+  // palabra entera. Cualquier otra cosa (numeros, codigo), "".
+  function nombreLimpio(t) {
+    var s = String(t || "").replace(/[\p{Extended_Pictographic}\u200D\uFE0E\uFE0F]/gu, " ");
+    s = s.replace(/\s+/g, " ").replace(/^[^\p{L}]+/u, "").replace(/[^\p{L}\p{M}]+$/u, "");
+    if (!s || !/^\p{L}[\p{L}\p{M}' .-]*$/u.test(s)) { return ""; }
+    var chicas = ["de", "del", "la", "las", "los", "y", "e"];
+    var ps = s.split(" "), out = [];
+    for (var i = 0; i < ps.length; i++) {
+      var p = ps[i];
+      var w = (i > 0 && chicas.indexOf(p.toLowerCase()) >= 0) ? p.toLowerCase() : p.charAt(0).toUpperCase() + p.slice(1);
+      if (out.concat([w]).join(" ").length > 30) {
+        if (!out.length) { out.push(w.slice(0, 30)); }
+        break;
+      }
+      out.push(w);
+    }
+    // Una particula no queda colgando al final del corte ("María de los").
+    while (out.length > 1 && chicas.indexOf(out[out.length - 1]) >= 0) { out.pop(); }
+    return out.join(" ");
+  }
+  // La llave del nombre en el celular: una por portal (por paciente).
+  function claveNombre(kid) { return NOMBRE_GUARDADO + String(kid || ""); }
+  // El titulo grande de Inicio: no repite el "Etapa 1 de 4" del arco.
+  function tituloDeAhora(t) {
+    var s = String(t || "").replace(/\s+/g, " ").trim();
+    return /^etapa\s*\d+\s*(de|\/)\s*\d+\s*\.?$/i.test(s) ? "" : s;
+  }
+  // "Lo que estamos trabajando" (Inicio): solo las zonas con un remedio que
+  // el paciente ya recibio. Lo que se vio sin remedio queda en Tu cuerpo.
+  function zonasEnTrabajo(zonas, porZona) {
+    return (Array.isArray(zonas) ? zonas : []).filter(function (z) {
+      var info = (porZona && porZona[z]) || {};
+      return Array.isArray(info.remedios) && info.remedios.some(function (r) { return typeof r === "string" && r.trim(); });
+    });
+  }
+  // (P2) EL TRAMO DE UN NIVEL (1-2 equilibrio, 3 leve, 4 con carga, 5-6
+  // fuerte): la misma vara que portal_paciente.tramo_de. Lo que no es un
+  // nivel no tiene tramo (punto gris), nunca "En equilibrio" por defecto.
+  function tramoDe(n) {
+    if (typeof n !== "number" || n % 1 !== 0 || n < 1 || n > 6) { return 0; }
+    if (n <= 2) { return 1; }
+    if (n === 3) { return 2; }
+    if (n === 4) { return 3; }
+    return 4;
+  }
+  // El tramo de una zona: solo si trae su lamina (lo que el paciente ve al
+  // tocarla). Sin lamina, sin tramo.
+  function tramoDeZona(info) {
+    if (!info || !(Array.isArray(info.carga) && info.carga.length)) { return 0; }
+    return tramoDe(info.n);
+  }
+  // Late solo la zona con un remedio de la etapa en curso (l = 1) y con su
+  // tramo: el punto gris queda QUIETO (LATE_SOLO_CON_NIVEL).
+  function late(info) {
+    var LATE_SOLO_CON_NIVEL = true;
+    return !!info && info.l === 1 && Array.isArray(info.remedios) && info.remedios.length > 0 && (!LATE_SOLO_CON_NIVEL || tramoDeZona(info) > 0);
+  }
+  // (16/10, decision de Jose) Titila la zona GRIS (sin tramo) que igual
+  // tiene un remedio de la etapa en curso (l = 1). La gris sin remedio de
+  // ahora queda quieta, y la que tiene tramo late (no titila). Solo con la
+  // llave prendida (prendida === true).
+  function titila(info, prendida) {
+    return prendida === true && !!info && info.l === 1 && Array.isArray(info.remedios) &&
+      info.remedios.some(function (r) { return typeof r === "string" && r.trim(); }) && tramoDeZona(info) === 0;
+  }
+  // Donde va cada etapa en la hebra (de 350 de ancho, 22 de margen): tantas
+  // como tiene el plan (de 1 al tope), nunca un numero fijo.
+  function posEtapas(n) {
+    var k = (typeof n === "number" && n > 0) ? Math.floor(Math.min(n, TOPE_ETAPAS)) : 0;
+    var out = [];
+    for (var i = 0; i < k; i++) { out.push(k === 1 ? 175 : Math.round((22 + i * 306 / (k - 1)) * 10) / 10); }
+    return out;
+  }
+  /*FIN-V3*/
+
+  /*P1B*/
+  // LO NUEVO DE LA FASE P1b, EN PURO (los tests lo corren con node).
+  // "La etapa termina en X dias" (Jose 14/10: guiarse por la etapa, no por
+  // el frasquito). Los dias desde HOY (la fecha del celular, AAAA-MM-DD)
+  // hasta el dia en que se cumple la etapa ("fin", firmado en el link). Sin
+  // fin, con una fecha que no existe o con mas del tope, null: no se dice nada.
+  // (14/10, ataque) Y con el dia ya pasado, tampoco: un link viejo no le pide
+  // al paciente que escriba para siempre (Python tampoco manda un fin vencido).
+  function diasDeEtapa(fin, hoy) {
+    var rx = /^(\d{4})-(\d{2})-(\d{2})$/;
+    var a = rx.exec(String(fin || "")), b = rx.exec(String(hoy || ""));
+    if (!a || !b) { return null; }
+    var fa = Date.UTC(+a[1], +a[2] - 1, +a[3]), fb = Date.UTC(+b[1], +b[2] - 1, +b[3]);
+    if (isNaN(fa) || isNaN(fb) || new Date(fa).getUTCDate() !== +a[3] || new Date(fb).getUTCDate() !== +b[3]) { return null; }
+    var n = Math.round((fa - fb) / 86400000);
+    return (n > TOPE_DIAS_ETAPA || n < 0) ? null : n;
+  }
+  function textoTermina(n) {
+    if (typeof n !== "number" || n !== n) { return ""; }
+    if (n > 1) { return "La etapa termina en " + n + " días"; }
+    if (n === 1) { return "La etapa termina mañana"; }
+    if (n === 0) { return "La etapa termina hoy"; }
+    return "";
+  }
+  // Los remedios de la pestaña, en el orden de las zonas: los de la etapa
+  // de ahora ("ahora" trae sus POSICIONES dentro de la lista de cada zona) y
+  // los de las anteriores. Si ninguna zona trae "ahora" no se sabe cuales
+  // son de ahora: hayAhora es false y van todos juntos, como antes.
+  function remediosPorEtapa(zonas, orden) {
+    var out = {hayAhora: false, ahora: [], antes: []}, porZona = {};
+    (Array.isArray(zonas) ? zonas : []).forEach(function (z) {
+      if (z && typeof z.z === "string") { porZona[z.z] = z; }
+    });
+    (Array.isArray(orden) ? orden : []).forEach(function (zn) {
+      var z = porZona[zn];
+      if (!z || !Array.isArray(z.remedios)) { return; }
+      var ah = Array.isArray(z.ahora) ? z.ahora : [];
+      z.remedios.forEach(function (r, i) {
+        if (typeof r !== "string" || !r.trim()) { return; }
+        if (ah.indexOf(i) >= 0) { out.hayAhora = true; out.ahora.push({z: zn, r: r}); } else { out.antes.push({z: zn, r: r}); }
+      });
+    });
+    return out;
+  }
+  // El plan de comidas: las listas de "suma" y "pausa" (hasta 8) y la
+  // frase de la temporada. Lo que no es texto, no va.
+  function listaComidas(c, k) {
+    if (!c || typeof c !== "object" || !Array.isArray(c[k])) { return []; }
+    return c[k].filter(function (x) { return typeof x === "string" && !!x.trim(); }).slice(0, 8);
+  }
+  function fraseTemporada(c) {
+    if (!c || typeof c !== "object" || typeof c.estacion !== "string" || !c.estacion) { return ""; }
+    var t = "Tu plan de comidas es el de " + c.estacion + (typeof c.hasta === "string" && c.hasta ? ", hasta fin de " + c.hasta : "") + ".";
+    if (typeof c.sigue === "string" && c.sigue) { t += " Ahí te armo el de " + c.sigue + "."; }
+    return t;
+  }
+  // Los accesos de Inicio: solo a lo que tiene algo adentro.
+  function accesosDe(tiene) {
+    var todos = [["cuerpo", "", "Tu cuerpo", "Tocá cada zona"],
+                 ["estudio", "", "Lo que se vio", "Tu estudio, explicado"],
+                 ["remedios", "flores", "Flores de Bach", "Tu mezcla del gotero"],
+                 ["remedios", "comidas", "Plan de comidas", "Qué sumar, qué pausar"]];
+    return todos.filter(function (a) { return !!(tiene && tiene[a[1] || a[0]]); })
+      .map(function (a) { return {p: a[0], tab: a[1], t: a[2], d: a[3]}; });
+  }
+  /*FIN-P1B*/
+
+  /*P3*/
+  // LO NUEVO DE LA FASE P3, EN PURO (los tests lo corren con node).
+  // HOY TE TOCA: las tomas de la planilla de la etapa en curso (las arma y
+  // las filtra Python contra el papel entregado; aca solo se ordenan). Los
+  // momentos son los de portal_tomas.MOMENTOS, en el mismo orden.
+  var MOMENTOS_HOY = ["Al despertar", "A la mañana", "Al mediodía", "A la tarde", "A la noche"];
+  var EN_EL_DIA = "En el día";
+  var TILDES = "cuantica-portal-tomas-";
+  // Las tomas que valen: solo las de la etapa EN CURSO (nActual), cada una
+  // con su nombre y sus momentos (o, sin momento, el horario del papel). Lo
+  // que el papel dice "N dias y corte" trae su ultimo dia ("u"): pasado ese
+  // dia (hoy, del celular), ya no va.
+  function tomasValidas(tm, nActual, hoy) {
+    if (!tm || typeof tm !== "object" || typeof tm.e !== "number" || tm.e !== nActual || !Array.isArray(tm.l)) { return []; }
+    var rxDia = /^\d{4}-\d{2}-\d{2}$/;
+    return tm.l.filter(function (t) {
+      if (!t || typeof t.r !== "string" || !t.r.trim() || !Array.isArray(t.m)) { return false; }
+      if (t.u !== undefined && (typeof t.u !== "string" || !rxDia.test(t.u))) { return false; }
+      if (typeof t.u === "string" && rxDia.test(String(hoy || "")) && String(hoy) > t.u) { return false; }
+      var ok = t.m.every(function (m) { return typeof m === "number" && m % 1 === 0 && m >= 0 && m < MOMENTOS_HOY.length; });
+      return ok && (t.m.length > 0 || (typeof t.h === "string" && !!t.h.trim()));
+    }).slice(0, 16);
+  }
+  // Lo que se tilda: un renglon en un momento ("1|Blatta orientalis").
+  function idToma(m, r) { return String(m) + "|" + String(r || ""); }
+  // Los grupos de Hoy te toca, en el orden del dia; lo que no tiene momento,
+  // al final, con el horario de su planilla.
+  function gruposDeHoy(lista) {
+    var out = [];
+    MOMENTOS_HOY.forEach(function (t, m) {
+      var items = [];
+      (lista || []).forEach(function (x) { if (x.m.indexOf(m) >= 0) { items.push({id: idToma(m, x.r), r: x.r, c: x.c, k: x.k, s: x.s, n: x.m.length}); } });
+      if (items.length) { out.push({m: m, t: t, items: items}); }
+    });
+    var sueltas = [];
+    (lista || []).forEach(function (x) { if (!x.m.length) { sueltas.push({id: idToma("d", x.r), r: x.r, c: x.c, k: x.k, s: x.s, h: x.h, n: 0}); } });
+    if (sueltas.length) { out.push({m: -1, t: EN_EL_DIA, items: sueltas}); }
+    return out;
+  }
+  // La cantidad, como se lee: "30 CH - 10 gotas - 2x/dia" -> "30 CH · 10
+  // gotas · 2 veces al día". Solo cambia la forma de escribirla.
+  function textoDosis(c) {
+    var t = String(c || "").replace(/\s+/g, " ").trim();
+    if (!t) { return ""; }
+    t = t.replace(/\b(\d+) a (\d+)\s?x\/dia\b/gi, "$1 a $2 veces al día")
+         .replace(/\b1\s?x\/dia\b/gi, "1 vez al día")
+         .replace(/\b(\d+)\s?x\/dia\b/gi, "$1 veces al día")
+         .replace(/\/dia\b/gi, " por día")
+         .replace(/\bpor dia\b/gi, "por día");
+    return t.split(" - ").join(" · ");
+  }
+  // En Hoy te toca la frecuencia ya la dice el momento: queda lo que va en
+  // cada toma ("30 CH · 10 gotas"). Solo si son tantas veces como momentos
+  // (nMom): "1x/dia" en dos momentos, o en "En el dia", se lee entero.
+  function dosisPorToma(c, nMom) {
+    var partes = String(c || "").replace(/\s+/g, " ").trim().split(" - ");
+    var quedan = partes.filter(function (p) {
+      var f = /^(\d+)( a (\d+))?\s?x\/dia$/i.exec(String(p || "").trim());
+      if (!f) { return !!p; }
+      var lo = +f[1], hi = f[3] ? +f[3] : lo;
+      return !(typeof nMom === "number" && nMom > 0 && nMom >= lo && nMom <= hi);
+    });
+    return quedan.length === partes.length ? textoDosis(c) : textoDosis(quedan.join(" - "));
+  }
+  // Los momentos de una toma, en palabras: "mañana y noche".
+  function textoMomentos(ms) {
+    var nom = ["al despertar", "mañana", "mediodía", "tarde", "noche"];
+    var w = (Array.isArray(ms) ? ms : []).filter(function (m) { return typeof m === "number" && nom[m]; }).map(function (m) { return nom[m]; });
+    if (!w.length) { return ""; }
+    var t = w.length === 1 ? w[0] : w.slice(0, -1).join(", ") + " y " + w[w.length - 1];
+    return t.charAt(0).toUpperCase() + t.slice(1);
+  }
+  // Los tildes de HOY (lo guardado en el celular). Lo de otro dia no vale:
+  // cada dia arranca de cero.
+  function tildesDeHoy(raw, hoy) {
+    try {
+      var o = JSON.parse(String(raw || ""));
+      if (!o || o.d !== hoy || !Array.isArray(o.t)) { return []; }
+      return o.t.filter(function (x) { return typeof x === "string" && x.length < 200; }).slice(0, 200);
+    } catch (e) { return []; }
+  }
+  // EL CANDADO DE LA ETAPA QUE VIENE (Jose 14/10): cerrado hasta el dia en
+  // que se cumple la de ahora ("abre", firmado en el link); ese dia se abre.
+  // Sin fecha (o con una que no existe), cerrado: no se inventa un dia.
+  function candado(abre, hoy) {
+    var rx = /^(\d{4})-(\d{2})-(\d{2})$/;
+    var a = rx.exec(String(abre || "")), b = rx.exec(String(hoy || ""));
+    if (!a || !b) { return {abierto: false, dias: null}; }
+    var fa = Date.UTC(+a[1], +a[2] - 1, +a[3]), fb = Date.UTC(+b[1], +b[2] - 1, +b[3]);
+    if (isNaN(fa) || isNaN(fb) || new Date(fa).getUTCDate() !== +a[3] || new Date(fb).getUTCDate() !== +b[3]) { return {abierto: false, dias: null}; }
+    var n = Math.round((fa - fb) / 86400000);
+    if (n > TOPE_DIAS_ETAPA) { return {abierto: false, dias: null}; }
+    return n <= 0 ? {abierto: true, dias: 0} : {abierto: false, dias: n};
+  }
+  function textoCandado(n, c) {
+    if (typeof n !== "number" || !c) { return ""; }
+    if (c.abierto) { return "Ya podés pasar a la Etapa " + n + " cuando sientas: si querés terminar tus remedios o esperar unos días, está bien."; }
+    if (c.dias === 1) { return "Se abre mañana, cuando se cumple tu etapa."; }
+    if (typeof c.dias === "number" && c.dias > 1) { return "Se abre en " + c.dias + " días, cuando se cumple tu etapa."; }
+    return "Se abre cuando se cumpla tu etapa.";
+  }
+  // La dosis de un remedio de la pestaña: la de SU renglon de la planilla
+  // ("d" de la zona apunta a cual). Solo de la etapa en curso; sin renglon,
+  // nada (el remedio sale sin dosis, nunca con una inventada).
+  function dosisDeRemedio(info, r, tm, nActual, hoy) {
+    if (!info || !Array.isArray(info.d) || !Array.isArray(info.remedios)) { return ""; }
+    if (!tm || typeof tm !== "object" || tm.e !== nActual || !Array.isArray(tm.l)) { return ""; }
+    var i = info.remedios.indexOf(r);
+    if (i < 0) { return ""; }
+    var par = info.d.filter(function (p) { return Array.isArray(p) && p[0] === i && typeof p[1] === "number"; })[0];
+    var t = par ? tm.l[par[1]] : null;
+    if (!t || typeof t.c !== "string" || !t.c.trim() || typeof t.r !== "string") { return ""; }
+    // Lo de "N dias y corte" que ya se cumplio: sin dosis (no se sigue).
+    if (typeof t.u === "string" && /^\d{4}-\d{2}-\d{2}$/.test(String(hoy || "")) && String(hoy) > t.u) { return ""; }
+    var mz = textoMomentos(t.m) || (typeof t.h === "string" ? t.h.replace(/\s+/g, " ").trim() : "");
+    return textoDosis(t.c) + (mz ? " · " + mz : "");
+  }
+  function textoDura(n, dura) {
+    var d = String(dura || "").replace(/\s+/g, " ").trim();
+    return (typeof n === "number" && d) ? "Tu Etapa " + n + " está programada para " + d + "." : "";
+  }
+  /*FIN-P3*/
+
+  /*P6*/
+  // EL PAGO DE LA ETAPA QUE VIENE (15/10, P6). Funciones puras: los tests
+  // las corren con node. El link tiene que ser de Mercado Pago o de PayPal,
+  // con su forma (el mismo control que pago_etapa_portal.link_valido).
+  function linkDePago(u, m) {
+    if (typeof u !== "string" || u.length > 800) { return false; }
+    if (m === "mp") { return /^https:\/\/www\.mercadopago\.com(?:\.ar)?\/checkout\/v1\/redirect\?pref_id=[0-9]{1,20}-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(u); }
+    if (m === "pp") { return /^https:\/\/www\.paypal\.com\/(?:cgi-bin\/webscr\?cmd=_xclick&[A-Za-z0-9_.~%=&+\-]{10,700}|ncp\/payment\/[A-Z0-9]{8,20})$/.test(u); }
+    return false;
+  }
+  // La vuelta del pago: "?pago=etapa&n=N" -> N (2 a 12); "?pago=etapa" sin
+  // una etapa que sirva -> -1; cualquier otra cosa -> 0.
+  function vueltaDePago(search) {
+    var s = String(search || "");
+    if (!/^\?(?:[^#]*&)?pago=etapa(?:&|$)/.test(s)) { return 0; }
+    var k = /[?&]n=(\d{1,2})(?:&|$)/.exec(s);
+    var n = k ? parseInt(k[1], 10) : 0;
+    return n >= 2 && n <= 12 ? n : -1;
+  }
+  // El aviso guardado en ESTE celular: volvio del pago de la etapa N hace
+  // 30 dias o menos.
+  function avisoVigente(json, n, hoy) {
+    try {
+      var o = JSON.parse(json || "null"), dia = /^(\d{4})-(\d{2})-(\d{2})$/;
+      var a = o && typeof o.d === "string" ? dia.exec(o.d) : null, b = dia.exec(String(hoy || ""));
+      if (!o || o.n !== n || !a || !b) { return false; }
+      var dd = (Date.UTC(+b[1], +b[2] - 1, +b[3]) - Date.UTC(+a[1], +a[2] - 1, +a[3])) / 86400000;
+      return dd >= 0 && dd <= 30;
+    } catch (e) { return false; }
+  }
+  // Que se ve al lado del candado: {modo, texto, u}. "ok" (ese pago ya me
+  // llego), "confirmando" (pago y volvio: lo estoy confirmando, nunca "pago
+  // recibido" al instante), "boton" (pagar) o "" (nada). El boton solo con
+  // el candado abierto (o sin candado), desde "d" y hasta "h" (el link
+  // vencido no cobra). Abierta no obliga: el boton invita, no apura.
+  function pagoDeEtapa(p, nSig, hoy, candAbierto, avisado) {
+    var nada = {modo: "", texto: "", u: ""}, dia = /^\d{4}-\d{2}-\d{2}$/;
+    if (!p || typeof p !== "object" || Array.isArray(p) || typeof p.n !== "number" || p.n !== nSig) { return nada; }
+    if (p.ok === 1) { return {modo: "ok", texto: "Tu pago de la Etapa " + p.n + " ya me llegó. Te escribo para coordinar cómo seguimos.", u: ""}; }
+    if (avisado === true) { return {modo: "confirmando", texto: "Tu pago de la Etapa " + p.n + ": lo estoy confirmando y te escribo para coordinar cómo seguimos.", u: ""}; }
+    if (candAbierto === false) { return nada; }
+    if (typeof hoy !== "string" || !dia.test(hoy) || typeof p.d !== "string" || !dia.test(p.d) || hoy < p.d) { return nada; }
+    if (p.h !== undefined && (typeof p.h !== "string" || !dia.test(p.h) || hoy > p.h)) { return nada; }
+    if (!linkDePago(p.u, p.m)) { return nada; }
+    return {modo: "boton", texto: "Pagar la Etapa " + p.n + (p.m === "mp" ? " con Mercado Pago" : " con PayPal"), u: p.u};
+  }
+  var TEXTO_VUELTA = "Lo estoy confirmando y te escribo para coordinar cómo seguimos.";
+  // Lo que dice el cartel al volver del pago: lo de la vuelta, y si el link
+  // no esta activo, TAMBIEN eso (no se tapa: tiene que pedir uno nuevo).
+  function textoDelAviso(t, vuelta, noActivo) {
+    if (!vuelta) { return t || noActivo; }
+    if (!t) { return TEXTO_VUELTA; }
+    if (t === noActivo) { return TEXTO_VUELTA + " " + noActivo; }
+    return t;
+  }
+  /*FIN-P6*/
+
+  // LAS PANTALLAS: una a la vez en el celular (en la compu, todas).
+  var pintarRielG = null;
+  // LAS PESTAÑAS DE TU PLAN: Remedios, Flores, Comidas. Una a la vez.
+  function elegirTab(t) {
+    if (TABS.indexOf(t) < 0) { return; }
+    tabActual = t;
+    TABS.forEach(function (x) {
+      var b = el("tab-b-" + x), pnl = el("tab-" + x), es = x === t;
+      if (b) { b.setAttribute("aria-selected", es ? "true" : "false"); b.tabIndex = es ? 0 : -1; }
+      if (pnl) { pnl.hidden = !es; }
+    });
+    texto("rem-titulo", t === "flores" ? "Tus flores de Bach" : (t === "comidas" ? "Tu plan de comidas" : "Tus remedios"));
+  }
+  function irA(p, tab) {
+    if (PANTALLAS.indexOf(p) < 0) { return; }
+    if (tab) { elegirTab(tab); }
+    PANTALLAS.forEach(function (x) {
+      var s = el("pant-" + x);
+      if (s) { s.classList.toggle("activa", x === p); }
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("#nav .nav-b"), function (b) {
+      var es = b.getAttribute("data-p") === p;
+      b.classList.toggle("activo", es);
+      if (es) { b.setAttribute("aria-current", "page"); } else { b.removeAttribute("aria-current"); }
+    });
+    try { window.scrollTo(0, 0); } catch (e) { /* queda donde estaba */ }
+    if (p === "inicio" && pintarRielG) { window.setTimeout(pintarRielG, 40); }
+  }
+
+  // LO QUE SE ESCUCHA UNA SOLA VEZ (la barra, las pestañas, la figura): si
+  // se pinta de nuevo con un link pegado adentro, no se duplica nada.
+  function escuchar() {
+    if (escuchando) { return; }
+    escuchando = true;
+    try {
+      Array.prototype.forEach.call(document.querySelectorAll("#nav .nav-b"), function (b) {
+        b.addEventListener("click", function () { irA(b.getAttribute("data-p")); });
+      });
+      el("ir-estudio").addEventListener("click", function () { irA("estudio"); });
+      TABS.forEach(function (t, i) {
+        var b = el("tab-b-" + t);
+        b.addEventListener("click", function () { elegirTab(t); });
+        b.addEventListener("keydown", function (ev) {
+          var k = ev.key === "ArrowRight" ? 1 : (ev.key === "ArrowLeft" ? -1 : 0);
+          if (!k) { return; }
+          ev.preventDefault();
+          var sig = TABS[(i + k + TABS.length) % TABS.length];
+          elegirTab(sig);
+          try { el("tab-b-" + sig).focus(); } catch (e) { /* sigue */ }
+        });
+      });
+      Array.prototype.forEach.call(document.querySelectorAll(".silueta .z"), function (g) {
+        var z = g.getAttribute("data-z");
+        var ir = function () { if (g.classList.contains("con") && elegirZona) { elegirZona(z); } };
+        g.addEventListener("click", ir);
+        g.addEventListener("keydown", function (ev) {
+          if ((ev.key === "Enter" || ev.key === " ") && g.classList.contains("con")) { ev.preventDefault(); ir(); }
+        });
+      });
+      el("contacto-link-nuevo").addEventListener("click", function () { pantallaSinLink(PEGAR_NUEVO); });
+      el("sin-link-volver").addEventListener("click", function () {
+        el("sin-link").hidden = true;
+        el("portal").hidden = false;
+      });
+      // El riel se recalcula al girar el telefono (una sola escucha: pinta
+      // el riel del portal que esta pintado ahora).
+      var pintarRiel = function () { if (pintarRielG) { pintarRielG(); } };
+      window.addEventListener("resize", pintarRiel);
+    } catch (e) { /* lo que no se pudo escuchar queda quieto */ }
+  }
+  // ANTES DE PINTAR: todo como recien abierto (un link nuevo pegado adentro
+  // se pinta sobre una pagina limpia, sin lo del link de antes).
+  function limpiar() {
+    try {
+      ["camino", "hebra-lineas", "etapas-puntos", "hebra-rotulos", "cifras", "zonas-inicio", "botones-zona", "vimos",
+       "lista-remedios", "flores", "pedidos", "accesos", "comidas-suma", "comidas-pausa", "zona-remedios", "zona-vimos",
+       "zona-laminas", "hoy-grupos", "hoy-cuenta", "candado-txt", "siguiente-dura", "flores-toma", "siguiente-pago",
+       "envio-texto", "envio-caja", "envio-form"].forEach(function (id) { var e = el(id); if (e) { e.textContent = ""; } });
+      ["sec-envio", "envio-form"].forEach(function (id) { var e = el(id); if (e) { e.hidden = true; } });
+      ["cifras", "sec-encuentro", "enc-ar", "sec-siguiente", "siguiente-que", "sec-zonas", "sec-accesos", "sec-pedir",
+       "panel-zona", "det-vimos", "det-motivo", "sec-mas", "det-flores", "sec-flores", "lista-remedios", "etapa-termina",
+       "rem-termina", "comidas-temporada", "comidas-cols", "col-suma", "col-pausa", "comidas-detalle", "link-nuevo-caja",
+       "zona-acompana", "zona-lo-que-vi", "leyenda-niveles", "nota-late", "nota-gris", "nota-titila", "zona-nivel",
+       "sec-hoy", "candado", "candado-txt", "siguiente-dura", "flores-toma", "siguiente-pago"].forEach(function (id) { var e = el(id); if (e) { e.hidden = true; } });
+      el("candado").classList.remove("abierto");
+      el("siguiente-precio").hidden = false;
+      tomasG = null;
+      el("cifras").classList.remove("dos");
+      el("anillo-num").hidden = false; el("anillo-de").hidden = false; texto("anillo-palabra", "Etapa");
+      el("anillo").classList.remove("lleno");
+      texto("sub", "Lo que leímos en tu estudio, zona por zona.");
+      texto("cuerpo-bajada", "Tocá una zona y te muestro qué la acompaña.");
+      texto("rem-bajada", "Los de las etapas que ya recibiste, zona por zona.");
+      texto("pie", "");
+      zonaVista = ""; laminasAbiertas = {}; carpetaLam = null; elegirZona = null; hayAhoraG = false;
+      Array.prototype.forEach.call(document.querySelectorAll(".silueta .z"), function (g) {
+        g.classList.remove("con", "elegida", "t1", "t2", "t3", "t4", "trabaja", "titila");
+        g.removeAttribute("tabindex"); g.removeAttribute("role"); g.removeAttribute("aria-label");
+      });
+      el("figura").classList.remove("todo");
+    } catch (e) { /* sigue */ }
+  }
+
+  // EL SALUDO: con el nombre que el paciente dejo en SU celular. Sin nombre,
+  // se lo pregunta (y no inventa uno). El nombre nunca va al link.
+  function pintarSaludo(kid) {
+    var n = nombreLimpio(guardado(claveNombre(kid))) || nombreLimpio(nombreDeLaVisita);
+    texto("saludo", n ? "Hola, " + n : "Hola");
+    el("nombre-caja").hidden = !!n;
+    el("saludo-frase").hidden = !n;
+    el("nombre-cambiar-caja").hidden = !n;
+  }
+  var nombreListo = false, kidNombre = "";
+  function prepararNombre(kid) {
+    // El campo del nombre se escucha una vez; el kid es el del portal pintado.
+    kidNombre = kid;
+    if (nombreListo) { return; }
+    nombreListo = true;
+    try {
+      var campo = el("nombre-campo"), nota = el("nombre-nota");
+      var listoNombre = function () {
+        var n = nombreLimpio(campo.value);
+        if (!n) {
+          nota.textContent = "Escribí tu nombre con letras, así te saludo.";
+          nota.hidden = false;
+          return;
+        }
+        nota.hidden = true;
+        nombreDeLaVisita = n;
+        var kid = kidNombre;
+        guardar(claveNombre(kid), n);
+        pintarSaludo(kid);
+      };
+      el("nombre-boton").addEventListener("click", listoNombre);
+      campo.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); listoNombre(); } });
+      el("nombre-cambiar").addEventListener("click", function () {
+        olvidarNombre(kidNombre);
+        pintarSaludo(kidNombre);
+        irA("inicio");
+        try { campo.value = ""; campo.focus(); } catch (e) { /* sigue */ }
+      });
+    } catch (e) { /* sin nombre: saluda con "Hola" */ }
+  }
+  function olvidarNombre(kid) {
+    nombreDeLaVisita = "";
+    try { window.localStorage.removeItem(claveNombre(kid)); } catch (e) { /* nada */ }
+  }
+
+  // LA HEBRA: dos lineas que se cruzan y un punto por etapa del plan. La de
+  // ahora, en verde petroleo y con su pulso; las hechas, blancas.
+  function pintarHebra(etapas) {
+    try {
+      var lineas = el("hebra-lineas"), g = el("etapas-puntos"), rot = el("hebra-rotulos");
+      var xs = posEtapas(etapas.length);
+      var y = function (x, fase) { return 35 + 13 * Math.sin((x / 350) * Math.PI * 5 + fase); };
+      var onda = function (fase, hasta) {
+        var d = "";
+        for (var x = 0; x <= hasta; x += 5) { d += (x ? " L" : "M") + x + " " + y(x, fase).toFixed(1); }
+        return d;
+      };
+      var linea = function (clase, d) {
+        var p = document.createElementNS(SVG, "path");
+        p.setAttribute("class", clase); p.setAttribute("d", d);
+        lineas.appendChild(p);
+      };
+      for (var x = 6; x < 350; x += 10) {
+        var r = document.createElementNS(SVG, "line");
+        r.setAttribute("class", "peldano");
+        r.setAttribute("x1", String(x)); r.setAttribute("x2", String(x));
+        r.setAttribute("y1", y(x, 0).toFixed(1)); r.setAttribute("y2", y(x, Math.PI).toFixed(1));
+        lineas.appendChild(r);
+      }
+      linea("hebra-2", onda(Math.PI, 350));
+      linea("hebra-1", onda(0, 350));
+      var hasta = -1;
+      etapas.forEach(function (e, i) { if (e.estado === "hecho" || e.estado === "actual") { hasta = i; } });
+      if (hasta >= 0) { linea("hebra-avance", onda(0, Math.round(xs[hasta] / 5) * 5)); }
+      etapas.forEach(function (e, i) {
+        var est = ["hecho", "actual", "pendiente"].indexOf(e.estado) >= 0 ? e.estado : "pendiente";
+        if (est === "actual") {
+          var a = document.createElementNS(SVG, "circle");
+          a.setAttribute("class", "etapa-anillo");
+          a.setAttribute("cx", String(xs[i])); a.setAttribute("cy", "35"); a.setAttribute("r", "7");
+          g.appendChild(a);
+        }
+        var c = document.createElementNS(SVG, "circle");
+        c.setAttribute("class", "etapa-punto " + est);
+        c.setAttribute("cx", String(xs[i])); c.setAttribute("cy", "35");
+        c.setAttribute("r", est === "actual" ? "6.5" : "4.5");
+        g.appendChild(c);
+        var lab = nuevo("div", "etapa-rotulo" + (est === "actual" ? " actual" : ""));
+        lab.style.left = (xs[i] / 350 * 100) + "%";
+        lab.appendChild(nuevo("span", null, String(e.n)));
+        if (est === "actual") { lab.appendChild(nuevo("span", "ya", "ahora")); }
+        rot.appendChild(lab);
+      });
+    } catch (e) { /* sin hebra: el camino de abajo igual se lee */ }
+  }
+
+  // EL PROXIMO ENCUENTRO, en la hora del telefono (y la de Argentina si es
+  // otra). La modalidad es la que esta en el turno: llamada o presencial.
+  function pintarEncuentro(enc) {
+    try {
+      if (!enc || !str(enc.cuando)) { return; }
+      var d = new Date(enc.cuando);
+      if (isNaN(d.getTime())) { return; }
+      var f = function (op) { return new Intl.DateTimeFormat("es-AR", op).format(d).replace(".", ""); };
+      texto("enc-dia", f({weekday: "short"}));
+      texto("enc-num", f({day: "numeric"}));
+      texto("enc-mes", f({month: "short"}));
+      var hora = f({hour: "2-digit", minute: "2-digit", hour12: false});
+      var modo = enc.modalidad === "llamada" ? "Por llamada" : (enc.modalidad === "presencial" ? "Presencial" : "");
+      texto("enc-hora", hora + (modo ? " · " + modo : ""));
+      var h = horas(enc.cuando);
+      if (h && !h.igual && h.ar) { texto("enc-ar", "Tu hora. En Argentina: " + h.ar); el("enc-ar").hidden = false; }
+      el("sec-encuentro").hidden = false;
+      revelar(el("sec-encuentro"));
+    } catch (e) { /* sin encuentro a la vista */ }
+  }
+
+  // TUS REMEDIOS (14/10, P1b): primero los de la etapa de ahora, despues los
+  // de las anteriores. Los de las etapas que vienen no viajan en el link.
+  // Sin el dato de cuales son de ahora, zona por zona como antes.
+  function liRemedio(z, r, conZona, ahora, dosis) {
+    var li = nuevo("li");
+    var nom = nuevo("span", "nom");
+    if (conZona && NOMBRES[z]) { nom.appendChild(nuevo("span", "zona-chica", NOMBRES[z])); }
+    nom.appendChild(nuevo("span", null, r));
+    // (P3) la dosis de su planilla, si es uno de sus renglones
+    if (dosis) { nom.appendChild(nuevo("span", "dosis", dosis)); li.className = "con-dosis"; }
+    li.appendChild(nom);
+    if (ahora) { li.appendChild(nuevo("span", "chip-etapa", "esta etapa")); }
+    return li;
+  }
+  function pintarRemedios(zonas, porZona, nAhora) {
+    var caja = el("lista-remedios"), rp = remediosPorEtapa(zonas, ZONAS);
+    if (rp.hayAhora) {
+      // (14/10, ataque) El cartelito "esta etapa" en la zona solo separa algo
+      // cuando hay remedios de etapas anteriores: en la Etapa 1 son todos.
+      hayAhoraG = rp.antes.length > 0;
+      texto("rem-bajada", rp.antes.length ? "Los de tu etapa" + (nAhora ? " " + nAhora : "") + ", y abajo los de las etapas que ya hiciste."
+                                          : "Los de tu etapa" + (nAhora ? " " + nAhora : "") + ".");
+      var b0 = nuevo("div", "zona-rem");
+      b0.appendChild(nuevo("p", "rotulo", nAhora ? "Etapa " + nAhora : "Esta etapa"));
+      var ul0 = nuevo("ul", "remedios");
+      rp.ahora.forEach(function (x) { ul0.appendChild(liRemedio(x.z, x.r, true, false, dosisDeRemedio(porZona[x.z], x.r, tomasG, nAhora))); });
+      b0.appendChild(ul0);
+      caja.appendChild(b0);
+      if (rp.antes.length) {
+        var det = nuevo("details"), sm = nuevo("summary", null, "De las etapas que ya hiciste");
+        det.appendChild(sm);
+        var dentro = nuevo("div", "dentro"), ul1 = nuevo("ul", "remedios");
+        // (P3) Un remedio de antes que sigue hasta terminar el frasco esta
+        // en la planilla de ahora: tambien lleva su dosis.
+        rp.antes.forEach(function (x) { ul1.appendChild(liRemedio(x.z, x.r, true, false, dosisDeRemedio(porZona[x.z], x.r, tomasG, nAhora))); });
+        dentro.appendChild(ul1);
+        det.appendChild(dentro);
+        caja.appendChild(det);
+      }
+      caja.hidden = false;
+      revelar(caja);
+      return rp.ahora.length + rp.antes.length;
+    }
+    var puestas = 0;
+    ZONAS.forEach(function (z) {
+      var rem = porZona[z] && Array.isArray(porZona[z].remedios) ? porZona[z].remedios.filter(str) : [];
+      if (!rem.length) { return; }
+      var b = nuevo("div", "zona-rem");
+      b.appendChild(nuevo("p", "rotulo", NOMBRES[z]));
+      var ul = nuevo("ul", "remedios");
+      rem.forEach(function (r) {
+        var dz = dosisDeRemedio(porZona[z], r, tomasG, nAhora, hoyLocal());
+        ul.appendChild(dz ? liRemedio(z, r, false, false, dz) : nuevo("li", null, r));
+      });
+      b.appendChild(ul);
+      caja.appendChild(b);
+      puestas++;
+    });
+    caja.hidden = !puestas;
+    if (puestas) { revelar(caja); }
+    return puestas;
+  }
+
+  // (P3) HOY TE TOCA: las tomas de hoy por momento, con su tilde. El tilde
+  // se guarda SOLO en el celular (por portal y por dia): nunca va al link
+  // ni a Jose. Lo de un dia anterior se borra solo.
+  function pintarHoy(kid, d, nActual) {
+    try {
+      var lista = tomasValidas(d.tomas, nActual, hoyLocal());
+      if (!lista.length) { return; }
+      var k = TILDES + String(kid || ""), hoy = hoyLocal();
+      var raw = guardado(k), marcadas = tildesDeHoy(raw, hoy);
+      if (raw && !marcadas.length) { olvidar(k); }
+      var grupos = gruposDeHoy(lista), caja = el("hoy-grupos"), botonesT = [], ids = [];
+      var cuenta = function () {
+        var n = marcadas.filter(function (x) { return ids.indexOf(x) >= 0; }).length;
+        texto("hoy-cuenta", n >= ids.length ? "Listo por hoy: " + n + " de " + ids.length + "." : n + " de " + ids.length + " hechas.");
+      };
+      grupos.forEach(function (g) {
+        var div = nuevo("div", "momento");
+        div.appendChild(nuevo("p", "sub-rotulo", g.t));
+        var ul = nuevo("ul", "tomas");
+        g.items.forEach(function (it) {
+          ids.push(it.id);
+          var li = nuevo("li"), b = nuevo("button", "toma");
+          b.type = "button";
+          b.setAttribute("role", "checkbox");
+          b.setAttribute("aria-checked", marcadas.indexOf(it.id) >= 0 ? "true" : "false");
+          var cj = nuevo("span", "caja");
+          cj.appendChild(tilde());
+          b.appendChild(cj);
+          var q = nuevo("span", "que");
+          q.appendChild(nuevo("span", "nom", it.r));
+          var cu = [];
+          if (str(it.c)) { cu.push(dosisPorToma(it.c, it.n)); }
+          if (str(it.s)) { cu.push(it.s); }
+          if (str(it.h)) { cu.push(it.h); }
+          cu = cu.filter(function (x) { return !!x; });
+          if (cu.length) { q.appendChild(nuevo("span", "cuanto", cu.join(" · "))); }
+          b.appendChild(q);
+          b.addEventListener("click", function () {
+            // Paso la medianoche con la pagina abierta: arranca de cero.
+            var ahora = hoyLocal();
+            if (ahora !== hoy) {
+              hoy = ahora; marcadas = [];
+              botonesT.forEach(function (x) { x.setAttribute("aria-checked", "false"); });
+            }
+            var i = marcadas.indexOf(it.id);
+            if (i >= 0) { marcadas.splice(i, 1); } else { marcadas.push(it.id); }
+            b.setAttribute("aria-checked", i >= 0 ? "false" : "true");
+            guardar(k, JSON.stringify({d: hoy, t: marcadas}));
+            cuenta();
+          });
+          botonesT.push(b);
+          li.appendChild(b);
+          ul.appendChild(li);
+        });
+        div.appendChild(ul);
+        caja.appendChild(div);
+      });
+      cuenta();
+      el("sec-hoy").hidden = false;
+      revelar(el("sec-hoy"));
+    } catch (e) { /* sin Hoy te toca: queda la planilla de papel */ }
+  }
+  // (P3) El candado chico del camino: el mismo dibujo que el de la tarjeta.
+  function candadoChico(abierto) {
+    var sp = nuevo("span", "candado-chico" + (abierto ? " abierto" : ""));
+    sp.setAttribute("aria-hidden", "true");
+    try { sp.appendChild(el("candado").querySelector("svg").cloneNode(true)); } catch (e) { /* sin dibujo */ }
+    return sp;
+  }
+
+  // (15/10, P4) Un pedido por el relay. El mismo pedido (doble toque,
+  // probar de nuevo) sale con el MISMO texto: alla cuenta una sola vez.
+  function pedirPorRelay(boton, tipo, campos, kid, clave, firma, mailHref, listoTxt) {
+    var k = "cuantica-portal-pedido-" + tipo + "-" + kid, ya = null, texto = "";
+    var alMail = function () {
+      try {
+        var a = nuevo("a", "boton-2", mailHref ? "No me llegó solo: tocá acá y se abre tu correo con el pedido escrito." : "No me llegó: escribime por WhatsApp.");
+        if (mailHref) { a.href = mailHref; }
+        if (boton.parentNode) { boton.parentNode.replaceChild(a, boton); }
+      } catch (e) { /* queda el boton */ }
+    };
+    try { ya = JSON.parse(window.localStorage.getItem(k) || "null"); } catch (e) { ya = null; }
+    try {
+      texto = (ya && typeof ya.t === "string" && ya.ok !== true) ? ya.t : pedidoTexto(tipo, campos, nonceNuevo(window.crypto), cuandoAhora());
+    } catch (e) { texto = ""; }
+    if (!texto) { alMail(); return; }
+    try { window.localStorage.setItem(k, JSON.stringify({t: texto, ok: false})); } catch (e) { /* sin memoria: igual sale */ }
+    boton.disabled = true;
+    boton.textContent = "Mandándotelo…";
+    sellarPedido(clave, kid, texto, window.crypto)
+      .then(function (s) { return mandarPedido(RELAY, sobrePedido(firma, texto, s), window.fetch.bind(window)); })
+      .then(function (r) {
+        if (!r || !r.ok) { alMail(); return; }
+        try { window.localStorage.setItem(k, JSON.stringify({t: texto, ok: true})); } catch (e) { /* nada */ }
+        boton.textContent = listoTxt || "Listo: me llegó tu pedido. Te aviso cuando lo despache.";
+      })
+      .catch(alMail);
+  }
+  // (16/10, P7) LA HOJA DEL CONTROL: el control de etapa adentro del
+  // portal. Lo que conteste vuelve como texto; el portal lo sella y lo manda
+  // por el relay. Si el relay no contesta ok, el control ofrece el mail.
+  var hojaG = {marco: null, u: "", kid: "", clave: "", firma: "", boton: null, escuchando: false};
+  // (16/10, ataque) Lo que se sabe: salieron hacia Jose (la app puede no
+  // cargarlas; entonces a Jose le llega el aviso de avisarle).
+  var LISTO_CONTROL = "Tus respuestas ya salieron hacia mí. Las voy a leer.";
+  function cerrarControl() {
+    try {
+      if (hojaG.marco && hojaG.marco.parentNode) { hojaG.marco.parentNode.removeChild(hojaG.marco); }
+    } catch (e) { /* nada */ }
+    hojaG.marco = null;
+    el("hoja-control").hidden = true;
+    try { if (hojaG.boton) { hojaG.boton.focus(); } } catch (e) { /* nada */ }
+  }
+  function alControl(ok, motivo) {
+    try {
+      if (hojaG.marco && hojaG.marco.contentWindow) { hojaG.marco.contentWindow.postMessage(respuestaAlControl(ok, motivo), "/"); }
+    } catch (e) { /* el control, sin respuesta, ofrece el mail */ }
+  }
+  function escucharControl() {
+    if (hojaG.escuchando) { return; }
+    hojaG.escuchando = true;
+    el("hoja-cerrar").onclick = cerrarControl;
+    document.addEventListener("keydown", function (ev) {
+      if (ev.key === "Escape" && !el("hoja-control").hidden) { cerrarControl(); }
+    });
+    window.addEventListener("message", function (ev) {
+      try {
+        if (!deLaHoja(ev.origin, ev.source, window.location.origin, hojaG.marco && hojaG.marco.contentWindow)) { return; }
+        var t = textoDelControl(ev.data);
+        if (!t || !hojaG.firma || !hojaG.clave) { return; }
+        if (!controlConRespuesta(t)) { alControl(false, "vacio"); return; }
+        var k = "cuantica-portal-control-" + hojaG.kid, ya = null;
+        try { ya = JSON.parse(window.localStorage.getItem(k) || "null"); } catch (e) { ya = null; }
+        var pedido = pedidoDelControl(t, ya, nonceNuevo(window.crypto), cuandoAhora());
+        if (!pedido) { alControl(false); return; }
+        var u = hojaG.u, kid = hojaG.kid, firma = hojaG.firma, boton = hojaG.boton;
+        try { window.localStorage.setItem(k, JSON.stringify({c: t, t: pedido, ok: false, u: u})); } catch (e) { /* sin memoria: igual sale */ }
+        sellarPedido(hojaG.clave, kid, pedido, window.crypto)
+          .then(function (s) {
+            var sob = sobrePedido(firma, pedido, s);
+            if (!sobreEntra(sob)) { return {ok: false, motivo: "grande"}; }
+            return mandarPedido(RELAY, sob, window.fetch.bind(window));
+          })
+          .then(function (r) {
+            if (!r || !r.ok) { alControl(false); return; }
+            try { window.localStorage.setItem(k, JSON.stringify({c: t, t: pedido, ok: true, u: u})); } catch (e) { /* nada */ }
+            alControl(true);
+            if (boton) { boton.textContent = LISTO_CONTROL; boton.disabled = true; }
+          })
+          .catch(function () { alControl(false); });
+      } catch (e) { alControl(false); }
+    });
+  }
+  function abrirControl(boton, u, kid, clave, firma) {
+    var src = controlEnElPortal(u);
+    if (!src) { return; }
+    escucharControl();
+    cerrarControl();
+    hojaG.u = u; hojaG.kid = kid; hojaG.clave = clave; hojaG.firma = firma; hojaG.boton = boton;
+    var m = document.createElement("iframe");
+    m.className = "hoja-marco";
+    m.title = "Tu control";
+    m.setAttribute("referrerpolicy", "no-referrer");
+    m.src = src;
+    el("hoja-control").appendChild(m);
+    hojaG.marco = m;
+    el("hoja-control").hidden = false;
+    try { el("hoja-cerrar").focus(); } catch (e) { /* nada */ }
+  }
+  // (16/10, P5) La seccion de los datos de envio.
+  function pintarEnvio(d, kid, clave) {
+    var ev = d && d.envio, caja = el("envio-caja"), form = el("envio-form");
+    caja.textContent = ""; form.textContent = ""; form.hidden = true;
+    el("sec-envio").hidden = true;
+    if (!ev || typeof ev !== "object" || !ev.d || typeof ev.d !== "object" || Array.isArray(ev.d)) { return; }
+    var linea = envioTexto(ev.d);
+    texto("envio-texto", linea ? "Acá te mando el frasquito: " + linea + "." : "Todavía no tengo tu dirección para mandarte el frasquito.");
+    var firmaR = firmaRelay(d.pedir && d.pedir.r, kid);
+    if (!(firmaR && relayValido(RELAY) && clave && typeof window.fetch === "function" && window.crypto && window.crypto.subtle)) {
+      caja.appendChild(nuevo("p", "nota-chica", linea ? "Si cambió algo, escribime por WhatsApp y lo corrijo." : "Pasame tu dirección por WhatsApp y la anoto."));
+    } else {
+      var abrir = nuevo("button", "boton-2", linea ? "Corregir mis datos" : "Completar mis datos");
+      abrir.type = "button";
+      abrir.onclick = function () {
+        form.textContent = "";
+        var inputs = {};
+        ENVIO_PORTAL.forEach(function (c) {
+          var lab = nuevo("label", null, c[1]);
+          var inp = document.createElement("input");
+          inp.type = c[0] === "telefono" ? "tel" : "text";
+          inp.maxLength = 120;
+          inp.value = typeof ev.d[c[0]] === "string" ? ev.d[c[0]] : "";
+          lab.appendChild(inp);
+          form.appendChild(lab);
+          inputs[c[0]] = inp;
+        });
+        var nota = nuevo("p", "nota-chica", "");
+        var mandar = nuevo("button", "boton-2", "Mandarme mis datos");
+        mandar.type = "button";
+        mandar.onclick = function () {
+          var v = {};
+          for (var k in inputs) { if (Object.prototype.hasOwnProperty.call(inputs, k)) { v[k] = inputs[k].value; } }
+          var r = envioDelFormulario(v);
+          if (!r.ok) { nota.textContent = "Me falta: " + r.falta.join(", ") + "."; return; }
+          nota.textContent = "";
+          olvidar("cuantica-portal-pedido-envio-" + kid);
+          var mailHref = "";
+          if (COMO_APP && /^[^@\s"<>?&]+@[^@\s"<>?&]+\.[a-z]{2,}$/i.test(String(MAIL || ""))) {
+            mailHref = "mailto:" + MAIL + "?subject=" + encodeURIComponent("Mis datos de envío") +
+              "&body=" + encodeURIComponent("Hola José, estos son mis datos de envío:\n\n" + envioTexto(r.envio) +
+                (r.envio.recibe ? "\nRecibe: " + r.envio.recibe : "") + (r.envio.telefono ? "\nCelular: " + r.envio.telefono : ""));
+          }
+          pedirPorRelay(mandar, "envio", {envio: r.envio}, kid, clave, firmaR, mailHref,
+                        "Listo: me llegaron tus datos. Si algo no cierra, te escribo.");
+        };
+        form.appendChild(mandar);
+        form.appendChild(nota);
+        form.hidden = false;
+        abrir.hidden = true;
+      };
+      caja.appendChild(abrir);
+    }
+    el("sec-envio").hidden = false;
+    revelar(el("sec-envio"));
+  }
+  function pintar(kid, d, clave) {
+    listo();
+    limpiar();
+    escuchar();
+    // Otro portal pegado adentro: el nombre de la visita era del de antes.
+    if (kidNombre && kidNombre !== kid) { nombreDeLaVisita = ""; }
+    el("portal").hidden = false;
+    if (!quieto) { el("saludo").classList.add("entra"); }
+    var esc = d.fechas && str(d.fechas.escaneo);
+    if (esc) { texto("sub", "Lo que leímos en tu estudio del " + esc + ", zona por zona."); }
+    try {
+      texto("fecha-hoy", new Intl.DateTimeFormat("es-AR", {weekday: "long", day: "numeric", month: "long"})
+        .format(new Date()).replace(",", ""));
+    } catch (e) { /* sin fecha */ }
+    pintarSaludo(kid);
+    prepararNombre(kid);
+
+    // (La barra de abajo, las pestañas y la figura se escuchan una vez: escuchar.)
+
+    // AHORA: la cupula con la etapa y lo que toca.
+    var av = avance(d.camino), actual = null;
+    d.camino.forEach(function (e) { if (e && e.n === av.n) { actual = e; } });
+    var tAhora = tituloDeAhora(d.ahora && str(d.ahora.titulo)), fAhora = d.ahora && str(d.ahora.frase);
+    var tEtapa = actual ? tituloDeAhora(str(actual.titulo)) : "";
+    if (!av.n) { texto("anillo-palabra", "Tu camino arranca"); el("anillo-num").hidden = true; el("anillo-de").hidden = true; }
+    texto("ahora-titulo", tAhora || tEtapa || "");
+    el("ahora-titulo").hidden = !(tAhora || tEtapa);
+    texto("ahora-frase", fAhora);
+    el("ahora").hidden = !(tAhora || fAhora || tEtapa);
+    texto("anillo-de", "de " + av.total);
+    revelar(el("hero"), function () {
+      contar(el("anillo-num"), av.n);
+      window.setTimeout(function () {
+        var arco = el("anillo-arco"), punta = el("anillo-punta"), ang = Math.PI * (1 - av.frac);
+        if (arco) { arco.style.strokeDashoffset = String(276.46 * (1 - av.frac)); }
+        if (punta && av.frac > 0) {
+          punta.setAttribute("cx", String(98 + 88 * Math.cos(ang)));
+          punta.setAttribute("cy", String(98 - 88 * Math.sin(ang)));
+          el("anillo").classList.add("lleno");
+        }
+      }, quieto ? 0 : 120);
+    });
+    pintarHebra(d.camino.filter(function (e) { return e && typeof e.n === "number"; }).slice(0, TOPE_ETAPAS));
+    pintarEncuentro(d.encuentro);
+    // (14/10, P1b) LA ETAPA TERMINA EN X DIAS: solo la de ahora, y solo si
+    // el link trae el dia en que se cumple. En Inicio y en Tus remedios.
+    try {
+      var tt = (actual && actual.estado === "actual") ? textoTermina(diasDeEtapa(actual.fin, hoyLocal())) : "";
+      if (tt) {
+        texto("etapa-termina", tt); el("etapa-termina").hidden = false;
+        texto("rem-termina", tt); el("rem-termina").hidden = false;
+      }
+    } catch (e) { /* sin la cuenta de dias */ }
+    // TU PROXIMA ETAPA: el precio, si viaja. De la que viene, la estrategia
+    // (su titulo, si lo tiene), nunca los remedios.
+    // (P3) Y SU CANDADO: cerrado hasta que se cumple la de ahora; ese dia
+    // se abre solo. Abierta no obliga: el paciente pasa cuando siente.
+    var sigCand = null, candSig = null;
+    try {
+      var nSig = (actual && actual.estado === "actual") ? actual.n + 1 : 0;
+      d.camino.forEach(function (e) { if (e && e.n === nSig && e.estado === "pendiente" && e.cd === 1) { sigCand = e; } });
+      if (sigCand) { candSig = candado(sigCand.abre, hoyLocal()); }
+    } catch (e) { sigCand = null; candSig = null; }
+    try {
+      var conPrecio = !!(d.precio && typeof d.precio.n === "number" && str(d.precio.texto));
+      var conCand = !!(sigCand && (!conPrecio || d.precio.n === sigCand.n));
+      if (conPrecio || conCand) {
+        var nT = conPrecio ? d.precio.n : sigCand.n;
+        texto("siguiente-titulo", "Etapa " + nT);
+        d.camino.forEach(function (e) {
+          if (e && e.n === nT && str(e.titulo)) { texto("siguiente-que", e.titulo); el("siguiente-que").hidden = false; }
+        });
+        texto("siguiente-precio", conPrecio ? d.precio.texto : "");
+        el("siguiente-precio").hidden = !conPrecio;
+        if (conCand) {
+          var dt = textoDura(actual.n, actual.dura);
+          if (dt) { texto("siguiente-dura", dt); el("siguiente-dura").hidden = false; }
+          texto("candado-txt", textoCandado(sigCand.n, candSig));
+          el("candado-txt").hidden = false;
+          el("candado").hidden = false;
+        }
+        // (P6) EL PAGO DE LA ETAPA QUE VIENE: el boton al lado del candado
+        // (solo abierto), o "lo estoy confirmando" si volvio del pago.
+        try {
+          if (d.pago) {
+            var hoyP = hoyLocal();
+            if (PAGO_ETAPA && VUELTA_PAGO === nT) { guardar(PAGO_AVISADO + kid, JSON.stringify({n: nT, d: hoyP})); }
+            var pv = pagoDeEtapa(d.pago, nT, hoyP, sigCand ? !!(candSig && candSig.abierto) : null,
+                                 PAGO_ETAPA && (VUELTA_PAGO === nT || avisoVigente(guardado(PAGO_AVISADO + kid), nT, hoyP)));
+            if (pv.modo) {
+              var cajaP = el("siguiente-pago");
+              if (pv.modo === "boton") {
+                var aP = nuevo("a", "boton-2", pv.texto);
+                aP.href = pv.u; aP.rel = "noopener noreferrer";
+                cajaP.appendChild(aP);
+              } else { cajaP.appendChild(nuevo("p", "nota-pago", pv.texto)); }
+              cajaP.hidden = false;
+            }
+          }
+        } catch (e) { /* sin boton de pago: como antes */ }
+        el("sec-siguiente").hidden = false;
+        revelar(el("sec-siguiente"), function () {
+          // Se ve cerrado y, si ya se cumplio la etapa, se abre.
+          if (conCand && candSig && candSig.abierto) {
+            window.setTimeout(function () { el("candado").classList.add("abierto"); }, quieto ? 0 : 450);
+          }
+        });
+      }
+    } catch (e) { /* sin la etapa que viene */ }
+
+    // EL CAMINO, ETAPA POR ETAPA (ninguna pendiente nombra remedios: de la
+    // etapa que viene, la estrategia, no los remedios).
+    var ol = el("camino"), total = d.camino.length, items = [], hechos = 0, iActual = -1;
+    if (esc) {
+      var li0 = nuevo("li", "hito hecho");
+      li0.appendChild(nuevo("span", "nodo"));
+      li0.appendChild(nuevo("div", "cual", "Tu estudio"));
+      li0.appendChild(nuevo("div", "fecha", esc));
+      items.push(li0);
+    }
+    d.camino.forEach(function (e) {
+      if (!e || typeof e.n !== "number") { return; }
+      var est = ["hecho", "actual", "pendiente"].indexOf(e.estado) >= 0 ? e.estado : "pendiente";
+      var li = nuevo("li", est);
+      var nodo = nuevo("span", "nodo", est === "hecho" ? null : String(e.n));
+      if (est === "hecho") { nodo.appendChild(tilde()); }
+      li.appendChild(nodo);
+      var cual = nuevo("div", "cual", "Etapa " + e.n + " de " + total);
+      if (est === "actual") { cual.appendChild(nuevo("span", "ahora-chip", "ahora")); }
+      if (sigCand && e === sigCand) { cual.appendChild(candadoChico(!!(candSig && candSig.abierto))); }
+      li.appendChild(cual);
+      li.appendChild(nuevo("div", "tit", str(e.titulo) || (est === "pendiente" ? "La armamos cuando llegues" : "")));
+      if (str(e.el)) { li.appendChild(nuevo("div", "fecha", "La recibiste el " + e.el)); hechos++; }
+      if (d.precio && d.precio.n === e.n && str(d.precio.texto)) { li.appendChild(nuevo("div", "precio", d.precio.texto)); }
+      items.push(li);
+      if (est === "actual") {
+        iActual = items.length - 1;
+        if (d.comidas && str(d.comidas.estacion)) {
+          var lc = nuevo("li", "marca-dia");
+          lc.appendChild(nuevo("span", "nodo"));
+          lc.appendChild(nuevo("div", "cual", "Tu plan de comidas"));
+          var t = "Es el de " + d.comidas.estacion + (str(d.comidas.hasta) ? ", hasta fin de " + d.comidas.hasta : "") + ".";
+          if (str(d.comidas.sigue)) { t += " Ahí te armo el de " + d.comidas.sigue + "."; }
+          lc.appendChild(nuevo("div", "nota", t));
+          items.push(lc);
+        }
+      }
+    });
+    items.forEach(function (li) { ol.appendChild(li); });
+    // El riel blanco se llena hasta la etapa de ahora; sin etapa de ahora,
+    // hasta la ultima hecha (nunca hasta una pendiente). Se recalcula al
+    // girar el telefono o cambiar el ancho.
+    var riel = el("riel");
+    var pintarRiel = function () {
+      try {
+        var hasta = hastaDelRiel(items.map(function (li) { return li.className; }), iActual);
+        var li = hasta >= 0 ? items[hasta] : null;
+        riel.style.height = Math.max(0, li ? (li.offsetTop + 16 - 16) : 0) + "px";
+      } catch (e) { /* sin riel, igual se lee */ }
+    };
+    pintarRielG = pintarRiel;
+    revelar(el("sec-camino"), function () {
+      items.forEach(function (li, i) {
+        if (quieto) { li.classList.add("visto"); return; }
+        li.style.animationDelay = (0.06 * i) + "s";
+        li.classList.add("visto");
+      });
+      window.setTimeout(pintarRiel, quieto ? 0 : 160);
+    });
+
+    // TU CUERPO: la figura de la ficha y las 8 zonas, todas con su punto
+    // gris quieto (sin nivel todavia). Se tocan las que tienen algo.
+    var porZona = {};
+    (Array.isArray(d.zonas) ? d.zonas : []).forEach(function (z) {
+      if (z && ZONAS.indexOf(z.z) >= 0) { porZona[z.z] = z; }
+    });
+    // Si el paquete no trae NINGUN remedio, el cartel "no hay un remedio
+    // propio para esta zona" no va: diria algo falso (ataque del 07/10).
+    var hayRemedios = Object.keys(porZona).some(function (k) {
+      return Array.isArray(porZona[k].remedios) && porZona[k].remedios.length > 0;
+    });
+    var vistas = {};
+    (Array.isArray(d.se_vio) ? d.se_vio : []).forEach(function (s) {
+      if (s && ZONAS.indexOf(s.z) >= 0) { vistas[s.z] = true; }
+    });
+    // Una zona se marca si tiene remedios o algo de lo que vimos. Con la
+    // lamina sola todavia no (en F1 el boton no abre nada): cuando las
+    // laminas se puedan abrir, ZONA_SOLO_LAMINA pasa a true.
+    var ZONA_SOLO_LAMINA = false;
+    var conAlgo = ZONAS.filter(function (z) {
+      var info = porZona[z] || {};
+      var rem = Array.isArray(info.remedios) && info.remedios.length;
+      var lam = Array.isArray(info.laminas) && info.laminas.length;
+      return rem || vistas[z] || (ZONA_SOLO_LAMINA && lam);
+    });
+
+    // Inicio ("Lo que estamos trabajando" y "Zonas en foco"): solo las zonas
+    // con un remedio que ya recibio. Lo visto sin remedio, en Tu cuerpo.
+    var enTrabajo = zonasEnTrabajo(ZONAS, porZona);
+    // LAS CIFRAS (necesitan saber cuantas zonas hay en foco)
+    var cs = cifras(d, enTrabajo.filter(function (z) { return z !== "todo"; }).length);
+    if (cs.length >= 2) {
+      var caja = el("cifras");
+      if (cs.length === 2) { caja.classList.add("dos"); }
+      var nums = [];
+      cs.forEach(function (c) {
+        var t = nuevo("div", "cifra"), nn = nuevo("span", "num", "0");
+        t.appendChild(nn); t.appendChild(nuevo("span", "que", c.que));
+        caja.appendChild(t); nums.push([nn, c.n]);
+      });
+      caja.hidden = false;
+      revelar(caja, function () { nums.forEach(function (x) { contar(x[0], x[1]); }); });
+    }
+    // (P3) HOY TE TOCA (solo con las tomas de la etapa en curso).
+    var nActual = (actual && actual.estado === "actual") ? actual.n : 0;
+    tomasG = d.tomas || null;
+    pintarHoy(kid, d, nActual);
+
+    var figura = el("figura");
+    try {
+      var img = figura.querySelector("img"), src = FIGURAS[figuraDe(d.sx)];
+      if (img && src && img.getAttribute("src") !== src) { img.setAttribute("src", src); }
+    } catch (e) { /* queda la neutra */ }
+    var botones = el("botones-zona"), deInicio = el("zonas-inicio");
+    var elegir = function (z) {
+      Array.prototype.forEach.call(document.querySelectorAll(".silueta .z"), function (g) {
+        g.classList.toggle("elegida", g.getAttribute("data-z") === z);
+      });
+      if (figura) { figura.classList.toggle("todo", z === "todo"); }
+      Array.prototype.forEach.call(botones.children, function (b) {
+        b.setAttribute("aria-pressed", b.getAttribute("data-z") === z ? "true" : "false");
+      });
+      Array.prototype.forEach.call(deInicio.children, function (b) {
+        b.setAttribute("aria-pressed", b.getAttribute("data-z") === z ? "true" : "false");
+      });
+      var info = porZona[z] || {};
+      texto("zona-nombre", NOMBRES[z]);
+      // (P2) su tramo, con las palabras de la leyenda (solo con lamina)
+      var tzp = tramoDeZona(info), zn = el("zona-nivel");
+      zn.className = "nivel-zona" + (tzp ? " t" + tzp : "");
+      texto("zona-nivel-t", tzp ? el("leyenda-niveles").querySelectorAll(".tramo-t")[tzp - 1].textContent : "");
+      zn.hidden = !tzp;
+      var ul = el("zona-remedios"); ul.textContent = "";
+      var rem = Array.isArray(info.remedios) ? info.remedios : [];
+      var ahZ = Array.isArray(info.ahora) ? info.ahora : [];
+      rem.forEach(function (r, i) { if (str(r)) { ul.appendChild(liRemedio(z, r, false, hayAhoraG && ahZ.indexOf(i) >= 0)); } });
+      ul.hidden = rem.length === 0;
+      el("zona-acompana").hidden = rem.length === 0;
+      el("zona-sin-remedios").hidden = rem.length > 0 || !hayRemedios;
+      var zv = el("zona-vimos"); zv.textContent = "";
+      (Array.isArray(d.se_vio) ? d.se_vio : []).forEach(function (s) {
+        if (s && s.z === z && str(s.titulo) && str(s.texto)) {
+          var pz = nuevo("p", "zona-texto");
+          pz.appendChild(nuevo("strong", null, s.titulo + ": "));
+          pz.appendChild(document.createTextNode(s.texto));
+          zv.appendChild(pz);
+        }
+      });
+      el("zona-lo-que-vi").hidden = !zv.children.length;
+      zonaVista = z;
+      var zl = el("zona-laminas"); zl.textContent = ""; zl.hidden = true;
+      if (Array.isArray(info.carga) && info.carga.length) { mostrarLaminas(zl, info.carga, kid, clave, z); }
+      var panel = el("panel-zona");
+      // Que la entrada corra en cada zona nueva.
+      panel.hidden = true; void panel.offsetWidth; panel.hidden = false;
+    };
+    elegirZona = elegir;
+    var hayNivel = false, hayLate = false, hayGris = false, hayTitila = false;
+    // La figura se escucha una vez (escuchar): aca solo se marcan las zonas
+    // que se pueden tocar en ESTE portal.
+    Array.prototype.forEach.call(document.querySelectorAll(".silueta .z"), function (g) {
+      var z = g.getAttribute("data-z");
+      if (conAlgo.indexOf(z) < 0) { return; }
+      g.classList.add("con");
+      // (P2) el tramo de su lamina mas cargada y, si se trabaja ahora, el anillo
+      var tz = tramoDeZona(porZona[z]);
+      if (tz) { g.classList.add("t" + tz); hayNivel = true; } else { hayGris = true; }
+      if (late(porZona[z])) { g.classList.add("trabaja"); hayLate = true; }
+      // (16/10, decision de Jose) el gris que igual se trabaja ahora: titila
+      if (titila(porZona[z], GRIS_TITILA)) { g.classList.add("titila"); hayTitila = true; }
+      g.setAttribute("tabindex", "0");
+      g.setAttribute("role", "button");
+      g.setAttribute("aria-label", NOMBRES[z]);
+    });
+    ZONAS.forEach(function (z) {
+      var b = nuevo("button", "zona-b");
+      b.appendChild(nuevo("span", "punto"));
+      b.appendChild(nuevo("span", null, NOMBRES[z]));
+      // (P2) las rayitas de su tramo, del mismo color que el punto
+      var tb = conAlgo.indexOf(z) >= 0 ? tramoDeZona(porZona[z]) : 0;
+      if (tb) { b.classList.add("t" + tb); b.appendChild(medidor()); }
+      b.type = "button"; b.setAttribute("data-z", z); b.setAttribute("aria-pressed", "false");
+      if (conAlgo.indexOf(z) < 0) { b.disabled = true; } else { b.addEventListener("click", function () { elegir(z); }); }
+      botones.appendChild(b);
+    });
+    if (!conAlgo.length) { texto("cuerpo-bajada", "Cuando recibas tu etapa, acá vas a ver las zonas que trabajamos."); }
+    // (P2) La leyenda de los 4 tramos, solo si alguna zona tiene nivel.
+    el("leyenda-niveles").hidden = !hayNivel && !hayLate && !hayTitila;
+    el("leyenda-niveles").querySelector("ul").hidden = !hayNivel;
+    el("nota-late").hidden = !hayLate;
+    // (16/10) Que dice el punto que titila (quieto si el celular pide menos
+    // movimiento: entonces es un borde punteado).
+    texto("nota-titila-t", quieto ? "El punto gris con borde punteado: ahí también trabajamos en esta etapa, aunque no tenga un nivel para mostrarte." : "El punto gris que titila: ahí también trabajamos en esta etapa, aunque no tenga un nivel para mostrarte.");
+    el("nota-titila").hidden = !hayTitila;
+    // El punto gris se explica solo si al lado hay puntos con color (si todo
+    // es gris, el cuerpo es el de siempre) y alguna zona que se toca es gris.
+    el("nota-gris").hidden = !(hayNivel && hayGris);
+    // Ir a una zona de Tu cuerpo desde otra pantalla: se elige y se baja a
+    // su panel.
+    var irAZona = function (z) {
+      elegir(z);
+      irA("cuerpo");
+      window.setTimeout(function () {
+        try { el("panel-zona").scrollIntoView({block: "start", behavior: quieto ? "auto" : "smooth"}); } catch (e) { /* queda arriba */ }
+      }, 80);
+    };
+    // Las zonas que trabajamos, tambien desde el Inicio: un toque y se abre
+    // Tu cuerpo con esa zona elegida.
+    enTrabajo.forEach(function (z) {
+      var b = nuevo("button", "pill");
+      b.appendChild(nuevo("span", "punto"));
+      b.appendChild(nuevo("span", null, NOMBRES[z]));
+      b.type = "button"; b.setAttribute("data-z", z); b.setAttribute("aria-pressed", "false");
+      b.addEventListener("click", function () { irAZona(z); });
+      deInicio.appendChild(b);
+    });
+    if (enTrabajo.length) { el("sec-zonas").hidden = false; revelar(el("sec-zonas")); }
+    revelar(el("sec-cuerpo"));
+
+    // TU ESTUDIO
+    var hayMas = false;
+    if (str(d.motivo)) { texto("motivo", d.motivo); el("det-motivo").hidden = false; hayMas = true; }
+    if (Array.isArray(d.se_vio) && d.se_vio.length) {
+      var cv = el("vimos");
+      d.se_vio.forEach(function (s) {
+        if (!s || !str(s.titulo) || !str(s.texto)) { return; }
+        var det = nuevo("details"), sm = nuevo("summary");
+        sm.appendChild(nuevo("span", null, s.titulo));
+        if (NOMBRES[s.z]) { sm.appendChild(nuevo("span", "etiqueta-zona", NOMBRES[s.z])); }
+        det.appendChild(sm);
+        var dentro = nuevo("div", "dentro");
+        dentro.appendChild(nuevo("p", "vimos-texto", s.texto));
+        // (14/10, P1b) De lo que se vio a su zona en Tu cuerpo.
+        if (conAlgo.indexOf(s.z) >= 0) {
+          var vz = nuevo("button", "ver-zona", "Ver qué la acompaña");
+          vz.type = "button";
+          vz.addEventListener("click", function () { irAZona(s.z); });
+          dentro.appendChild(vz);
+        }
+        det.appendChild(dentro);
+        cv.appendChild(det);
+      });
+      if (cv.children.length) { el("det-vimos").hidden = false; hayMas = true; }
+    }
+    el("sec-mas").hidden = !hayMas;
+    el("estudio-vacio").hidden = hayMas;
+    if (hayMas) { revelar(el("sec-mas")); }
+
+    // TU PLAN, EN TRES PESTAÑAS (14/10, P1b): Remedios, Flores y Comidas.
+    // Remedios: los de la etapa de ahora y, aparte, los de las anteriores.
+    var nRem = pintarRemedios(d.zonas, porZona, actual && actual.estado === "actual" ? actual.n : 0), hayFlores = false;
+    el("remedios-vacio").hidden = !!nRem;
+    el("rem-bajada").hidden = !nRem;
+    // Flores: como en el papel, cada una con lo que hace (su frase).
+    if (Array.isArray(d.flores) && d.flores.length) {
+      var ulf = el("flores"), nf = 0;
+      d.flores.forEach(function (f) {
+        if (!f || !str(f.f) || !str(f.t)) { return; }
+        nf++;
+        var li = nuevo("li", "num");
+        li.appendChild(nuevo("span", "n", (nf < 10 ? "0" : "") + nf));
+        var tx = nuevo("span");
+        tx.appendChild(nuevo("strong", null, f.f + ": "));
+        tx.appendChild(document.createTextNode(f.t));
+        li.appendChild(tx);
+        ulf.appendChild(li);
+      });
+      if (ulf.children.length) { el("det-flores").hidden = false; el("sec-flores").hidden = false; revelar(el("sec-flores")); hayFlores = true; }
+    }
+    // (P3) La toma del gotero, la de su planilla.
+    try {
+      var tf = tomasValidas(d.tomas, nActual).filter(function (t) { return t.k === "f" && str(t.c); })[0];
+      if (tf) {
+        var mf = textoMomentos(tf.m);
+        texto("flores-toma", "Tu gotero: " + textoDosis(tf.c) + (mf ? " · " + mf : "") + ".");
+        el("flores-toma").hidden = false;
+      }
+    } catch (e) { /* sin la toma del gotero */ }
+    el("flores-vacio").hidden = hayFlores;
+    // Comidas: la temporada, y lo que suma y lo que pausa (solo lo que esta
+    // en el PDF del plan que tiene en la mano: lo decide Python).
+    var hayComidas = false;
+    try {
+      var ft = fraseTemporada(d.comidas), su = listaComidas(d.comidas, "suma"), pa = listaComidas(d.comidas, "pausa");
+      if (ft) { texto("comidas-temporada", ft); el("comidas-temporada").hidden = false; hayComidas = true; }
+      su.forEach(function (x) { el("comidas-suma").appendChild(nuevo("li", null, x)); });
+      pa.forEach(function (x) { el("comidas-pausa").appendChild(nuevo("li", null, x)); });
+      el("col-suma").hidden = !su.length;
+      el("col-pausa").hidden = !pa.length;
+      if (su.length || pa.length) { el("comidas-cols").hidden = false; el("comidas-detalle").hidden = false; hayComidas = true; }
+    } catch (e) { /* sin comidas */ }
+    el("comidas-vacio").hidden = hayComidas;
+    elegirTab(tabActual);
+
+    // LOS ACCESOS DE INICIO: a lo que tiene algo (con dos o mas, se ven).
+    try {
+      var acc = accesosDe({cuerpo: conAlgo.length > 0, estudio: hayMas, flores: hayFlores, comidas: hayComidas});
+      if (acc.length >= 2) {
+        acc.forEach(function (a) {
+          var b = nuevo("button", "acceso");
+          b.type = "button";
+          b.appendChild(nuevo("span", "t", a.t));
+          b.appendChild(nuevo("span", "d", a.d));
+          b.addEventListener("click", function () { irA(a.p, a.tab); });
+          el("accesos").appendChild(b);
+        });
+        el("sec-accesos").hidden = false;
+        revelar(el("sec-accesos"));
+      }
+    } catch (e) { /* sin accesos */ }
+
+    // LOS DOS BOTONES DE ADENTRO (portal como app): solo los que vinieron
+    // FIRMADOS en "pedir". El pedido le llega a Jose por mail: el paciente
+    // lo ve escrito y toca Enviar. Nada sale solo, nada va a terceros.
+    try {
+      var bs = COMO_APP ? botonesPedir(d.pedir, MAIL, hoyLocal()) : [];
+      if (bs.length && window.crypto && window.crypto.subtle) {
+        codigoPedido(kid, window.crypto).then(function (cod) {
+          var caja = el("pedidos"), puestos = 0, conControl = false;
+          var firmaR = firmaRelay(d.pedir && d.pedir.r, kid);
+          bs.forEach(function (b) {
+            var href = b.u || mailPedido(MAIL, b.que, cod);
+            if (!href) { return; }
+            // (15/10, P4) El frasquito va por el relay si se puede; si el
+            // relay no contesta ok, el mail de hoy.
+            if (b.que === "f" && firmaR && relayValido(RELAY) && clave && typeof window.fetch === "function") {
+              var bt = nuevo("button", "boton-2", b.texto);
+              bt.type = "button";
+              bt.onclick = function () { pedirPorRelay(bt, "frasquito", {}, kid, clave, firmaR, href); };
+              caja.appendChild(bt);
+              puestos++;
+              return;
+            }
+            // (16/10, P7) Las preguntas de la etapa: el control se abre en
+            // una hoja del portal y la respuesta va por el relay (con la
+            // llave apagada o sin relay, el link de siempre).
+            if (b.que === "e" && b.u && PREGUNTAS_PORTAL === true && controlEnElPortal(b.u) && mismoSitio(b.u, window.location.origin) && firmaR && relayValido(RELAY) && clave &&
+                typeof window.fetch === "function" && typeof window.postMessage === "function") {
+              var bc = nuevo("button", "boton-2", "Responder");
+              bc.type = "button";
+              var yaC = null;
+              try { yaC = JSON.parse(window.localStorage.getItem("cuantica-portal-control-" + kid) || "null"); } catch (e) { yaC = null; }
+              if (yaMandoElControl(yaC, b.u)) {
+                bc.textContent = LISTO_CONTROL;
+                bc.disabled = true;
+              } else {
+                bc.onclick = function () { abrirControl(bc, b.u, kid, clave, firmaR); };
+              }
+              caja.appendChild(bc);
+              puestos++;
+              conControl = true;
+              return;
+            }
+            var a = nuevo("a", "boton-2", b.texto);
+            a.href = href;
+            if (b.u) { a.target = "_blank"; a.rel = "noopener noreferrer"; conControl = true; }
+            caja.appendChild(a);
+            puestos++;
+          });
+          if (conControl) { texto("pedir-bajada", "Tocá lo que necesites: me llega a mí y te contesto."); }
+          if (puestos) { el("sec-pedir").hidden = false; revelar(el("sec-pedir")); }
+        }).catch(function () { /* sin botones: el portal queda como antes */ });
+      }
+    } catch (e) { /* sin botones: el portal queda como antes */ }
+    // (16/10, P5) TUS DATOS DE ENVIO: solo si vinieron FIRMADOS en "envio"
+    // (la llave, Argentina y el pais escrito los decide la notebook). Se
+    // corrigen por el relay; sin relay, se leen y se avisa por WhatsApp.
+    try { pintarEnvio(d, kid, clave); } catch (e) { /* sin envio: como antes */ }
+    revelar(el("hablemos"));
+    if (str(d.act)) { texto("pie", "Actualizado el " + d.act); }
+    // Abierta como app: siempre a mano un lugar para pegar un link nuevo (en
+    // el iPhone el icono no se entera solo del link nuevo).
+    try {
+      if (COMO_APP && PLAT === "app") {
+        el("link-nuevo-caja").hidden = false;
+        el("link-nuevo").onclick = function () { pantallaSinLink(PEGAR_NUEVO); };
+      }
+    } catch (e) { /* queda como antes */ }
+
+    // EL FESTEJO: cada etapa nueva que recibiste (y la primera vez que entrás).
+    var k = "cuantica-portal-hitos-" + kid, antes = parseInt(guardado(k) || "0", 10) || 0;
+    if (hayQueFestejar(hechos, antes, memoriaAnda())) { window.setTimeout(festejo, quieto ? 0 : 1100); }
+    guardar(k, String(hechos));
+    // La onda se acomoda debajo de la cabecera (se dibuja una sola vez).
+    if (!pintado) { ondas(); }
+    pintado = true;
+    irA("inicio");
+  }
+
+  // EL PORTAL COMO APP: lo que no es puro (el navegador). Con la llave
+  // apagada no se escucha nada ni se registra nada.
+  var LINK_GUARDADO = "cuantica-portal-link", INSTALADA = "cuantica-portal-instalada";
+  var promptInstalar = null, PLAT = "compu";
+  var MAL_COPIADO = "Tu link no se copió entero. Volvé a copiarlo completo del mensaje que te mandé y pegalo acá.";
+  var NO_ABRE_APP = "Ese link ya no está activo. Si te mandé uno nuevo, copialo del mensaje y pegalo acá. Si no, escribime y te lo paso.";
+  var PEGAR_NUEVO = "Copiá el link nuevo que te mandé y pegalo acá: tu portal se abre con lo último.";
+  function suelta() {
+    try {
+      return window.matchMedia("(display-mode: standalone)").matches ||
+        window.matchMedia("(display-mode: fullscreen)").matches || window.navigator.standalone === true;
+    } catch (e) { return false; }
+  }
+  function olvidar(k) { try { window.localStorage.removeItem(k); } catch (e) { /* nada */ } }
+  if (COMO_APP) {
+    try {
+      window.addEventListener("beforeinstallprompt", function (ev) { ev.preventDefault(); promptInstalar = ev; });
+      window.addEventListener("appinstalled", function () { guardar(INSTALADA, "1"); instalada(); });
+      if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "127.0.0.1" || location.hostname === "localhost")) {
+        navigator.serviceWorker.register("portal-sw.js", {scope: "portal.html"}).catch(function () { /* sin app: el portal anda igual */ });
+      }
+    } catch (e) { /* sin app: el portal anda igual */ }
+  }
+  function copiar(link) {
+    var nota = el("instalar-nota");
+    var ok = function () { nota.textContent = "Copiado. Abrí el ícono CUÁNTICA y, si ya lo tenías, tocá «¿Te mandé un link nuevo?», abajo de todo, y pegalo ahí."; nota.hidden = false; };
+    var aMano = function () {
+      var c = el("instalar-link");
+      c.value = link; c.hidden = false;
+      try { c.focus(); c.select(); } catch (e) { /* queda a la vista */ }
+      nota.textContent = "Mantené apretado tu link de arriba y elegí «Copiar»."; nota.hidden = false;
+    };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(link).then(ok, aMano); } else { aMano(); }
+    } catch (e) { aMano(); }
+  }
+  function instalada() {
+    try {
+      if (el("instalar").hidden) { return; }
+      texto("instalar-texto", "Listo: tu portal ya está en la pantalla de tu celular. Abrilo desde el ícono CUÁNTICA.");
+      el("instalar-boton").hidden = true;
+      el("instalar-nota").hidden = true;
+      el("pasos-ios").hidden = true;
+      texto("instalar-ayuda", "");
+    } catch (e) { /* queda como estaba */ }
+  }
+  // LA PUERTA DE INSTALAR: la marca y UN boton. No deja pasar al portal.
+  function pantallaInstalar(plat, frag) {
+    listo();
+    el("puerta").hidden = true; el("aviso").hidden = true; el("portal").hidden = true; el("sin-link").hidden = true;
+    var link = location.href.split("#")[0] + "#" + frag;
+    var boton = el("instalar-boton"), nota = el("instalar-nota"), marca = el("instalar-marca");
+    // (14/10, P1b) La bienvenida saluda con el nombre que dejo en SU celular.
+    try {
+      var nh = nombreLimpio(guardado(claveNombre(String(frag || "").split(".")[1] || "")));
+      texto("instalar-hola", nh ? "Hola, " + nh : "");
+      el("instalar-hola").hidden = !nh;
+    } catch (e) { /* sin saludo */ }
+    if (marca && !marca.getAttribute("src")) { marca.setAttribute("src", "imagenes/icono-192.png"); }
+    nota.hidden = true;
+    if (plat === "ios") {
+      // Sin manifiesto, el iPhone guarda en el icono el link de la pantalla
+      // (con lo de despues del #): asi abre el portal de esta persona.
+      try { var m = document.querySelector('link[rel="manifest"]'); if (m && m.parentNode) { m.parentNode.removeChild(m); } } catch (e) { /* sigue */ }
+      texto("instalar-texto", "Tu portal va en la pantalla de tu celular, como una app. Son dos toques en Safari:");
+      el("pasos-ios").hidden = false;
+      texto("instalar-boton", "Copiar mi link");
+      texto("instalar-ayuda", "¿Ya tenés el ícono y te mandé un link nuevo? Copialo con este botón, abrí el ícono y pegalo en «¿Te mandé un link nuevo?», abajo de todo. Si no ves Compartir ni los tres puntitos, tocá la brújula para abrirlo en Safari.");
+      boton.onclick = function () { copiar(link); };
+    } else if (plat === "iosafuera") {
+      texto("instalar-texto", "En el iPhone, tu portal se agrega a la pantalla desde Safari. Copiá tu link, abrí Safari y pegalo arriba, en la barra de direcciones.");
+      texto("instalar-boton", "Copiar mi link");
+      texto("instalar-ayuda", "Si ves un botón «Abrir en Safari» o una brújula, tocalo y listo.");
+      boton.onclick = function () { copiar(link); };
+    } else if (plat === "enapp") {
+      texto("instalar-texto", "Tu link se abrió adentro de otra aplicación, y ahí no se puede instalar. Tocá los tres puntitos de arriba y elegí «Abrir en el navegador» (Chrome o Safari).");
+      texto("instalar-boton", "Copiar mi link");
+      texto("instalar-ayuda", "Si no aparece, copiá tu link y pegalo en Chrome o en Safari.");
+      boton.onclick = function () { copiar(link); };
+    } else {
+      texto("instalar-texto", guardado(INSTALADA) === "1"
+        ? "Tu portal ya se actualizó: abrilo desde el ícono CUÁNTICA de tu pantalla. Si lo borraste, instalalo de nuevo."
+        : "Tu portal va en la pantalla de tu celular, como una app: lo abrís con un toque, sin buscar el link.");
+      texto("instalar-ayuda", "");
+      boton.onclick = function () {
+        if (promptInstalar) {
+          var p = promptInstalar;
+          promptInstalar = null;
+          try {
+            p.prompt();
+            Promise.resolve(p.userChoice).then(function (r) {
+              if (r && r.outcome === "accepted") { guardar(INSTALADA, "1"); instalada(); }
+            }).catch(function () { /* queda la puerta */ });
+          } catch (e) { /* queda la puerta */ }
+        } else {
+          nota.textContent = "Tocá los tres puntitos de arriba a la derecha (⋮) y elegí «Instalar aplicación» o «Agregar a la pantalla principal». Si estás adentro de WhatsApp, elegí primero «Abrir en Chrome».";
+          nota.hidden = false;
+        }
+      };
+    }
+    el("instalar").hidden = false;
+  }
+  // Abierta desde el icono sin ningun link guardado: tocarlo o pegarlo.
+  function pantallaSinLink(msg) {
+    listo();
+    el("puerta").hidden = true; el("aviso").hidden = true; el("portal").hidden = true; el("instalar").hidden = true;
+    var nt = el("sin-link-nota");
+    if (typeof msg === "string" && msg) { nt.textContent = msg; nt.hidden = false; } else if (VUELTA_PAGO) { nt.textContent = TEXTO_VUELTA; nt.hidden = false; } else { nt.hidden = true; }
+    try { el("sin-link-campo").value = ""; } catch (e) { /* sigue */ }
+    // Si ya habia un portal pintado (vino de "¿Te mandé un link nuevo?"),
+    // se puede volver a el sin pegar nada.
+    el("sin-link-volver").hidden = !pintado;
+    el("sin-link").hidden = false;
+    el("sin-link-boton").onclick = function () {
+      var s = linkPegado(el("sin-link-campo").value);
+      if (!s) {
+        texto("sin-link-nota", "Ese no parece tu link. Copialo entero del mensaje que te mandé y pegalo acá.");
+        el("sin-link-nota").hidden = false;
+        return;
+      }
+      el("sin-link").hidden = true;
+      arrancar(s);
+    };
+  }
+
+  function arrancar(pegado, quedan) {
+    var plat = COMO_APP ? plataforma(navigator.userAgent, navigator.maxTouchPoints || 0, suelta()) : "compu";
+    PLAT = plat;
+    var recordado = recuerdaEn(COMO_APP, plat) ? guardado(LINK_GUARDADO) : null;
+    var esPegado = typeof pegado === "string" && !!pegado;
+    var lista = Array.isArray(quedan) ? quedan
+      : (esPegado ? [pegado] : candidatosLink(location.hash, LOCAL, recordado, COMO_APP, plat));
+    var frag = lista[0] || "";
+    // Cuando un link no abre: probar el siguiente; si no queda ninguno, el
+    // link pegado vuelve a pedir pegarlo (se copio mal), la app pide un
+    // link nuevo, y el navegador avisa como siempre.
+    var noAbre = function (motivo) {
+      if (COMO_APP && frag === recordado) { olvidar(LINK_GUARDADO); }
+      if (lista.length > 1) { arrancar(pegado, lista.slice(1)); return; }
+      // (14/10, P1b) Un link pegado desde adentro del portal (Contacto) que
+      // no abre: se vuelve a pedir, con "Volver a mi portal" a mano.
+      if ((COMO_APP || pintado) && esPegado) { pantallaSinLink(motivo === "apagado" ? NO_ABRE_APP : MAL_COPIADO); return; }
+      if (COMO_APP && plat === "app") { pantallaSinLink(NO_ABRE_APP); return; }
+      avisar(NO_ACTIVO);
+    };
+    if (!frag) { if (COMO_APP && plat === "app") { pantallaSinLink(); return; } avisar(NO_ACTIVO); return; }
+    var cripto = window.crypto;
+    if (!cripto || !cripto.subtle || typeof TextDecoder === "undefined") { avisar(VIEJO); return; }
+    abrirPaquete(frag, CLAVE, cripto).then(function (r) {
+      if (!r) { noAbre("firma"); return; }
+      // Los links apagados desde la ficha: la lista vive en el mismo sitio
+      // que la pagina (nada de terceros). Si no se puede leer, se sigue.
+      var lista = (location.protocol === "http:" || location.protocol === "https:")
+        ? fetch("portal-revocados.json", {cache: "no-store", credentials: "omit"})
+            .then(function (x) { return x.ok ? x.json() : null; })
+            .catch(function () { return null; })
+        : Promise.resolve(null);
+      return Promise.all([lista, huella(r.kid, cripto)]).then(function (v) {
+        var rev = v[0], h = v[1];
+        if (rev && Array.isArray(rev.r) && rev.r.indexOf(h) >= 0) { noAbre("apagado"); return; }
+        // EL PORTAL COMO APP: el link bueno queda guardado (el icono lo
+        // abre), y en el celular sin instalar solo se ve la puerta de instalar.
+        if (COMO_APP) {
+          if (frag !== LOCAL && recuerdaEn(COMO_APP, plat)) { guardar(LINK_GUARDADO, frag); }
+          var pant = queMostrar(COMO_APP, plat);
+          if (pant !== "portal") { pantallaInstalar(pant, frag); return; }
+          if (plat === "app") { guardar(INSTALADA, "1"); }
+        }
+        var entrar = function () { el("puerta").hidden = true; pintar(r.kid, r.d, r.k); };
+        if (guardado("cuantica-portal-ok") === "1") { entrar(); return; }
+        listo();
+        el("puerta").hidden = false;
+        el("entrar").addEventListener("click", function () { guardar("cuantica-portal-ok", "1"); entrar(); });
+      });
+    }).catch(function (e) { avisar(e && e.message === "viejo" ? VIEJO : NO_ACTIVO); });
+  }
+  try { VUELTA_PAGO = PAGO_ETAPA ? vueltaDePago(location.search) : 0; } catch (e) { VUELTA_PAGO = 0; }
+  // (21/10) Un link NUEVO pegado en la misma pestaña cambia solo lo de
+  // después del #: el navegador no recarga y quedaba el portal viejo (o
+  // "este link no está activo"). Con un link de portal, se abre entero.
+  try { window.addEventListener("hashchange", function () { if (/^#p1\./.test(location.hash)) { location.reload(); } }); } catch (e) { /* queda como estaba */ }
+  arrancar();
+  // Si en 15 segundos nada se pinto, el cartel de "Abriendo" no queda
+  // girando para siempre.
+  window.setTimeout(function () {
+    try {
+      var a = el("abriendo");
+      if (a && !a.hidden && el("portal").hidden && el("puerta").hidden && el("aviso").hidden &&
+          el("instalar").hidden && el("sin-link").hidden) { avisar(NO_ACTIVO); }
+    } catch (e) { /* queda como estaba */ }
+  }, 15000);
+})();
+</script>
+</body>
+</html>

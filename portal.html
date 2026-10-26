@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-sHxyBTF75xXKWMUAT+GnTo+XlkeU5w0Y+J/YpqM/1Kw='; style-src 'sha256-rnMbDF4nRz5uNsWBi84u5o/MIbhSOuJFL6kFjbLqsSY=' 'sha256-LNFFEjYU6Ef9fdCUO2qY9qmmbzs/mZmshQHNC51eWBA='; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-d2OSFINxlDBQtFEolS6Fhuj6+fcSNwp1zViRjCRB71Q='; style-src 'sha256-SsPuOLGSVTB5PwtqJ/EhzUw2aO8NgrHqIE3pT+dd0QE=' 'sha256-LNFFEjYU6Ef9fdCUO2qY9qmmbzs/mZmshQHNC51eWBA='; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
 <meta name="theme-color" content="#050606">
 <meta name="color-scheme" content="dark">
 <title>Tu portal · CUÁNTICA</title>
@@ -110,7 +110,14 @@
   .rotulo { font-family: var(--sc); font-weight: 700; font-size: 13px; letter-spacing: .3em; color: var(--tenue); text-transform: uppercase; margin: 0; }
   .rotulo.centro { text-align: center; padding-left: .3em; }
   .titulo-portal { font-family: var(--sc); font-style: italic; color: var(--blanco); font-weight: 600; font-size: 42px; line-height: 1; margin: 12px 0 0; letter-spacing: .005em; }
-  .titulo-portal.entra { animation: titulo 450ms var(--asienta) both; }
+  /* (26/10, auditoria) El saludo entra agrandado (scale 1.25). En el celular
+     Chrome, un bloque de todo el ancho agrandado se sale por la derecha y
+     eso ensanchaba la pagina ENTERA al volver de otra pantalla a Inicio (la
+     barra de abajo quedaba de 402 px en 375 y aparecia scroll de costado).
+     Por eso el saludo ocupa como mucho el 80 % del ancho y crece desde la
+     izquierda: 80 % x 1,25 = 100 %, nunca se sale. (Recortar el html o la
+     cabecera con overflow tapaba otros chequeos: no.) */
+  .titulo-portal.entra { animation: titulo 450ms var(--asienta) both; transform-origin: left center; width: fit-content; max-width: 80%; }
   h2 { font-family: var(--sc); font-style: italic; color: var(--blanco); font-weight: 600; font-size: 26px; line-height: 1.1; margin: 0 0 10px; }
   .titulo-pant { font-size: 42px; line-height: 1; margin: 12px 0 0; }
   .bajada { color: var(--crema); font-family: var(--texto); font-size: 19px; margin: 12px 0 0; line-height: 1.45; opacity: .86; }
@@ -166,6 +173,7 @@
   /* LAS CIFRAS: tres numeros entre lineas finas, sin cajas. */
   .cifras { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0 0 40px; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); }
   .cifras.dos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cifras.una { grid-template-columns: minmax(0, 1fr); }
   .cifra { padding: 16px 10px 14px; min-width: 0; text-align: center; }
   .cifra + .cifra { border-left: 1px solid var(--linea); }
   .cifra .num { display: block; font-family: var(--dato); font-weight: 600; font-size: 28px; line-height: 1; color: var(--blanco); font-variant-numeric: tabular-nums lining-nums; }
@@ -428,7 +436,7 @@
   /* EL FESTEJO: sobrio. Un anillo blanco y una linea que lo dice. */
   .festejo { position: fixed; inset: 0; pointer-events: none; z-index: 50; display: flex; align-items: center; justify-content: center; }
   .festejo .anillo-f { position: absolute; width: 120px; height: 120px; border-radius: 50%; border: 1px solid var(--blanco); animation: expande 1.4s var(--asienta) forwards; }
-  .festejo .dice { position: absolute; bottom: calc(var(--abajo) + 20px); left: 16px; right: 16px; margin: 0 auto; max-width: 420px; text-align: center; padding: 14px 18px; border-radius: 14px; background: var(--verde); border: 1px solid var(--teal); color: var(--blanco); font-size: 14px; animation: entra 220ms var(--rebote) both; }
+  .festejo .dice { position: absolute; bottom: calc(var(--abajo) + 20px); left: 16px; right: 16px; margin: 0 auto; max-width: 420px; text-align: center; padding: 14px 18px; border-radius: 14px; background: var(--verde); border: 1px solid var(--teal); color: var(--blanco); font-size: 14px; pointer-events: auto; cursor: pointer; animation: entra 220ms var(--rebote) both; }
   .festejo .dice.se-va { animation: sale 250ms var(--sale) forwards; }
 
   /* (14/10, fase P1b) LAS PANTALLAS QUE FALTABAN, con el mismo look. */
@@ -790,13 +798,15 @@
       <p class="bajada" id="sub">Lo que leímos en tu estudio, zona por zona.</p>
     </div>
     <section class="bloque revela" id="sec-mas" hidden>
+      <!-- (26/10, auditoria) Lo que conto el paciente va PRIMERO y abierto:
+           cerrado y al final de la lista no lo encontraba nadie. -->
+      <details id="det-motivo" hidden open>
+        <summary>Lo que me contaste</summary>
+        <div class="dentro"><p class="motivo" id="motivo"></p></div>
+      </details>
       <details id="det-vimos" hidden open>
         <summary>Lo que vimos, zona por zona</summary>
         <div class="dentro" id="vimos"></div>
-      </details>
-      <details id="det-motivo" hidden>
-        <summary>Lo que me contaste</summary>
-        <div class="dentro"><p class="motivo" id="motivo"></p></div>
       </details>
     </section>
     <p class="nota-chica" id="estudio-vacio" hidden>Cuando tengas tu informe, acá vas a ver lo que leímos, zona por zona.</p>
@@ -910,6 +920,7 @@
   // de ahora titila. Con la llave apagada queda en false: gris quieto.
   var GRIS_TITILA = false;
   var NO_ACTIVO = "Este link no está activo. Escribime y te paso uno nuevo.";
+  var DEMORA = "Se está demorando más de lo normal. Cerrá y volvé a abrir tu link.";
   var VIEJO = "Tu teléfono necesita una versión más nueva del navegador para abrir tu portal. Actualizalo y volvé a tocar el link.";
   var ZONAS = ["cabeza", "cuello", "pecho", "abdomen", "pelvis", "brazos", "piernas", "todo"];
   var NOMBRES = {cabeza: "Cabeza", cuello: "Cuello y garganta", pecho: "Pecho", abdomen: "Abdomen",
@@ -1012,7 +1023,10 @@
     var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && toques > 1);
     var android = /Android/.test(ua);
     if (!ios && !android) { return "compu"; }
-    if (/FBAN|FBAV|FB_IAB|FBIOS|Instagram|Line\/|MicroMessenger|GSA\/|; wv\)/.test(ua)) { return "enapp"; }
+    // (26/10, ataque) TikTok (BytedanceWebview / musical_ly) tambien es
+    // "adentro de otra app": antes caia en "android" y la puerta no decia
+    // como salir.
+    if (/FBAN|FBAV|FB_IAB|FBIOS|Instagram|Line\/|MicroMessenger|GSA\/|; wv\)|Bytedance|musical_ly|TikTok/.test(ua)) { return "enapp"; }
     // En el iPhone solo Safari agrega a inicio con los dos pasos: Chrome,
     // Firefox, Edge o el navegador de adentro de otra app (sin "Safari/")
     // tienen que abrirlo en Safari primero.
@@ -1074,6 +1088,15 @@
       out.push({que: "e", texto: "Pasar a la etapa siguiente", u: controlValido(p.u) ? p.u : ""});
     }
     return out;
+  }
+  // (26/10, auditoria) Lo que dice arriba de los botones de pedir, segun
+  // por donde sale cada uno: por el relay (le llega solo a Jose) o por el
+  // correo del celular (se abre escrito y toca Enviar). Decia siempre "se
+  // abre tu correo" aunque el frasquito saliera solo al tocarlo. En puro.
+  function bajadaPedir(porRelay, porMail) {
+    if (porRelay > 0 && porMail > 0) { return "Tocá lo que necesites: me llega a mí y te contesto. Si se te abre el correo, solo tocá Enviar."; }
+    if (porRelay > 0) { return "Tocá lo que necesites: me llega a mí y te contesto."; }
+    return "Tocá y se abre tu correo con el pedido escrito: solo tocá Enviar. Me llega a mí y te contesto.";
   }
   function hoyLocal(d) {
     d = d || new Date();
@@ -1439,6 +1462,30 @@
     if (nr) { out.push({n: nr, que: nr === 1 ? "Remedio en tu plan" : "Remedios en tu plan"}); }
     return out;
   }
+  // (26/10, auditoria, Jose: "contadores pobres") La fila de cifras va
+  // solo si alguna cuenta algo (2 o mas): "1 etapa, 1 zona, 1 remedio" no
+  // dice nada que el arco no diga ya. En puro (node).
+  // (26/10, ataque) Con pacientes reales la fila seguia pobre: "1 Etapa
+  // recibida | 1 Zona en foco | 2 Remedios". Van SOLO las cifras que
+  // cuentan 2 o mas (las que valen 1 no dicen nada que el arco no diga).
+  function cifrasQueValen(cs) {
+    return (Array.isArray(cs) ? cs : []).filter(function (c) { return !!c && typeof c.n === "number" && c.n >= 2; });
+  }
+  function cifrasValen(cs) {
+    return cifrasQueValen(cs).length >= 1;
+  }
+  // (26/10, ataque) Si ya recibio una etapa ("La recibiste el 23/10") y no
+  // hay nada que mostrar, no se le dice "cuando recibas tu etapa": se esta
+  // cargando, que escriba. En puro (node).
+  function textoVacio(recibida, cual) {
+    if (recibida) { return "Estoy terminando de cargar esto. Si no aparece en el día, escribime."; }
+    if (cual === "cuerpo") { return "Cuando recibas tu etapa, acá vas a ver las zonas que trabajamos."; }
+    if (cual === "estudio") { return "Cuando tengas tu informe, acá vas a ver lo que leímos, zona por zona."; }
+    return "Tus remedios aparecen acá cuando recibís tu etapa.";
+  }
+  function etapaRecibida(camino) {
+    return (Array.isArray(camino) ? camino : []).some(function (e) { return !!(e && str(e.el)); });
+  }
   function memoriaAnda() {
     try {
       var k = "cuantica-portal-prueba", v = String(new Date().getTime());
@@ -1567,6 +1614,25 @@
   }
 
   // EL FESTEJO: un anillo cobre y una linea. Nada de papelitos.
+  // (26/10, auditoria, Jose: "el cartel verde tapa botones varios
+  // segundos") El cartel se va solo a los 2,6 s y ANTES si lo tocan; el
+  // toque lo recibe el cartel (pointer-events: auto en .dice), asi no
+  // aprieta por accidente lo que esta debajo.
+  var FESTEJO_MS = 2600;
+  // Como se va: una sola vez (el toque y el reloj llaman a la misma),
+  // con su salida, y a los 400 ms fuera del documento. En puro (node).
+  function cerrarFestejo(caja, dice, win) {
+    var hecho = false;
+    return function () {
+      if (hecho) { return false; }
+      hecho = true;
+      try { dice.classList.add("se-va"); } catch (e) { /* sigue */ }
+      win.setTimeout(function () {
+        try { if (caja.parentNode) { caja.parentNode.removeChild(caja); } } catch (e) { /* nada */ }
+      }, 400);
+      return true;
+    };
+  }
   function festejo() {
     if (quieto) { return; }
     try {
@@ -1576,8 +1642,9 @@
       var dice = nuevo("div", "dice", "Tenés una etapa nueva en tu camino.");
       caja.appendChild(dice);
       document.body.appendChild(caja);
-      window.setTimeout(function () { dice.classList.add("se-va"); }, 3200);
-      window.setTimeout(function () { if (caja.parentNode) { caja.parentNode.removeChild(caja); } }, 3600);
+      var irse = cerrarFestejo(caja, dice, window);
+      dice.addEventListener("click", function (ev) { try { ev.stopPropagation(); } catch (x) { /* sigue */ } irse(); });
+      window.setTimeout(irse, FESTEJO_MS);
     } catch (e) { /* sin festejo */ }
   }
 
@@ -2092,7 +2159,7 @@
       el("candado").classList.remove("abierto");
       el("siguiente-precio").hidden = false;
       tomasG = null;
-      el("cifras").classList.remove("dos");
+      el("cifras").classList.remove("dos"); el("cifras").classList.remove("una");
       el("anillo-num").hidden = false; el("anillo-de").hidden = false; texto("anillo-palabra", "Etapa");
       el("anillo").classList.remove("lleno");
       texto("sub", "Lo que leímos en tu estudio, zona por zona.");
@@ -2513,10 +2580,24 @@
     el("sec-envio").hidden = false;
     revelar(el("sec-envio"));
   }
+  // (26/10, ataque) Con la conexion lenta, la lista de links apagados
+  // tardaba mas de 15 s, el reloj decia "Este link no esta activo" y el
+  // cartel quedaba arriba del portal. La lista se espera hasta LIMITE_LISTA
+  // (si no llega, se sigue como cuando falla), y pintar esconde el aviso.
+  var LIMITE_LISTA = 7000, verificado = false;
+  function conLimite(p, ms, win) {
+    win = win || window;
+    return new Promise(function (res) {
+      var t = win.setTimeout(function () { res(null); }, ms);
+      Promise.resolve(p).then(function (v) { win.clearTimeout(t); res(v); },
+                              function () { win.clearTimeout(t); res(null); });
+    });
+  }
   function pintar(kid, d, clave) {
     listo();
     limpiar();
     escuchar();
+    el("aviso").hidden = true;
     // Otro portal pegado adentro: el nombre de la visita era del de antes.
     if (kidNombre && kidNombre !== kid) { nombreDeLaVisita = ""; }
     el("portal").hidden = false;
@@ -2714,9 +2795,11 @@
     var enTrabajo = zonasEnTrabajo(ZONAS, porZona);
     // LAS CIFRAS (necesitan saber cuantas zonas hay en foco)
     var cs = cifras(d, enTrabajo.filter(function (z) { return z !== "todo"; }).length);
-    if (cs.length >= 2) {
+    if (cifrasValen(cs)) {
       var caja = el("cifras");
+      cs = cifrasQueValen(cs);
       if (cs.length === 2) { caja.classList.add("dos"); }
+      if (cs.length === 1) { caja.classList.add("una"); }
       var nums = [];
       cs.forEach(function (c) {
         var t = nuevo("div", "cifra"), nn = nuevo("span", "num", "0");
@@ -2808,7 +2891,7 @@
       if (conAlgo.indexOf(z) < 0) { b.disabled = true; } else { b.addEventListener("click", function () { elegir(z); }); }
       botones.appendChild(b);
     });
-    if (!conAlgo.length) { texto("cuerpo-bajada", "Cuando recibas tu etapa, acá vas a ver las zonas que trabajamos."); }
+    if (!conAlgo.length) { texto("cuerpo-bajada", textoVacio(etapaRecibida(d.camino), "cuerpo")); }
     // (P2) La leyenda de los 4 tramos, solo si alguna zona tiene nivel.
     el("leyenda-niveles").hidden = !hayNivel && !hayLate && !hayTitila;
     el("leyenda-niveles").querySelector("ul").hidden = !hayNivel;
@@ -2869,12 +2952,14 @@
     }
     el("sec-mas").hidden = !hayMas;
     el("estudio-vacio").hidden = hayMas;
+    if (!hayMas) { texto("estudio-vacio", textoVacio(etapaRecibida(d.camino), "estudio")); }
     if (hayMas) { revelar(el("sec-mas")); }
 
     // TU PLAN, EN TRES PESTAÑAS (14/10, P1b): Remedios, Flores y Comidas.
     // Remedios: los de la etapa de ahora y, aparte, los de las anteriores.
     var nRem = pintarRemedios(d.zonas, porZona, actual && actual.estado === "actual" ? actual.n : 0), hayFlores = false;
     el("remedios-vacio").hidden = !!nRem;
+    if (!nRem) { texto("remedios-vacio", textoVacio(etapaRecibida(d.camino), "remedios")); }
     el("rem-bajada").hidden = !nRem;
     // Flores: como en el papel, cada una con lo que hace (su frase).
     if (Array.isArray(d.flores) && d.flores.length) {
@@ -2941,7 +3026,7 @@
       var bs = COMO_APP ? botonesPedir(d.pedir, MAIL, hoyLocal()) : [];
       if (bs.length && window.crypto && window.crypto.subtle) {
         codigoPedido(kid, window.crypto).then(function (cod) {
-          var caja = el("pedidos"), puestos = 0, conControl = false;
+          var caja = el("pedidos"), puestos = 0, porRelay = 0, porMail = 0;
           var firmaR = firmaRelay(d.pedir && d.pedir.r, kid);
           bs.forEach(function (b) {
             var href = b.u || mailPedido(MAIL, b.que, cod);
@@ -2954,6 +3039,7 @@
               bt.onclick = function () { pedirPorRelay(bt, "frasquito", {}, kid, clave, firmaR, href); };
               caja.appendChild(bt);
               puestos++;
+              porRelay++;
               return;
             }
             // (16/10, P7) Las preguntas de la etapa: el control se abre en
@@ -2973,16 +3059,16 @@
               }
               caja.appendChild(bc);
               puestos++;
-              conControl = true;
+              porRelay++;
               return;
             }
             var a = nuevo("a", "boton-2", b.texto);
             a.href = href;
-            if (b.u) { a.target = "_blank"; a.rel = "noopener noreferrer"; conControl = true; }
+            if (b.u) { a.target = "_blank"; a.rel = "noopener noreferrer"; porRelay++; } else { porMail++; }
             caja.appendChild(a);
             puestos++;
           });
-          if (conControl) { texto("pedir-bajada", "Tocá lo que necesites: me llega a mí y te contesto."); }
+          texto("pedir-bajada", bajadaPedir(porRelay, porMail));
           if (puestos) { el("sec-pedir").hidden = false; revelar(el("sec-pedir")); }
         }).catch(function () { /* sin botones: el portal queda como antes */ });
       }
@@ -3162,12 +3248,14 @@
     if (!cripto || !cripto.subtle || typeof TextDecoder === "undefined") { avisar(VIEJO); return; }
     abrirPaquete(frag, CLAVE, cripto).then(function (r) {
       if (!r) { noAbre("firma"); return; }
+      verificado = true;
       // Los links apagados desde la ficha: la lista vive en el mismo sitio
-      // que la pagina (nada de terceros). Si no se puede leer, se sigue.
+      // que la pagina (nada de terceros). Si no se puede leer (o tarda mas
+      // de LIMITE_LISTA), se sigue.
       var lista = (location.protocol === "http:" || location.protocol === "https:")
-        ? fetch("portal-revocados.json", {cache: "no-store", credentials: "omit"})
+        ? conLimite(fetch("portal-revocados.json", {cache: "no-store", credentials: "omit"})
             .then(function (x) { return x.ok ? x.json() : null; })
-            .catch(function () { return null; })
+            .catch(function () { return null; }), LIMITE_LISTA)
         : Promise.resolve(null);
       return Promise.all([lista, huella(r.kid, cripto)]).then(function (v) {
         var rev = v[0], h = v[1];
@@ -3200,7 +3288,7 @@
     try {
       var a = el("abriendo");
       if (a && !a.hidden && el("portal").hidden && el("puerta").hidden && el("aviso").hidden &&
-          el("instalar").hidden && el("sin-link").hidden) { avisar(NO_ACTIVO); }
+          el("instalar").hidden && el("sin-link").hidden) { avisar(verificado ? DEMORA : NO_ACTIVO); }
     } catch (e) { /* queda como estaba */ }
   }, 15000);
 })();

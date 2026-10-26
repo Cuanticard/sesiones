@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-d2OSFINxlDBQtFEolS6Fhuj6+fcSNwp1zViRjCRB71Q='; style-src 'sha256-SsPuOLGSVTB5PwtqJ/EhzUw2aO8NgrHqIE3pT+dd0QE=' 'sha256-LNFFEjYU6Ef9fdCUO2qY9qmmbzs/mZmshQHNC51eWBA='; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-4Lyrk2z0UI+HmSc1eoubNaBmXPnYjDdxePZQjuxbaHQ='; style-src 'sha256-WdA1cKyUQEO3jneE4AQbTCp6GrooU8JK7v97jZ7sGAs=' 'sha256-LNFFEjYU6Ef9fdCUO2qY9qmmbzs/mZmshQHNC51eWBA='; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
 <meta name="theme-color" content="#050606">
 <meta name="color-scheme" content="dark">
 <title>Tu portal · CUÁNTICA</title>
@@ -432,6 +432,19 @@
   .envio-form label { display: grid; gap: 4px; font-family: var(--dato); font-size: 13px; color: var(--crema); }
   .envio-form input { font: inherit; font-size: 16px; width: 100%; box-sizing: border-box; padding: 10px 12px; min-height: 44px; border-radius: 10px; border: 1px solid var(--linea-fuerte); background: transparent; color: var(--blanco); }
   .envio-form input:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  /* (26/10, decision 3 de Jose) COMO ME VENGO SINTIENDO: la nota del
+     paciente, y "Con esto llegaste" con la fecha. Todo a lo ancho (375 px:
+     nada se sale, nada tapa). */
+  .campo-nota { display: block; width: 100%; min-height: 96px; resize: vertical; font-family: var(--texto); font-size: 18px; line-height: 1.4; margin-top: 14px; }
+  .nota-mandar { margin-top: 10px; }
+  ul.notas-lista { list-style: none; margin: 14px 0 0; padding: 0; }
+  ul.notas-lista li { padding: 10px 0; border-bottom: 1px solid var(--linea); font-family: var(--texto); font-size: 17px; line-height: 1.4; color: var(--crema); overflow-wrap: anywhere; }
+  ul.notas-lista li .cuando { display: block; font-family: var(--dato); font-size: 11.5px; color: var(--tenue); margin-bottom: 2px; }
+  .llegaste { font-family: var(--texto); font-size: 18px; line-height: 1.45; color: var(--crema); margin: 12px 0 0; padding-left: 16px; border-left: 1px solid var(--linea-fuerte); overflow-wrap: anywhere; }
+  .llegaste strong { color: var(--blanco); font-weight: 600; }
+  .motivo-fecha { font-family: var(--dato); font-size: 12px; color: var(--tenue); margin: 0 0 8px; }
+  /* (26/10, decision 2a) El pago del frasquito: la nota de la vuelta. */
+  .pago-frasquito { margin-top: 10px; }
 
   /* EL FESTEJO: sobrio. Un anillo blanco y una linea que lo dice. */
   .festejo { position: fixed; inset: 0; pointer-events: none; z-index: 50; display: flex; align-items: center; justify-content: center; }
@@ -700,6 +713,20 @@
       <div class="pago-sig" id="siguiente-pago" hidden aria-live="polite"></div>
     </section>
 
+    <!-- (26/10, decision 3 de Jose) COMO ME VENGO SINTIENDO: solo con la
+         llave portal_notas.PORTAL_NOTAS. La nota queda en el celular y
+         viaja por el relay a la libreta del paciente. -->
+    <section class="bloque revela" id="sec-notas" hidden aria-labelledby="notas-titulo">
+      <p class="rotulo">Cómo me vengo sintiendo</p>
+      <h2 id="notas-titulo">¿Cómo te venís sintiendo?</h2>
+      <p class="llegaste" id="notas-llegaste" hidden></p>
+      <textarea class="campo campo-nota" id="nota-campo" maxlength="600" rows="3" placeholder="Contame en pocas palabras cómo venís" aria-label="Cómo te venís sintiendo"></textarea>
+      <button type="button" class="boton-2 nota-mandar" id="nota-mandar">Mandármelo</button>
+      <p class="nota-chica" id="nota-estado" hidden aria-live="polite"></p>
+      <ul class="notas-lista" id="notas-lista"></ul>
+      <p class="nota-chica">Lo que escribís me llega a mí y queda en tu libreta: lo tengo en cuenta en tu próxima etapa.</p>
+    </section>
+
     <section class="bloque revela" id="sec-zonas" hidden>
       <h2>Lo que estamos trabajando</h2>
       <div class="pills" id="zonas-inicio"></div>
@@ -801,8 +828,8 @@
       <!-- (26/10, auditoria) Lo que conto el paciente va PRIMERO y abierto:
            cerrado y al final de la lista no lo encontraba nadie. -->
       <details id="det-motivo" hidden open>
-        <summary>Lo que me contaste</summary>
-        <div class="dentro"><p class="motivo" id="motivo"></p></div>
+        <summary><span id="motivo-titulo">Lo que me contaste</span></summary>
+        <div class="dentro"><p class="motivo-fecha" id="motivo-fecha" hidden></p><p class="motivo" id="motivo"></p></div>
       </details>
       <details id="det-vimos" hidden open>
         <summary>Lo que vimos, zona por zona</summary>
@@ -909,6 +936,8 @@
   var PAGO_ETAPA = true;
   var PAGO_AVISADO = "cuantica-portal-pago-";
   var VUELTA_PAGO = 0;
+  // (26/10, decision 2a) La vuelta del pago del frasquito (?pago=frasquito).
+  var VUELTA_FRASQUITO = false;
   // LA ENTRADA UNICA DEL PORTAL (15/10, P4, portal_relay.py). Con la llave
   // apagada RELAY es "" y los pedidos siguen por el mail de hoy.
   var RELAY = "https://script.google.com/macros/s/AKfycbwrzY3uUcoTb47YV0JQ0Cq5cZHJB7G0oK3pln3-Rz67si_w6Hp_9dD2mnjnceqAO4sH/exec";
@@ -919,13 +948,23 @@
   // (16/10, decision de Jose) El punto gris que igual se trabaja en la etapa
   // de ahora titila. Con la llave apagada queda en false: gris quieto.
   var GRIS_TITILA = false;
+  // (26/10, las tres decisiones de Jose) Cada una con su llave en Python;
+  // apagada queda en false y la pagina es la de hoy.
+  // El nombre de pila viaja en el link (portal_nombre.py): saluda sin preguntar.
+  var NOMBRE_LINK = true;
+  // "Con esto llegaste" con la fecha, y la nota del paciente (portal_notas.py).
+  var NOTAS = true;
+  // La actividad del portal, un sobre por dia (portal_actividad.py).
+  var ACTIVIDAD = true;
+  // El pago del frasquito con Mercado Pago (pago_frasquito_portal.py).
+  var PAGO_FRASQUITO = true;
   var NO_ACTIVO = "Este link no está activo. Escribime y te paso uno nuevo.";
   var DEMORA = "Se está demorando más de lo normal. Cerrá y volvé a abrir tu link.";
   var VIEJO = "Tu teléfono necesita una versión más nueva del navegador para abrir tu portal. Actualizalo y volvé a tocar el link.";
   var ZONAS = ["cabeza", "cuello", "pecho", "abdomen", "pelvis", "brazos", "piernas", "todo"];
   var NOMBRES = {cabeza: "Cabeza", cuello: "Cuello y garganta", pecho: "Pecho", abdomen: "Abdomen",
                  pelvis: "Pelvis", brazos: "Brazos y manos", piernas: "Piernas y pies", todo: "Todo el cuerpo"};
-  var CLAVES = ["v", "ahora", "camino", "encuentro", "comidas", "precio", "zonas", "se_vio", "motivo", "fechas", "exterior", "act", "flores", "pedir", "sx", "tomas", "pago", "envio"];
+  var CLAVES = ["v", "ahora", "camino", "encuentro", "comidas", "precio", "zonas", "se_vio", "motivo", "fechas", "exterior", "act", "flores", "pedir", "sx", "tomas", "pago", "envio", "np"];
   var SVG = "http://www.w3.org/2000/svg";
   // (14/10, portal v3) Las pantallas de la barra de abajo, la figura de Tu
   // cuerpo segun la ficha, el nombre que escribe el paciente (queda en SU
@@ -1130,9 +1169,28 @@
   // pedido viaja al relay de Google con el codigo del link ("pedir"."r") y
   // SELLADO con la clave propia del link (la que solo tienen este celular y
   // la notebook). Si el relay no contesta ok, el camino de hoy: el mail.
-  var PEDIDOS_RELAY = ["frasquito", "preguntas", "turno", "envio"];
+  // (26/10) "nota" y "actividad" son los tipos nuevos (portal_notas.py,
+  // portal_actividad.py): la pagina los MANDA solo con su llave (NOTAS,
+  // ACTIVIDAD); aca solo se sabe armarlos.
+  var PEDIDOS_RELAY = ["frasquito", "preguntas", "turno", "envio", "nota", "actividad"];
   var CAMPOS_ENVIO = ["recibe", "calle", "numero", "piso", "depto", "referencia", "localidad", "provincia", "cp", "telefono", "dni"];
   var RX_CUANDO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}-03:00$/;
+  var TOPE_NOTA = 600;
+  var EVENTOS_PAGINA = ["instalo", "abrio", "tomas_marco", "etapa_vio"];
+  var EVENTOS_CON_NUMERO = ["tomas_marco", "etapa_vio"];
+  var TOPE_EVENTOS = 20;
+  // Un evento de la actividad: {e, d} o {e, d, v}, de la lista cerrada (lo
+  // mismo que portal_actividad.evento_valido).
+  function eventoValido(e) {
+    if (!e || typeof e !== "object" || Array.isArray(e) || EVENTOS_PAGINA.indexOf(e.e) < 0) { return false; }
+    if (typeof e.d !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(e.d)) { return false; }
+    var ks = Object.keys(e).filter(function (k) { return Object.prototype.hasOwnProperty.call(e, k); });
+    for (var i = 0; i < ks.length; i++) {
+      if (ks[i] !== "e" && ks[i] !== "d" && !(ks[i] === "v" && EVENTOS_CON_NUMERO.indexOf(e.e) >= 0)) { return false; }
+    }
+    if (Object.prototype.hasOwnProperty.call(e, "v") && (typeof e.v !== "number" || e.v % 1 !== 0 || e.v < 0 || e.v > 999)) { return false; }
+    return true;
+  }
   function relayValido(u) {
     return typeof u === "string" && /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/.test(u);
   }
@@ -1170,6 +1228,21 @@
       }
       if (!n) { return ""; }
       p.envio = e;
+    } else if (tipo === "nota") {
+      // (26/10, decision 3) un solo campo: el texto, limpio y corto
+      if (typeof campos.texto !== "string") { return ""; }
+      var tx = notaLimpia(campos.texto);
+      if (!tx) { return ""; }
+      p.texto = tx;
+    } else if (tipo === "actividad") {
+      // (26/10, decision 2b) la lista de eventos chicos, cerrada
+      var evs = campos.eventos;
+      if (!Array.isArray(evs) || !evs.length || evs.length > TOPE_EVENTOS || !evs.every(eventoValido)) { return ""; }
+      p.eventos = evs.map(function (x) {
+        var y = {e: x.e, d: x.d};
+        if (Object.prototype.hasOwnProperty.call(x, "v")) { y.v = x.v; }
+        return y;
+      });
     }
     return JSON.stringify(p);
   }
@@ -2072,6 +2145,113 @@
   }
   /*FIN-P6*/
 
+  /*V4*/
+  // LAS TRES DECISIONES DE JOSE DEL 26/10, EN PURO (los tests las corren
+  // con node): el nombre del link, "Con esto llegaste" y la nota, la
+  // actividad del portal, y el pago del frasquito.
+  // El nombre que vino FIRMADO en el link ("np"): una sola palabra de
+  // letras; cualquier otra cosa, "" (y la pagina pregunta como hoy).
+  function nombreDelLink(np) {
+    if (typeof np !== "string" || !np || /\s/.test(np) || np.length > 30) { return ""; }
+    var n = nombreLimpio(np);
+    return (n && n.indexOf(" ") < 0) ? n : "";
+  }
+  // "Con esto llegaste el 12/08/2026: «…»." El motivo se cita SOLO hasta un
+  // FIN DE FRASE (como "Lo que me contaste": el ataque del 26/10 lo
+  // encontro cortando en "diversas…", "lo…", "tengo muchos…", y arriba de
+  // todo del portal); si en las primeras LLEGASTE_TOPE letras no cierra
+  // ninguna frase, en Inicio va solo la fecha ("Llegaste el 12/08/2026") y
+  // el texto entero queda en Tu estudio. Un "Hola, José!" con que arranca
+  // el formulario no se cita. Sin nada, "".
+  var LLEGASTE_TOPE = 220;
+  function textoLlegaste(motivo, fecha) {
+    var m = String(motivo || "").replace(/\s+/g, " ").trim();
+    m = m.replace(/^¡?hola\b[,!.\s]*(jos[eé](?![\wáéíóúñ]))?[!.,:;\s]*/i, "");
+    var f = (typeof fecha === "string" && /^\d{2}\/\d{2}\/\d{4}$/.test(fecha)) ? " el " + fecha : "";
+    if (m.length > LLEGASTE_TOPE) {
+      var corte = m.slice(0, LLEGASTE_TOPE + 1), fin = -1, rx = /[.!?…](?=\s|$)/g, x;
+      while ((x = rx.exec(corte)) !== null) { fin = x.index + 1; }
+      m = (fin > 0) ? corte.slice(0, fin) : "";
+    }
+    if (!m) { return f ? "Llegaste" + f : ""; }
+    return "Con esto llegaste" + f + ": «" + m + "»";
+  }
+  // El titulo del apartado: al cerrar una etapa (candado abierto), lo sugiere.
+  function tituloNotas(nActual, candAbierto) {
+    if (candAbierto === true && typeof nActual === "number" && nActual > 0) { return "Terminaste la Etapa " + nActual + ". ¿Cómo te venís sintiendo?"; }
+    return "¿Cómo te venís sintiendo?";
+  }
+  // La nota como sale del celular: sin < ni > (un "<90" o ">140" se escribe
+  // "menos de 90", "más de 140": el ataque del 26/10 los veia borrados y la
+  // presión cambiaba de sentido), sin controles, corta. "" si no queda nada.
+  function notaLimpia(t) {
+    if (!/[A-Za-z0-9À-ɏ]/.test(String(t || ""))) { return ""; }
+    return String(t || "").replace(/</g, " menos de ").replace(/>/g, " más de ").replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g, " ").replace(/[ \t]+/g, " ").trim().slice(0, TOPE_NOTA).trim();
+  }
+  // Las notas guardadas en el celular: [{t, d, ok}] (hasta 10, las ultimas).
+  function notasGuardadas(raw) {
+    try {
+      var o = JSON.parse(String(raw || "[]"));
+      if (!Array.isArray(o)) { return []; }
+      return o.filter(function (x) { return !!x && typeof x.t === "string" && !!x.t && typeof x.d === "string"; })
+        .map(function (x) { return {t: String(x.t).slice(0, TOPE_NOTA), d: x.d.slice(0, 10), ok: x.ok === true, p: typeof x.p === "string" ? x.p : ""}; }).slice(-10);
+    } catch (e) { return []; }
+  }
+  // LA ACTIVIDAD: la cola de eventos del celular. Un evento por dia (y por
+  // numero en los que lo llevan); en "tomas_marco" se queda el dia mas alto.
+  function agregarEvento(cola, e, d, v) {
+    var out = Array.isArray(cola) ? cola.filter(eventoValido) : [];
+    var ev = {e: e, d: d};
+    if (typeof v === "number") { ev.v = v; }
+    if (!eventoValido(ev)) { return out; }
+    for (var i = 0; i < out.length; i++) {
+      var x = out[i];
+      if (x.e !== e || x.d !== d) { continue; }
+      if (e === "etapa_vio" && x.v !== ev.v) { continue; }
+      if (e === "tomas_marco" && typeof ev.v === "number" && (typeof x.v !== "number" || ev.v > x.v)) { out[i] = ev; }
+      return out;
+    }
+    out.push(ev);
+    return out.slice(-TOPE_EVENTOS);
+  }
+  // El dia de la etapa (1 = el dia que la recibio), contra hoy. 0 si no se sabe.
+  function diaDeEtapa(el, hoy) {
+    var a = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(String(el || "")), b = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(hoy || ""));
+    if (!a || !b) { return 0; }
+    var fa = Date.UTC(+a[3], +a[2] - 1, +a[1]), fb = Date.UTC(+b[1], +b[2] - 1, +b[3]);
+    if (isNaN(fa) || isNaN(fb)) { return 0; }
+    var n = Math.round((fb - fa) / 86400000) + 1;
+    return (n >= 1 && n <= 999) ? n : 0;
+  }
+  // Cuando se manda el sobre (cada sobre es un mail en la casilla de Jose y
+  // gasta el cupo del dia, que comparten fichas, pagos y pedidos; ataque
+  // del 26/10): a lo sumo uno por dia, y en el momento SOLO si la cola trae
+  // algo mas que "abrio" (instalo, tomas, etapa vista). Los "abrio" solos se
+  // juntan y salen cada DIAS_ENTRE_SOBRES dias (portal_actividad.
+  // DIAS_ENTRE_SOBRES_SOLO_ABRIO), o si nunca se mando nada.
+  var DIAS_ENTRE_SOBRES = 7;
+  function hayQueMandarActividad(cola, ultimoEnvio, hoy) {
+    if (!Array.isArray(cola) || !cola.length || typeof hoy !== "string" || ultimoEnvio === hoy) { return false; }
+    var soloAbrio = cola.every(function (x) { return x && x.e === "abrio"; });
+    if (!soloAbrio) { return true; }
+    if (typeof ultimoEnvio !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(ultimoEnvio)) { return true; }
+    var dias = diasDeEtapa(hoy, ultimoEnvio);
+    return typeof dias !== "number" || isNaN(dias) || dias >= DIAS_ENTRE_SOBRES;
+  }
+  // EL PAGO DEL FRASQUITO: el link que vino FIRMADO en "pedir" (fp, fh, ft).
+  // Solo Mercado Pago, con su forma, y no vencido. {u, texto} o null.
+  function botonPagoFrasquito(p, hoy) {
+    if (!p || typeof p !== "object" || p.f !== 1 || typeof p.fp !== "string" || !linkDePago(p.fp, "mp")) { return null; }
+    if (typeof p.fh === "string" && /^\d{4}-\d{2}-\d{2}$/.test(p.fh) && typeof hoy === "string" && hoy > p.fh) { return null; }
+    var t = (typeof p.ft === "string" && /^\$[\d.]{1,12}$/.test(p.ft)) ? " (" + p.ft + ")" : "";
+    return {u: p.fp, texto: "Pagarlo con Mercado Pago" + t};
+  }
+  // La vuelta del pago del frasquito: "?pago=frasquito".
+  function vueltaDeFrasquito(search) {
+    return /^\?(?:[^#]*&)?pago=frasquito(?:&|$)/.test(String(search || ""));
+  }
+  /*FIN-V4*/
+
   // LAS PANTALLAS: una a la vez en el celular (en la compu, todas).
   var pintarRielG = null;
   // LAS PESTAÑAS DE TU PLAN: Remedios, Flores, Comidas. Una a la vez.
@@ -2149,8 +2329,10 @@
       ["camino", "hebra-lineas", "etapas-puntos", "hebra-rotulos", "cifras", "zonas-inicio", "botones-zona", "vimos",
        "lista-remedios", "flores", "pedidos", "accesos", "comidas-suma", "comidas-pausa", "zona-remedios", "zona-vimos",
        "zona-laminas", "hoy-grupos", "hoy-cuenta", "candado-txt", "siguiente-dura", "flores-toma", "siguiente-pago",
-       "envio-texto", "envio-caja", "envio-form"].forEach(function (id) { var e = el(id); if (e) { e.textContent = ""; } });
-      ["sec-envio", "envio-form"].forEach(function (id) { var e = el(id); if (e) { e.hidden = true; } });
+       "envio-texto", "envio-caja", "envio-form", "notas-lista", "nota-estado", "notas-llegaste", "motivo-fecha"].forEach(function (id) { var e = el(id); if (e) { e.textContent = ""; } });
+      ["sec-envio", "envio-form", "sec-notas", "notas-llegaste", "nota-estado", "motivo-fecha"].forEach(function (id) { var e = el(id); if (e) { e.hidden = true; } });
+      texto("motivo-titulo", "Lo que me contaste");
+      try { el("nota-campo").value = ""; } catch (e) { /* sigue */ }
       ["cifras", "sec-encuentro", "enc-ar", "sec-siguiente", "siguiente-que", "sec-zonas", "sec-accesos", "sec-pedir",
        "panel-zona", "det-vimos", "det-motivo", "sec-mas", "det-flores", "sec-flores", "lista-remedios", "etapa-termina",
        "rem-termina", "comidas-temporada", "comidas-cols", "col-suma", "col-pausa", "comidas-detalle", "link-nuevo-caja",
@@ -2177,8 +2359,14 @@
 
   // EL SALUDO: con el nombre que el paciente dejo en SU celular. Sin nombre,
   // se lo pregunta (y no inventa uno). El nombre nunca va al link.
-  function pintarSaludo(kid) {
-    var n = nombreLimpio(guardado(claveNombre(kid))) || nombreLimpio(nombreDeLaVisita);
+  // (26/10, decision 1 de Jose) Con el nombre de pila FIRMADO en el link
+  // ("np", con su llave), saluda con ese y no pregunta.
+  // (26/10, ataque) Lo que el paciente escribio en SU celular gana sobre el
+  // del link, y "Cambiar como te saludo" queda siempre a mano: si el link
+  // trae un nombre que no es el suyo, lo corrige y listo.
+  function pintarSaludo(kid, np) {
+    var del = (NOMBRE_LINK === true) ? nombreDelLink(np) : "";
+    var n = nombreLimpio(guardado(claveNombre(kid))) || del || nombreLimpio(nombreDeLaVisita);
     texto("saludo", n ? "Hola, " + n : "Hola");
     el("nombre-caja").hidden = !!n;
     el("saludo-frase").hidden = !n;
@@ -2203,13 +2391,13 @@
         nombreDeLaVisita = n;
         var kid = kidNombre;
         guardar(claveNombre(kid), n);
-        pintarSaludo(kid);
+        pintarSaludo(kid, "");
       };
       el("nombre-boton").addEventListener("click", listoNombre);
       campo.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); listoNombre(); } });
       el("nombre-cambiar").addEventListener("click", function () {
         olvidarNombre(kidNombre);
-        pintarSaludo(kidNombre);
+        pintarSaludo(kidNombre, "");
         irA("inicio");
         try { campo.value = ""; campo.focus(); } catch (e) { /* sigue */ }
       });
@@ -2404,6 +2592,17 @@
             b.setAttribute("aria-checked", i >= 0 ? "false" : "true");
             guardar(k, JSON.stringify({d: hoy, t: marcadas}));
             cuenta();
+            // (26/10, decision 2b) marco tomas: hasta que dia de la etapa
+            try {
+              if (ACTIVIDAD === true && i < 0) {
+                var elAct = "";
+                (Array.isArray(d.camino) ? d.camino : []).forEach(function (e) { if (e && e.n === nActual && str(e.el)) { elAct = e.el; } });
+                // (26/10, ataque) sin el dia de la etapa (0) no se manda:
+                // "marco tomas hasta el dia 0" no dice nada
+                var diaT = diaDeEtapa(elAct, hoy);
+                if (diaT > 0) { registrarActividad(kid, "tomas_marco", hoy, diaT); }
+              }
+            } catch (e) { /* sin actividad */ }
           });
           botonesT.push(b);
           li.appendChild(b);
@@ -2580,6 +2779,128 @@
     el("sec-envio").hidden = false;
     revelar(el("sec-envio"));
   }
+  // (26/10, decision 3 de Jose) COMO ME VENGO SINTIENDO: la nota del
+  // paciente. Queda en SU celular (por portal) y viaja por el relay como
+  // pedido "nota", sellado con la clave del link. Si el relay no contesta
+  // ok, queda guardada y se manda la proxima vez que abre el portal. Con la
+  // llave apagada, sin relay o sin codigo del link, no se ve el apartado.
+  var NOTAS_GUARDADAS = "cuantica-portal-notas-", REINTENTOS_POR_VISITA = 3;
+  function pintarNotas(kid, d, clave, actual, candAbierto) {
+    var sec = el("sec-notas");
+    sec.hidden = true;
+    if (NOTAS !== true) { return; }
+    var firmaR = firmaRelay(d.pedir && d.pedir.r, kid);
+    if (!(firmaR && relayValido(RELAY) && clave && typeof window.fetch === "function" && window.crypto && window.crypto.subtle)) { return; }
+    var nAct = (actual && actual.estado === "actual") ? actual.n : 0;
+    texto("notas-titulo", tituloNotas(nAct, candAbierto));
+    var ll = textoLlegaste(d.motivo, d.fechas && d.fechas.consulta);
+    if (ll) { texto("notas-llegaste", ll); el("notas-llegaste").hidden = false; }
+    var k = NOTAS_GUARDADAS + kid, campo = el("nota-campo"), estado = el("nota-estado"), lista = el("notas-lista"), boton = el("nota-mandar");
+    var notas = notasGuardadas(guardado(k));
+    var pintarLista = function () {
+      lista.textContent = "";
+      notas.slice().reverse().forEach(function (x) {
+        var li = nuevo("li");
+        var f = /^(\d{4})-(\d{2})-(\d{2})$/.exec(x.d);
+        li.appendChild(nuevo("span", "cuando", (f ? f[3] + "/" + f[2] : "") + (x.ok ? " · me llegó" : " · la mando cuando pueda")));
+        li.appendChild(document.createTextNode(x.t));
+        lista.appendChild(li);
+      });
+    };
+    var mandarUna = function (x, alFinal) {
+      var txt = "";
+      try { txt = x.p || pedidoTexto("nota", {texto: x.t}, nonceNuevo(window.crypto), cuandoAhora()); } catch (e) { txt = ""; }
+      if (!txt) { if (alFinal) { alFinal(false); } return; }
+      x.p = txt;
+      sellarPedido(clave, kid, txt, window.crypto)
+        .then(function (s) { return mandarPedido(RELAY, sobrePedido(firmaR, txt, s), window.fetch.bind(window)); })
+        .then(function (r) { x.ok = !!(r && r.ok); if (x.ok) { x.p = ""; } guardar(k, JSON.stringify(notas)); if (alFinal) { alFinal(x.ok); } })
+        .catch(function () { if (alFinal) { alFinal(false); } });
+    };
+    boton.onclick = function () {
+      var t = notaLimpia(campo.value);
+      if (!t) { estado.textContent = "Escribí algo primero, aunque sean dos palabras."; estado.hidden = false; return; }
+      var x = {t: t, d: hoyLocal(), ok: false, p: ""};
+      notas.push(x);
+      notas = notas.slice(-10);
+      guardar(k, JSON.stringify(notas));
+      campo.value = "";
+      boton.disabled = true;
+      estado.textContent = "Mandándotelo…"; estado.hidden = false;
+      pintarLista();
+      mandarUna(x, function (ok) {
+        boton.disabled = false;
+        estado.textContent = ok ? "Listo: me llegó. Gracias por contarme." : "No me llegó ahora: la guardé en tu celular y la mando la próxima vez que abras tu portal.";
+        pintarLista();
+      });
+    };
+    pintarLista();
+    sec.hidden = false;
+    revelar(sec);
+    // Lo que quedo sin mandar, se vuelve a intentar (callado, hasta
+    // REINTENTOS_POR_VISITA por vez, una atras de otra: el ataque del 26/10
+    // vio que con una sola, la primera que el relay rechazara trababa a las
+    // demas para siempre).
+    try {
+      var pend = notas.filter(function (x) { return !x.ok; }).slice(0, REINTENTOS_POR_VISITA);
+      pend.forEach(function (x, i) {
+        window.setTimeout(function () { mandarUna(x, function () { pintarLista(); }); }, 2500 + i * 1500);
+      });
+    } catch (e) { /* queda para la proxima */ }
+  }
+  // (26/10, decision 2a) EL PAGO DEL FRASQUITO: el link de Mercado Pago que
+  // vino FIRMADO en "pedir" (fp), despues de pedirlo; y la nota de la vuelta
+  // ("lo estoy confirmando"). Con la llave apagada, nada.
+  var PAGO_F_AVISADO = "cuantica-portal-pago-frasquito-";
+  function pintarPagoFrasquito(caja, p, kid) {
+    if (PAGO_FRASQUITO !== true || !caja || caja.querySelector(".pago-frasquito")) { return; }
+    var hoy = hoyLocal();
+    if (VUELTA_FRASQUITO) { guardar(PAGO_F_AVISADO + kid, JSON.stringify({d: hoy})); }
+    var av = null;
+    try { av = JSON.parse(guardado(PAGO_F_AVISADO + kid) || "null"); } catch (e) { av = null; }
+    var dias = (av && typeof av.d === "string") ? diasDeEtapa(hoy, av.d) : null;
+    var div = nuevo("div", "pago-frasquito");
+    if (VUELTA_FRASQUITO || (av && typeof dias === "number" && dias <= 30)) {
+      div.appendChild(nuevo("p", "nota-pago", "Tu pago del frasquito: lo estoy confirmando. Cuando lo despache te aviso."));
+    } else {
+      var b = botonPagoFrasquito(p, hoy);
+      if (!b) { return; }
+      var a = nuevo("a", "boton-2", b.texto);
+      a.href = b.u; a.rel = "noopener noreferrer";
+      div.appendChild(a);
+    }
+    caja.appendChild(div);
+  }
+  // (26/10, decision 2b) LA ACTIVIDAD DEL PORTAL: la cola en el celular y el
+  // sobre de una vez por dia. Nunca frena la pantalla: si el relay no
+  // contesta, la cola queda para la proxima. Con la llave apagada, nada.
+  var ACT_COLA = "cuantica-portal-actividad-", ACT_ULTIMO = "cuantica-portal-actividad-envio-";
+  function registrarActividad(kid, e, d, v) {
+    try {
+      if (ACTIVIDAD !== true) { return; }
+      var cola = [];
+      try { cola = JSON.parse(guardado(ACT_COLA + kid) || "[]"); } catch (x) { cola = []; }
+      guardar(ACT_COLA + kid, JSON.stringify(agregarEvento(cola, e, d, v)));
+    } catch (x) { /* sin memoria: no pasa nada */ }
+  }
+  function mandarActividad(kid, clave, firmaR) {
+    try {
+      if (ACTIVIDAD !== true || !(firmaR && relayValido(RELAY) && clave && typeof window.fetch === "function" && window.crypto && window.crypto.subtle)) { return; }
+      var cola = [];
+      try { cola = JSON.parse(guardado(ACT_COLA + kid) || "[]"); } catch (x) { cola = []; }
+      cola = Array.isArray(cola) ? cola.filter(eventoValido) : [];
+      var hoy = hoyLocal();
+      if (!hayQueMandarActividad(cola, guardado(ACT_ULTIMO + kid), hoy)) { return; }
+      var txt = pedidoTexto("actividad", {eventos: cola}, nonceNuevo(window.crypto), cuandoAhora());
+      if (!txt) { olvidar(ACT_COLA + kid); return; }
+      sellarPedido(clave, kid, txt, window.crypto)
+        .then(function (s) { return mandarPedido(RELAY, sobrePedido(firmaR, txt, s), window.fetch.bind(window)); })
+        .then(function (r) {
+          if (r && r.ok) { olvidar(ACT_COLA + kid); guardar(ACT_ULTIMO + kid, hoy); }
+        })
+        .catch(function () { /* queda para la proxima */ });
+    } catch (x) { /* sin actividad */ }
+  }
   // (26/10, ataque) Con la conexion lenta, la lista de links apagados
   // tardaba mas de 15 s, el reloj decia "Este link no esta activo" y el
   // cartel quedaba arriba del portal. La lista se espera hasta LIMITE_LISTA
@@ -2608,7 +2929,7 @@
       texto("fecha-hoy", new Intl.DateTimeFormat("es-AR", {weekday: "long", day: "numeric", month: "long"})
         .format(new Date()).replace(",", ""));
     } catch (e) { /* sin fecha */ }
-    pintarSaludo(kid);
+    pintarSaludo(kid, d.np);
     prepararNombre(kid);
 
     // (La barra de abajo, las pestañas y la figura se escuchan una vez: escuchar.)
@@ -2703,6 +3024,9 @@
         });
       }
     } catch (e) { /* sin la etapa que viene */ }
+    // (26/10, decision 3) COMO ME VENGO SINTIENDO, con "Con esto llegaste".
+    // Con la llave apagada (o si algo falla) no se ve nada.
+    try { pintarNotas(kid, d, clave, actual, sigCand ? !!(candSig && candSig.abierto) : false); } catch (e) { /* sin notas: como antes */ }
 
     // EL CAMINO, ETAPA POR ETAPA (ninguna pendiente nombra remedios: de la
     // etapa que viene, la estrategia, no los remedios).
@@ -2928,6 +3252,16 @@
     // TU ESTUDIO
     var hayMas = false;
     if (str(d.motivo)) { texto("motivo", d.motivo); el("det-motivo").hidden = false; hayMas = true; }
+    // (26/10, decision 3) "Con esto llegaste", con la fecha de la consulta.
+    // (26/10, ataque) La fecha se ve aunque no haya motivo cargado: Jose la
+    // pidio "visible siempre".
+    try {
+      var fc = (NOTAS === true && d.fechas) ? str(d.fechas.consulta) : "";
+      if (NOTAS === true && (str(d.motivo) || fc)) {
+        texto("motivo-titulo", "Con esto llegaste");
+        if (fc) { texto("motivo-fecha", "Tu primera consulta: " + fc); el("motivo-fecha").hidden = false; el("det-motivo").hidden = false; hayMas = true; }
+      }
+    } catch (e) { /* queda "Lo que me contaste" */ }
     if (Array.isArray(d.se_vio) && d.se_vio.length) {
       var cv = el("vimos");
       d.se_vio.forEach(function (s) {
@@ -3036,8 +3370,19 @@
             if (b.que === "f" && firmaR && relayValido(RELAY) && clave && typeof window.fetch === "function") {
               var bt = nuevo("button", "boton-2", b.texto);
               bt.type = "button";
-              bt.onclick = function () { pedirPorRelay(bt, "frasquito", {}, kid, clave, firmaR, href); };
+              bt.onclick = function () {
+                pedirPorRelay(bt, "frasquito", {}, kid, clave, firmaR, href);
+                // (26/10, decision 2a) pedido: ahora, a pagarlo
+                try { pintarPagoFrasquito(caja, d.pedir, kid); } catch (e) { /* sin pago: como hoy */ }
+              };
               caja.appendChild(bt);
+              // Si ya lo pidio desde este celular, el link para pagarlo
+              // queda a mano (y la vuelta del pago, si volvio).
+              try {
+                var yaF = null;
+                try { yaF = JSON.parse(window.localStorage.getItem("cuantica-portal-pedido-frasquito-" + kid) || "null"); } catch (e) { yaF = null; }
+                if ((yaF && yaF.ok === true) || VUELTA_FRASQUITO) { pintarPagoFrasquito(caja, d.pedir, kid); }
+              } catch (e) { /* sin pago: como hoy */ }
               puestos++;
               porRelay++;
               return;
@@ -3077,6 +3422,21 @@
     // (la llave, Argentina y el pais escrito los decide la notebook). Se
     // corrigen por el relay; sin relay, se leen y se avisa por WhatsApp.
     try { pintarEnvio(d, kid, clave); } catch (e) { /* sin envio: como antes */ }
+    // (26/10, decision 2b) LA ACTIVIDAD DEL PORTAL: "abrio" hoy, la etapa
+    // que vio, y "instalo" la primera vez como app. Se manda UN sobre por
+    // dia, despues de pintar y sin frenar nada. Con la llave apagada, nada.
+    try {
+      if (ACTIVIDAD === true) {
+        var hoyA = hoyLocal();
+        registrarActividad(kid, "abrio", hoyA);
+        if (actual && actual.estado === "actual" && typeof actual.n === "number") { registrarActividad(kid, "etapa_vio", hoyA, actual.n); }
+        if (PLAT === "app" && guardado("cuantica-portal-instalo-" + kid) !== "1") {
+          registrarActividad(kid, "instalo", hoyA);
+          guardar("cuantica-portal-instalo-" + kid, "1");
+        }
+        window.setTimeout(function () { mandarActividad(kid, clave, firmaRelay(d.pedir && d.pedir.r, kid)); }, 1500);
+      }
+    } catch (e) { /* sin actividad: como antes */ }
     revelar(el("hablemos"));
     if (str(d.act)) { texto("pie", "Actualizado el " + d.act); }
     // Abierta como app: siempre a mano un lugar para pegar un link nuevo (en
@@ -3145,14 +3505,15 @@
     } catch (e) { /* queda como estaba */ }
   }
   // LA PUERTA DE INSTALAR: la marca y UN boton. No deja pasar al portal.
-  function pantallaInstalar(plat, frag) {
+  function pantallaInstalar(plat, frag, np) {
     listo();
     el("puerta").hidden = true; el("aviso").hidden = true; el("portal").hidden = true; el("sin-link").hidden = true;
     var link = location.href.split("#")[0] + "#" + frag;
     var boton = el("instalar-boton"), nota = el("instalar-nota"), marca = el("instalar-marca");
-    // (14/10, P1b) La bienvenida saluda con el nombre que dejo en SU celular.
+    // (14/10, P1b) La bienvenida saluda con el nombre que dejo en SU celular
+    // (26/10: o con el que vino firmado en el link, con su llave).
     try {
-      var nh = nombreLimpio(guardado(claveNombre(String(frag || "").split(".")[1] || "")));
+      var nh = ((NOMBRE_LINK === true) ? nombreDelLink(np) : "") || nombreLimpio(guardado(claveNombre(String(frag || "").split(".")[1] || "")));
       texto("instalar-hola", nh ? "Hola, " + nh : "");
       el("instalar-hola").hidden = !nh;
     } catch (e) { /* sin saludo */ }
@@ -3265,7 +3626,7 @@
         if (COMO_APP) {
           if (frag !== LOCAL && recuerdaEn(COMO_APP, plat)) { guardar(LINK_GUARDADO, frag); }
           var pant = queMostrar(COMO_APP, plat);
-          if (pant !== "portal") { pantallaInstalar(pant, frag); return; }
+          if (pant !== "portal") { pantallaInstalar(pant, frag, r.d && r.d.np); return; }
           if (plat === "app") { guardar(INSTALADA, "1"); }
         }
         var entrar = function () { el("puerta").hidden = true; pintar(r.kid, r.d, r.k); };
@@ -3277,6 +3638,7 @@
     }).catch(function (e) { avisar(e && e.message === "viejo" ? VIEJO : NO_ACTIVO); });
   }
   try { VUELTA_PAGO = PAGO_ETAPA ? vueltaDePago(location.search) : 0; } catch (e) { VUELTA_PAGO = 0; }
+  try { VUELTA_FRASQUITO = PAGO_FRASQUITO === true && vueltaDeFrasquito(location.search); } catch (e) { VUELTA_FRASQUITO = false; }
   // (21/10) Un link NUEVO pegado en la misma pestaña cambia solo lo de
   // después del #: el navegador no recarga y quedaba el portal viejo (o
   // "este link no está activo"). Con un link de portal, se abre entero.

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-4Lyrk2z0UI+HmSc1eoubNaBmXPnYjDdxePZQjuxbaHQ='; style-src 'sha256-WdA1cKyUQEO3jneE4AQbTCp6GrooU8JK7v97jZ7sGAs=' 'sha256-LNFFEjYU6Ef9fdCUO2qY9qmmbzs/mZmshQHNC51eWBA='; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-LKxVwKVolJ2Q0WWiAlIZ505gGiygHZgX305sCRQ1dEU='; style-src 'sha256-SMWsICk5dfq6M7O/U9A+zvxHKCpT0gFjKS/fqLVv+U0=' 'sha256-LNFFEjYU6Ef9fdCUO2qY9qmmbzs/mZmshQHNC51eWBA='; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
 <meta name="theme-color" content="#050606">
 <meta name="color-scheme" content="dark">
 <title>Tu portal · CUÁNTICA</title>
@@ -178,6 +178,15 @@
   .cifra + .cifra { border-left: 1px solid var(--linea); }
   .cifra .num { display: block; font-family: var(--dato); font-weight: 600; font-size: 28px; line-height: 1; color: var(--blanco); font-variant-numeric: tabular-nums lining-nums; }
   .cifra .que { display: block; margin-top: 8px; font-size: 11px; line-height: 1.3; color: var(--tenue); }
+  /* (27/10, claridad) LO DE HOY: en lugar de las cifras, lo que el paciente
+     tiene que hacer hoy, en una o dos lineas que se tocan. */
+  .tu-dia { margin: 0 0 36px; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); }
+  .tu-dia button { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; padding: 12px 0; background: none; border: 0; color: var(--blanco); text-align: left; cursor: pointer; font-family: var(--sc); font-style: italic; font-weight: 600; font-size: 19px; line-height: 1.2; }
+  .tu-dia button + button { border-top: 1px solid var(--linea); }
+  .tu-dia button .t { flex: 1; min-width: 0; }
+  .tu-dia button.listo { color: var(--tenue); }
+  .tu-dia button .flecha-d { flex: none; width: 14px; height: 14px; color: var(--apagado); }
+  .tu-dia button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
 
   /* EL PROXIMO ENCUENTRO: la fecha en su arco verde petroleo. */
   .encuentro { display: flex; gap: 18px; align-items: center; padding: 20px 0; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); }
@@ -530,6 +539,13 @@
   .hoy .hoy-cuenta { font-family: var(--dato); font-size: 13px; color: var(--tenue); margin: 2px 0 6px; }
   .hoy .momento { margin: 14px 0 0; }
   .hoy .momento .sub-rotulo { margin: 0 0 2px; }
+  /* (27/10, claridad) Los momentos que no son de ahora, cerrados: una linea
+     con su cuenta. Se abren con un toque. */
+  .hoy details.momento { border-top: 1px solid var(--linea); }
+  .hoy details.momento:last-of-type { border-bottom: 0; }
+  .hoy details.momento > summary.sub-rotulo { min-height: 48px; padding: 12px 44px 12px 0; margin: 0; font-family: var(--sc); font-style: normal; font-size: 13px; letter-spacing: .3em; color: var(--tenue); font-weight: 600; }
+  .hoy details.momento > summary.sub-rotulo::before { content: attr(data-cuenta); order: 2; margin-left: auto; padding-left: 12px; font-family: var(--dato); font-size: 12px; letter-spacing: 0; text-transform: none; color: var(--tenue); }
+  .hoy details.momento > summary.sub-rotulo::after { width: 26px; height: 26px; margin-top: -13px; }
   ul.tomas { list-style: none; padding: 0; margin: 0; }
   ul.tomas li { border-bottom: 1px solid var(--linea); }
   button.toma { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; padding: 10px 0; background: none; border: 0; color: var(--blanco); text-align: left; cursor: pointer; font: inherit; }
@@ -567,6 +583,328 @@
     .silueta .z.titila .halo { stroke: var(--blanco); stroke-dasharray: 3 3; }
     .punto-titila { box-shadow: none; outline: 1px dashed var(--blanco); outline-offset: 2px; }
   }
+  /*DISENIO*/
+  /* EL DISENO DE CLAUDE DESIGN (27/10, Jose: "aplica el nuevo html a la
+     revision para que quede todo aplicado"). La capa visual de "Arma tu
+     frasco" pasada al portal: botica antigua, obsidiana, cobre y verde mar.
+     Es SOLO la capa visual: no cambia que se muestra ni el orden (eso es de
+     la auditoria de claridad). Todo cuelga de html.disenio, que pone la
+     llave DISENIO del script: con la llave en false ninguna de estas reglas
+     aplica y ninguna de sus imagenes se pide (van como fondos de CSS). Las
+     imagenes: plantillas/portal_imagenes (copiar_imagenes), propias, nada
+     de terceros. Sin sombras de texto ni sombras 3D (la regla de marca del
+     13/10): el texto sobre foto se protege con el degrade a obsidiana. Lo
+     que se mueve sin parar sigue siendo solo el pulso, la respiracion de la
+     figura y el gris que titila (nada nuevo se mueve sin parar). */
+  html.disenio {
+    --ds-fondo: #0A0F0F;
+    --ds-hueso: #F5EDE0;
+    --ds-cobre-tx: #E5A06A;
+    --linea: rgba(196, 122, 53, .18);
+    --linea-fuerte: rgba(196, 122, 53, .35);
+    --tenue: rgba(245, 237, 224, .72);
+    --apagado: rgba(245, 237, 224, .6);
+    --ds-placa: linear-gradient(180deg, #E6A468 0%, #C47A35 46%, #A9622A 54%, #D18D4B 100%);
+    --ds-ambar: linear-gradient(180deg, #F0B578 0%, #D48A42 46%, #B56A2E 54%, #E09B55 100%);
+    --ds-esmalte: radial-gradient(120% 140% at 50% 0%, #0C8E84, #006B64 55%, #004A44);
+    --ds-relieve: inset 0 1px 0 rgba(255, 240, 220, .6), inset 0 -2px 0 rgba(60, 25, 5, .55);
+    --ds-bisel: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+    --ds-bisel-in: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px);
+    --ds-bisel-12: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+    --ds-sobre-foto: linear-gradient(90deg, #0A0F0F 36%, rgba(10, 15, 15, .66) 62%, rgba(10, 15, 15, .12)), linear-gradient(180deg, #0A0F0F 0%, rgba(10, 15, 15, 0) 20%, rgba(10, 15, 15, 0) 55%, #0A0F0F 100%);
+    background: #0A0F0F;
+  }
+  html.disenio body { background: #0A0F0F; color: var(--ds-hueso); }
+  html.disenio .brillo-arriba { background: radial-gradient(90% 70% at 50% -20%, rgba(0, 60, 56, .5), transparent 70%); }
+
+  /* LOS ICONOS DE COBRE (Claude Design, icono-01 a 29): cada lugar dice cual. */
+  html.disenio .nav-b[data-p="inicio"], html.disenio .acceso[data-a="inicio"] { --ds-ic: url("imagenes/icono-01-inicio.webp"); }
+  html.disenio .nav-b[data-p="cuerpo"], html.disenio .acceso[data-a="cuerpo"] { --ds-ic: url("imagenes/icono-02-cuerpo.webp"); }
+  html.disenio .nav-b[data-p="estudio"], html.disenio .acceso[data-a="estudio"] { --ds-ic: url("imagenes/icono-03-estudio.webp"); }
+  html.disenio .nav-b[data-p="remedios"], html.disenio .pestana[data-tab="remedios"] { --ds-ic: url("imagenes/icono-04-remedios.webp"); }
+  html.disenio .nav-b[data-p="contacto"] { --ds-ic: url("imagenes/icono-05-contacto.webp"); }
+  html.disenio .pestana[data-tab="flores"], html.disenio .acceso[data-a="flores"] { --ds-ic: url("imagenes/icono-14-flores.webp"); }
+  html.disenio .pestana[data-tab="comidas"], html.disenio .acceso[data-a="comidas"] { --ds-ic: url("imagenes/icono-15-comidas.webp"); }
+  html.disenio [data-z="cabeza"] { --ds-ic: url("imagenes/icono-20-zona-cabeza.webp"); }
+  html.disenio [data-z="cuello"] { --ds-ic: url("imagenes/icono-21-zona-cuello-garganta.webp"); }
+  html.disenio [data-z="pecho"] { --ds-ic: url("imagenes/icono-22-zona-pecho.webp"); }
+  html.disenio [data-z="abdomen"] { --ds-ic: url("imagenes/icono-23-zona-abdomen.webp"); }
+  html.disenio [data-z="pelvis"] { --ds-ic: url("imagenes/icono-24-zona-pelvis.webp"); }
+  html.disenio [data-z="brazos"] { --ds-ic: url("imagenes/icono-25-zona-brazos-manos.webp"); }
+  html.disenio [data-z="piernas"] { --ds-ic: url("imagenes/icono-26-zona-piernas-pies.webp"); }
+  html.disenio [data-z="todo"] { --ds-ic: url("imagenes/icono-27-zona-todo-el-cuerpo.webp"); }
+
+  /* LA CABECERA Y LOS ROTULOS: versalitas de cobre claro con aire. */
+  html.disenio .cabecera { margin: 0 0 14px; }
+  html.disenio .logo { width: 104px; }
+  html.disenio .cabecera .marca-txt { color: var(--ds-cobre-tx); font-weight: 600; font-size: 10px; }
+  html.disenio .rotulo { color: var(--ds-cobre-tx); font-weight: 600; font-size: 11px; letter-spacing: .42em; }
+  html.disenio .bajada, html.disenio .hero p { color: var(--ds-hueso); opacity: .88; }
+  html.disenio .sub-rotulo { color: var(--apagado); font-size: 11px; letter-spacing: .38em; }
+
+  /* LAS CABECERAS DE PANTALLA: la foto a la derecha, el texto a la izquierda
+     sobre lo oscuro, degrade a obsidiana abajo (en el celular la foto se
+     recorta hacia la derecha para que se siga viendo el objeto). */
+  html.disenio .pantalla > .encabezado { display: flex; flex-direction: column; justify-content: flex-end; min-height: 150px; margin: 0 -16px 16px; padding: 20px 24px 14px; background: var(--ds-sobre-foto), var(--ds-banner, none) right -72px center / auto 100% no-repeat; }
+  html.disenio #pant-inicio > .encabezado { --ds-banner: url("imagenes/fondo-camino-tres-frascos.webp"); }
+  html.disenio #pant-estudio > .encabezado { --ds-banner: url("imagenes/fondo-estudio-pantalla.webp"); }
+  html.disenio #pant-remedios > .encabezado { --ds-banner: url("imagenes/frasco-banner-remedios.webp"); }
+  html.disenio #pant-remedios:has(#tab-b-flores[aria-selected="true"]) > .encabezado { --ds-banner: url("imagenes/fondo-flores.webp"); }
+  html.disenio #pant-remedios:has(#tab-b-comidas[aria-selected="true"]) > .encabezado { --ds-banner: url("imagenes/fondo-comidas.webp"); }
+  html.disenio #pant-contacto > .encabezado { --ds-banner: url("imagenes/fondo-contacto-carta.webp"); }
+  /* Tu cuerpo no lleva foto arriba: la figura de fondo va detras del cuerpo. */
+  html.disenio #pant-cuerpo > .encabezado { min-height: 0; padding-top: 34px; background: none; }
+  html.disenio .titulo-portal, html.disenio .titulo-pant { font-size: 44px; }
+
+  /* TU CAMINO: la cupula con borde de cobre, el icono del camino y la helice
+     de cobre (hecha = cobre, la de ahora brilla, la que viene apagada). */
+  html.disenio .hero { border-color: rgba(196, 122, 53, .35); border-radius: 170px 170px 0 0; padding-top: 30px; background: linear-gradient(180deg, rgba(0, 60, 56, .5), rgba(10, 15, 15, 0) 78%); }
+  html.disenio .anillo .pista { stroke: rgba(196, 122, 53, .3); }
+  html.disenio .anillo .arco { stroke: #E5A06A; }
+  html.disenio .anillo .punta { fill: #E5A06A; }
+  html.disenio .anillo-palabra, html.disenio .anillo-de { color: var(--ds-hueso); }
+  html.disenio .hebra-1 { stroke: rgba(229, 160, 106, .35); }
+  html.disenio .hebra-2 { stroke: #006B64; }
+  html.disenio .hebra-avance { stroke: #E5A06A; filter: drop-shadow(0 0 4px rgba(229, 160, 106, .7)); }
+  html.disenio .peldano { stroke: #C47A35; opacity: .3; }
+  html.disenio .etapa-punto { fill: #0A0F0F; stroke: rgba(245, 237, 224, .3); }
+  html.disenio .etapa-punto.hecho { fill: #C47A35; stroke: #E5A06A; }
+  html.disenio .etapa-punto.actual { fill: #C47A35; stroke: #E5A06A; filter: drop-shadow(0 0 6px rgba(229, 160, 106, .9)); }
+  html.disenio .etapa-anillo { stroke: #3CE7E1; }
+  html.disenio .etapa-rotulo { color: rgba(245, 237, 224, .5); }
+  html.disenio .etapa-rotulo .ya { color: var(--ds-cobre-tx); }
+  html.disenio .termina { color: var(--ds-hueso); }
+
+  /* LO DE HOY (claridad): las mismas lineas, con la flecha de cobre. */
+  html.disenio .tu-dia button .flecha-d, html.disenio .fila .flecha-d { color: #C47A35; }
+
+  /* TUS TOMAS DE HOY: cabecera con la gota, el icono, y el tilde grande de cobre. */
+  html.disenio #sec-hoy { position: relative; margin-left: -16px; margin-right: -16px; padding: 64px 16px 0;
+    background: linear-gradient(90deg, #0A0F0F 26%, rgba(10, 15, 15, .5) 60%, rgba(10, 15, 15, .05)) left top / 100% 124px no-repeat,
+                linear-gradient(180deg, #0A0F0F 0%, rgba(10, 15, 15, 0) 25%, rgba(10, 15, 15, 0) 60%, #0A0F0F 100%) left top / 100% 124px no-repeat,
+                url("imagenes/frasco-banner-tomas-la-gota.webp") right -30px top / auto 124px no-repeat; }
+  html.disenio #sec-hoy::before { content: ""; position: absolute; left: 16px; top: 64px; width: 48px; height: 48px; border-radius: 50%; background: url("imagenes/icono-06-tomas-de-hoy.webp") center / contain no-repeat; }
+  html.disenio #sec-hoy > .rotulo, html.disenio #sec-hoy > h2 { padding-left: 60px; }
+  html.disenio #sec-hoy > h2 { font-size: 28px; }
+  html.disenio button.toma { min-height: 60px; gap: 12px; }
+  html.disenio button.toma .que { flex: 1; }
+  html.disenio button.toma .nom { font-size: 20px; line-height: 1.1; }
+  html.disenio button.toma .cuanto { color: rgba(245, 237, 224, .66); font-size: 13.5px; }
+  html.disenio button.toma .caja { order: 2; width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid rgba(196, 122, 53, .6); color: #E5A06A; }
+  html.disenio button.toma .caja svg { width: 24px; height: 24px; }
+  html.disenio button.toma[aria-checked="true"] .caja { background: rgba(196, 122, 53, .12); border-color: #C47A35; box-shadow: 0 0 14px rgba(229, 160, 106, .45); }
+  html.disenio button.toma[aria-checked="true"] .nom { color: rgba(245, 237, 224, .5); }
+  html.disenio .hoy details.momento > summary.sub-rotulo { color: var(--apagado); font-size: 11px; letter-spacing: .38em; }
+
+  /* TU PROXIMO ENCUENTRO: tarjeta de botica con la foto de las manos. */
+  html.disenio #sec-encuentro { position: relative; align-items: flex-end; min-height: 176px; padding: 66px 18px 18px; border: 1px solid rgba(196, 122, 53, .3); clip-path: var(--ds-bisel-12);
+    background: linear-gradient(90deg, #0A0F0F 30%, rgba(10, 15, 15, .6) 60%, rgba(10, 15, 15, .1)), url("imagenes/fondo-encuentro-manos.webp") right -60px center / auto 120% no-repeat; }
+  html.disenio #sec-encuentro::before { content: ""; position: absolute; left: 18px; top: 16px; width: 40px; height: 40px; border-radius: 50%; background: url("imagenes/icono-07-encuentro.webp") center / contain no-repeat; }
+  html.disenio .encuentro .fecha-arco { background: #003C38; box-shadow: inset 0 0 0 1px rgba(229, 160, 106, .55); }
+  html.disenio .encuentro .hora-ar { color: var(--ds-hueso); }
+
+  /* LOS APARTADOS CON SU ICONO A LA IZQUIERDA (pago, notas, camino, pedir, envio). */
+  html.disenio #sec-siguiente, html.disenio #sec-notas, html.disenio #sec-camino, html.disenio #sec-envio { position: relative; }
+  html.disenio #sec-siguiente::before, html.disenio #sec-notas::before, html.disenio #sec-camino::before, html.disenio #sec-envio::before { content: ""; position: absolute; left: 0; width: 44px; height: 44px; border-radius: 50%; background: center / contain no-repeat; }
+  html.disenio #sec-siguiente::before { top: 18px; background-image: url("imagenes/icono-16-pago.webp"); }
+  html.disenio #sec-notas::before { top: 0; background-image: url("imagenes/icono-12-notas.webp"); }
+  html.disenio #sec-camino::before { top: 0; background-image: url("imagenes/icono-08-camino-etapas.webp"); }
+  html.disenio #sec-envio::before { top: 0; background-image: url("imagenes/icono-10-envio.webp"); }
+  html.disenio #sec-siguiente > .rotulo, html.disenio #sec-siguiente > .sig-cabeza,
+  html.disenio #sec-notas > .rotulo, html.disenio #sec-notas > h2,
+  html.disenio #sec-camino > .rotulo, html.disenio #sec-camino > h2 { padding-left: 58px; }
+  html.disenio #sec-envio > .rotulo { display: flex; align-items: center; min-height: 44px; padding-left: 58px; }
+  html.disenio .siguiente { border-color: rgba(196, 122, 53, .2); }
+  html.disenio .siguiente .precio-sig { font-size: 17px; color: var(--ds-hueso); }
+  html.disenio .candado { color: var(--ds-cobre-tx); }
+
+  /* PEDIR OTRO FRASQUITO: tarjeta con la foto del frasco en camino. */
+  html.disenio #sec-pedir { position: relative; padding: 76px 18px 18px; border: 1px solid rgba(196, 122, 53, .3); clip-path: var(--ds-bisel-12);
+    background: linear-gradient(90deg, #0A0F0F 28%, rgba(10, 15, 15, .55) 58%, rgba(10, 15, 15, .05)) left top / 100% 118px no-repeat,
+                linear-gradient(180deg, rgba(10, 15, 15, 0) 40%, #0A0F0F 100%) left top / 100% 118px no-repeat,
+                url("imagenes/frasco-banner-va-en-camino.webp") right -20px top / auto 118px no-repeat; }
+  html.disenio #sec-pedir::before { content: ""; position: absolute; left: 18px; top: 16px; width: 44px; height: 44px; border-radius: 50%; background: url("imagenes/icono-09-pedir-otro-frasquito.webp") center / contain no-repeat; }
+
+  /* LOS BOTONES DE BOTICA: placa de cobre cepillado (primario), doble linea
+     de cobre (secundario), esmalte verde petroleo (hecho), brillo ambar
+     (pagar). Al tocar, el cobre se aclara apenas y la placa sube 1 px. El
+     foco se ve ADENTRO de la placa (el bisel recorta lo de afuera). */
+  html.disenio .boton { position: relative; border-radius: 0; background: var(--ds-placa); color: #2B1407; font-family: var(--sc); font-weight: 700; font-size: 16px; letter-spacing: .18em; text-transform: uppercase; clip-path: var(--ds-bisel); box-shadow: var(--ds-relieve); }
+  html.disenio .boton::before { content: ""; position: absolute; inset: 4px; border: 1px solid rgba(60, 25, 5, .45); clip-path: var(--ds-bisel-in); pointer-events: none; }
+  html.disenio .boton:hover { background: var(--ds-placa); filter: brightness(1.06); }
+  html.disenio .boton:active { transform: translateY(-1px); filter: brightness(1.08); }
+  html.disenio .boton:focus-visible { outline: none; filter: brightness(1.1); }
+  html.disenio .boton:focus-visible::before { border: 2px solid #0A0F0F; inset: 3px; }
+  html.disenio .boton-2 { position: relative; border-radius: 0; border: 1px solid #C47A35; background: transparent; color: var(--ds-cobre-tx); font-family: var(--sc); font-weight: 700; font-size: 15px; letter-spacing: .14em; text-transform: uppercase; clip-path: var(--ds-bisel); }
+  html.disenio .boton-2::before { content: ""; position: absolute; inset: 4px; border: 1px solid rgba(196, 122, 53, .5); pointer-events: none; }
+  html.disenio .boton-2:hover { background: rgba(196, 122, 53, .1); }
+  html.disenio .boton-2:active { transform: translateY(-1px); }
+  html.disenio .boton-2:focus-visible { outline: none; background: rgba(60, 231, 225, .08); }
+  html.disenio .boton-2:focus-visible::before { border: 2px solid #3CE7E1; }
+  /* Pagar (la etapa que viene y el frasquito): la placa con brillo ambar. */
+  html.disenio .pago-sig .boton-2, html.disenio .pago-frasquito .boton-2 { min-height: 60px; border: 0; background: var(--ds-ambar); color: #2B1407; font-size: 16px; letter-spacing: .16em; box-shadow: inset 0 1px 0 rgba(255, 240, 220, .7), inset 0 -2px 0 rgba(60, 25, 5, .55), 0 0 28px rgba(229, 160, 106, .4); }
+  html.disenio .pago-sig .boton-2::before, html.disenio .pago-frasquito .boton-2::before { border-color: rgba(60, 25, 5, .45); clip-path: var(--ds-bisel-in); }
+  html.disenio .pago-sig .boton-2:focus-visible::before, html.disenio .pago-frasquito .boton-2:focus-visible::before { border: 2px solid #0A0F0F; }
+  /* Hecho: el esmalte verde petroleo con su filete de cobre. */
+  html.disenio .boton-3 { border-radius: 0; border: 1.5px solid #C47A35; background: var(--ds-esmalte); color: var(--ds-hueso); font-family: var(--sc); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; clip-path: var(--ds-bisel); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), inset 0 -2px 0 rgba(0, 0, 0, .4); }
+  html.disenio .boton-3:focus-visible { outline: none; border-color: #3CE7E1; }
+  html.disenio .ver-zona { border-radius: 0; border-color: #C47A35; color: var(--ds-cobre-tx); font-family: var(--sc); font-weight: 700; letter-spacing: .12em; clip-path: var(--ds-bisel-in); }
+  html.disenio .ver-zona:focus-visible { outline: none; border: 2px solid #3CE7E1; background: rgba(60, 231, 225, .08); }
+  html.disenio #contacto-link-nuevo { position: relative; padding: 10px 20px; border: 1px solid #C47A35; color: var(--ds-cobre-tx); text-decoration: none; font-family: var(--sc); font-weight: 700; font-size: 13px; letter-spacing: .12em; clip-path: var(--ds-bisel-in); }
+  html.disenio #contacto-link-nuevo:focus-visible { outline: none; border: 2px solid #3CE7E1; }
+
+  /* COMO ME VENGO SINTIENDO: la caja de notas con filete de cobre. */
+  html.disenio .campo, html.disenio .campo-link, html.disenio .envio-form input { border-radius: 0; border-color: rgba(196, 122, 53, .35); background: rgba(245, 237, 224, .04); color: var(--ds-hueso); }
+  html.disenio .llegaste, html.disenio .motivo { border-left-color: rgba(196, 122, 53, .5); color: var(--ds-hueso); }
+
+  /* LO QUE ESTAMOS TRABAJANDO y LOS ACCESOS: el medallon de cada cosa. */
+  html.disenio .pill { padding-left: 5px; border-color: rgba(196, 122, 53, .35); }
+  html.disenio .pill .punto { display: none; }
+  html.disenio .pill::before { content: ""; flex: none; width: 36px; height: 36px; border-radius: 50%; background: #0A0F0F var(--ds-ic, none) center / 36px 36px no-repeat; box-shadow: 0 0 0 1px rgba(245, 237, 224, .25); }
+  html.disenio .pill[aria-pressed="true"] { background: #003C38; border-color: #C47A35; }
+  html.disenio .acceso[data-a]::before { content: ""; display: block; width: 34px; height: 34px; margin-bottom: 2px; border-radius: 50%; background: #0A0F0F var(--ds-ic, none) center / 34px 34px no-repeat; box-shadow: 0 0 0 1px rgba(245, 237, 224, .25); }
+
+  /* ETAPA POR ETAPA: hecha en cobre, la de ahora brilla, la que viene apagada. */
+  html.disenio .camino-caja::before { background: rgba(196, 122, 53, .3); }
+  html.disenio .riel { background: #E5A06A; }
+  html.disenio .nodo { background: #0A0F0F; border-color: rgba(245, 237, 224, .3); color: rgba(245, 237, 224, .66); }
+  html.disenio li.hecho .nodo { border-color: #C47A35; color: #E5A06A; }
+  html.disenio li.hito.hecho .nodo { background: #C47A35; }
+  html.disenio li.actual .nodo { background: #C47A35; border-color: #E5A06A; color: #2B1407; box-shadow: 0 0 12px rgba(229, 160, 106, .6); }
+  html.disenio .ahora-chip, html.disenio .chip-etapa { background: #003C38; border-color: #C47A35; }
+  html.disenio li.actual .cual, html.disenio li.hecho .cual { color: var(--ds-cobre-tx); }
+  html.disenio .precio { border-top-color: rgba(196, 122, 53, .3); color: var(--ds-hueso); }
+
+  /* HABLEMOS: el icono de contacto arriba, la placa de cobre abajo. */
+  html.disenio .hablemos { border-top-color: rgba(196, 122, 53, .2); }
+  html.disenio .hablemos > .rotulo.centro::before { content: ""; display: block; width: 36px; height: 36px; margin: 0 auto 6px; border-radius: 50%; background: url("imagenes/icono-05-contacto.webp") center / contain no-repeat; }
+
+  /* TU CUERPO: la figura de fondo, muy atenuada, y la lista de zonas con su
+     medallon (el punto del nivel, en la esquina del medallon). */
+  html.disenio .cuerpo-caja { position: relative; }
+  html.disenio .cuerpo-caja::before { content: ""; position: absolute; z-index: 0; left: -30px; top: -24px; width: 72%; height: calc(100% + 48px); background: url("imagenes/fondo-cuerpo-figura.webp") left top / cover no-repeat; opacity: .18; pointer-events: none; -webkit-mask-image: linear-gradient(90deg, #000 45%, transparent 95%); mask-image: linear-gradient(90deg, #000 45%, transparent 95%); }
+  html.disenio .figura, html.disenio .botones-zona { position: relative; z-index: 1; }
+  html.disenio .zona-b { position: relative; gap: 8px; min-height: 52px; font-size: 15.5px; border-bottom-color: rgba(196, 122, 53, .15); }
+  html.disenio .zona-b::before { content: ""; flex: none; width: 38px; height: 38px; border-radius: 50%; background: #0A0F0F var(--ds-ic, none) center / 38px 38px no-repeat; box-shadow: 0 0 0 1px rgba(245, 237, 224, .25); }
+  html.disenio .zona-b .punto { position: absolute; left: 30px; top: 50%; margin-top: 8px; width: 9px; height: 9px; box-shadow: 0 0 0 2px #0A0F0F; }
+  html.disenio .zona-b[aria-pressed="true"]::before { background-color: #003C38; box-shadow: 0 0 0 1px #E5A06A, 0 0 14px rgba(229, 160, 106, .35); }
+  html.disenio .zona-b[aria-pressed="true"] { border-bottom-color: #C47A35; }
+  html.disenio .zona-b[aria-pressed="true"] .punto { box-shadow: 0 0 0 2px #0A0F0F; }
+  html.disenio .zona-b:disabled::before { opacity: .45; }
+  /* Las rayitas del nivel van debajo del nombre (como en el diseno): asi un
+     nombre largo con su medidor nunca ensancha la columna. */
+  html.disenio .zona-b > span:not(.punto):not(.medidor) { min-width: 0; overflow-wrap: anywhere; }
+  html.disenio .zona-b .medidor { position: absolute; left: 46px; bottom: 5px; margin: 0; }
+  html.disenio .zona-b:has(.medidor) { padding-bottom: 12px; }
+  html.disenio .silueta .z.elegida .halo { fill: #003C38; stroke: #E5A06A; }
+  html.disenio .panel-zona { border-top: 1.5px solid #C47A35; }
+  html.disenio #panel-zona[data-z] h3 { display: flex; align-items: center; gap: 14px; }
+  html.disenio #panel-zona[data-z] h3::before { content: ""; flex: none; width: 56px; height: 56px; border-radius: 50%; background: #003C38 var(--ds-ic, none) center / 56px 56px no-repeat; box-shadow: 0 0 0 1.5px #E5A06A, 0 0 18px rgba(229, 160, 106, .35); }
+  html.disenio .laminas-zona img { border-radius: 0; border-color: rgba(196, 122, 53, .3); }
+
+  /* TU ESTUDIO: "Con esto llegaste" como tarjeta con la libreta, y "Lo que
+     vimos" con la copa; las filas plegables con su + de cobre. */
+  html.disenio details > summary::after { border-color: rgba(196, 122, 53, .5); background: linear-gradient(#E5A06A, #E5A06A) center / 11px 1.5px no-repeat, linear-gradient(#E5A06A, #E5A06A) center / 1.5px 11px no-repeat; }
+  html.disenio details[open] > summary::after { background-size: 11px 1.5px, 1.5px 0; }
+  html.disenio #det-motivo { position: relative; margin-bottom: 26px; padding: 0 18px; border: 1px solid rgba(196, 122, 53, .3); clip-path: var(--ds-bisel-12);
+    background: linear-gradient(90deg, #0A0F0F 30%, rgba(10, 15, 15, .6) 60%, rgba(10, 15, 15, .1)) left top / 100% 124px no-repeat,
+                linear-gradient(180deg, rgba(10, 15, 15, 0) 50%, #0A0F0F 100%) left top / 100% 124px no-repeat,
+                url("imagenes/fondo-notas-libreta.webp") right -40px top / auto 124px no-repeat; }
+  html.disenio #det-motivo > summary { min-height: 124px; align-items: flex-end; padding: 70px 48px 14px 0; }
+  html.disenio #det-motivo > summary::before { content: ""; position: absolute; left: 0; top: 16px; width: 44px; height: 44px; border-radius: 50%; background: #003C38 url("imagenes/icono-13-con-esto-llegaste.webp") center / 44px 44px no-repeat; box-shadow: 0 0 0 1.5px #E5A06A; }
+  html.disenio #det-motivo > summary::after { top: 30px; background-color: #0A0F0F; border-color: #C47A35; }
+  html.disenio #det-vimos > summary { margin: 0 -16px; padding: 60px 64px 14px 74px; min-height: 120px; align-items: flex-end;
+    background: linear-gradient(90deg, #0A0F0F 50%, rgba(10, 15, 15, .7) 74%, rgba(10, 15, 15, .15)), linear-gradient(180deg, #0A0F0F, rgba(10, 15, 15, 0) 30%, rgba(10, 15, 15, 0) 60%, #0A0F0F), url("imagenes/frasco-banner-estudio-la-copa.webp") right -70px top / auto 120px no-repeat; }
+  html.disenio #det-vimos > summary::before { content: ""; position: absolute; left: 16px; bottom: 12px; width: 44px; height: 44px; border-radius: 50%; background: url("imagenes/icono-17-lamina.webp") center / contain no-repeat; }
+  html.disenio #det-vimos > summary::after { right: 16px; background-color: #0A0F0F; border-color: #C47A35; }
+  html.disenio details details { border-top-color: rgba(196, 122, 53, .15); }
+  html.disenio .etiqueta-zona { color: rgba(245, 237, 224, .55); }
+
+  /* TUS REMEDIOS: pestañas como medallones chicos; cada remedio con el
+     medallon de su zona; las flores con el de la flor. */
+  html.disenio .pestanas { display: flex; gap: 8px; border-bottom: 0; margin: 0 0 24px; }
+  html.disenio .pestana { flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 6px; min-height: 46px; padding: 0 8px 0 4px; border-radius: 24px; border: 1px solid rgba(196, 122, 53, .35); font-family: var(--sc); font-weight: 700; font-size: 14px; letter-spacing: .06em; color: rgba(245, 237, 224, .66); white-space: nowrap; overflow: hidden; }
+  html.disenio .pestana::before { content: ""; flex: none; width: 34px; height: 34px; border-radius: 50%; background: #0A0F0F var(--ds-ic, none) center / 34px 34px no-repeat; box-shadow: 0 0 0 1px rgba(245, 237, 224, .25); opacity: .7; }
+  html.disenio .pestana[aria-selected="true"] { background: #003C38; border-color: #C47A35; color: var(--ds-hueso); box-shadow: 0 0 14px rgba(229, 160, 106, .3); }
+  html.disenio .pestana[aria-selected="true"]::after { display: none; }
+  html.disenio .pestana[aria-selected="true"]::before { opacity: 1; box-shadow: 0 0 0 1px #E5A06A; }
+  html.disenio .pestana:focus-visible { outline: 2px solid #3CE7E1; outline-offset: 2px; }
+  html.disenio ul.remedios li { border-bottom-color: rgba(196, 122, 53, .18); }
+  html.disenio ul.remedios li::before { background: #C47A35; }
+  html.disenio ul.remedios li .dosis { color: rgba(245, 237, 224, .78); }
+  html.disenio ul.flores li { position: relative; padding-left: 52px; min-height: 60px; border-bottom-color: rgba(196, 122, 53, .18); }
+  html.disenio ul.flores li::before { content: ""; position: absolute; left: 0; top: 12px; width: 38px; height: 38px; border-radius: 50%; background: #0A0F0F url("imagenes/que-es-flor.webp") center / 38px 38px no-repeat; box-shadow: 0 0 0 1px rgba(245, 237, 224, .3); }
+  html.disenio .comidas-cols .col.suma .sub-rotulo { color: var(--ds-cobre-tx); }
+
+  /* ACA ESTOY: las dos filas grandes con su medallon. */
+  html.disenio #contacto-wa .ic, html.disenio #contacto-mail .ic, html.disenio #ir-estudio .ic { display: none; }
+  html.disenio #contacto-wa::before, html.disenio #contacto-mail::before, html.disenio #ir-estudio::before { content: ""; flex: none; width: 56px; height: 56px; border-radius: 50%; background: #0A0F0F center / 56px 56px no-repeat; box-shadow: 0 0 0 1px rgba(245, 237, 224, .35); }
+  html.disenio #contacto-wa::before { background-image: url("imagenes/icono-29-whatsapp.webp"); }
+  html.disenio #contacto-mail::before { background-image: url("imagenes/icono-28-mail.webp"); }
+  html.disenio #ir-estudio::before { width: 44px; height: 44px; background-size: 44px 44px; background-image: url("imagenes/icono-03-estudio.webp"); }
+  html.disenio .fila { min-height: 88px; border-bottom-color: rgba(196, 122, 53, .2); }
+  html.disenio .fila:first-of-type { border-top-color: rgba(196, 122, 53, .2); }
+  html.disenio .fila .t { font-size: 24px; }
+  html.disenio .fila .d { font-family: var(--texto); font-size: 16px; color: rgba(245, 237, 224, .75); }
+
+  /* LA BARRA DE ABAJO: cinco medallones; la pestaña activa en verde
+     petroleo con el aro de cobre brillante, las otras con aro hueso fino. */
+  html.disenio .nav { background: #0A0F0F; border-top: 1px solid rgba(196, 122, 53, .25); }
+  html.disenio .nav-b { gap: 3px; min-height: 72px; padding: 6px 2px 8px; color: rgba(245, 237, 224, .55); font-family: var(--sc); font-weight: 700; font-size: 11px; letter-spacing: .08em; }
+  /* El icono de siempre queda DEBAJO del medallon: si la imagen no baja, se ve el de linea. */
+  html.disenio .nav-b svg { position: absolute; z-index: 0; top: 15px; left: 50%; margin-left: -12px; opacity: .8; }
+  html.disenio .nav-b::before, html.disenio .nav-b.activo::before { content: ""; position: relative; z-index: 1; display: block; width: 42px; height: 42px; border-radius: 50%; background: transparent var(--ds-ic, none) center / 40px 40px no-repeat; box-shadow: 0 0 0 1px rgba(245, 237, 224, .22); opacity: .62; filter: saturate(.7); transition: box-shadow 300ms, opacity 300ms, background-color 300ms; }
+  html.disenio .nav-b.activo { color: #FFFFFF; }
+  html.disenio .nav-b.activo::before { top: auto; left: auto; right: auto; height: 42px; background-color: transparent; box-shadow: 0 0 0 1px #E5A06A, 0 0 14px rgba(229, 160, 106, .35); opacity: 1; filter: brightness(1.15); }
+
+  /* EL AVISO "Tenes una etapa nueva": placa de cobre angosta que baja desde
+     arriba, se cierra al tocar y nunca tapa la barra de abajo. */
+  html.disenio .festejo .dice { top: calc(12px + env(safe-area-inset-top)); bottom: auto; left: 14px; right: 14px; padding: 12px 40px 12px 58px; border: 0; border-radius: 0; background: var(--ds-placa); color: #2B1407; clip-path: var(--ds-bisel); box-shadow: var(--ds-relieve); font-family: var(--sc); font-weight: 700; font-size: 15px; letter-spacing: .08em; line-height: 1.25; text-align: left; animation: ds-baja 600ms cubic-bezier(.22, .61, .36, 1) both; }
+  html.disenio .festejo .dice::before { content: ""; position: absolute; left: 14px; top: 50%; width: 34px; height: 34px; margin-top: -17px; background: url("imagenes/icono-08-camino-etapas.webp") center / contain no-repeat; filter: brightness(.35); border-radius: 50%; }
+  html.disenio .festejo .dice::after { content: "×"; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 20px; }
+  html.disenio .festejo .dice.se-va { animation: sale 250ms var(--sale) forwards; }
+  html.disenio .festejo .anillo-f { border-color: #E5A06A; }
+
+  /* LOS ESTADOS VACIOS: hueso sobre obsidiana, con la helice atenuada. */
+  html.disenio #estudio-vacio, html.disenio #remedios-vacio, html.disenio #flores-vacio, html.disenio #comidas-vacio { text-align: center; padding: 18px 20px 8px; font-family: var(--sc); font-style: italic; font-weight: 600; font-size: 21px; line-height: 1.25; color: var(--ds-hueso); }
+  html.disenio #estudio-vacio::before, html.disenio #remedios-vacio::before, html.disenio #flores-vacio::before, html.disenio #comidas-vacio::before { content: ""; display: block; width: 40px; height: 102px; margin: 0 auto 14px; background: url("imagenes/simbolo-adn.webp") center / contain no-repeat; opacity: .4; }
+
+  /* LA PANTALLA "ABRIENDO TU PORTAL": el icono de la app, tal cual. */
+  html.disenio .abriendo { gap: 22px; background: #0A0F0F; }
+  html.disenio .abriendo img { display: none; }
+  html.disenio .abriendo::before { content: ""; width: 150px; height: 150px; border-radius: 34px; background: url("imagenes/logo-icono-app.webp") center / cover no-repeat; box-shadow: 0 0 0 1px rgba(245, 237, 224, .15), 0 0 40px rgba(60, 231, 225, .12); }
+  html.disenio .abriendo > span:not(.barra) { font-family: var(--sc); font-style: italic; font-weight: 600; font-size: 30px; letter-spacing: 0; color: #FFFFFF; }
+  html.disenio .abriendo .barra { background: rgba(196, 122, 53, .3); }
+  html.disenio .abriendo .barra::after { background: #E5A06A; }
+
+  /* LA PUERTA DE INSTALAR: la ilustracion de su telefono arriba de los pasos. */
+  html.disenio #instalar[data-plat] .tarjeta::before { content: ""; display: block; width: 100%; height: 180px; margin: 0 0 12px; background: center / contain no-repeat; }
+  html.disenio #instalar[data-plat="ios"] .tarjeta::before, html.disenio #instalar[data-plat="iosafuera"] .tarjeta::before { background-image: url("imagenes/icono-30-instalar-iphone.webp"); }
+  html.disenio #instalar[data-plat="android"] .tarjeta::before { background-image: url("imagenes/icono-31-instalar-android.webp"); }
+  /* Adentro de otra app (Instagram, Facebook...) no se sabe si es iPhone o Android: solo el texto. */
+  html.disenio #instalar[data-plat]:not([data-plat="ios"]):not([data-plat="iosafuera"]):not([data-plat="android"]) .tarjeta::before { display: none; }
+  html.disenio .puerta .marca { width: 72px; height: 72px; border-radius: 17px; box-shadow: 0 0 0 1px rgba(245, 237, 224, .15); }
+  html.disenio ol.pasos-ios li { border-bottom-color: rgba(196, 122, 53, .2); }
+
+  @keyframes ds-baja { from { transform: translateY(-120%); } to { transform: none; } }
+  @media (min-width: 980px) and (hover: hover) and (pointer: fine) {
+    html.disenio .pantalla > .encabezado, html.disenio #sec-hoy { margin-left: 0; margin-right: 0; }
+    html.disenio #det-vimos > summary { margin: 0; }
+  }
+  /* (27/10) de 361 a 410 px "Remedios" no entraba entero: medallon y aire mas chicos. */
+  @media (max-width: 410px) {
+    html.disenio .pestanas { gap: 6px; }
+    html.disenio .pestana { gap: 4px; padding: 0 6px 0 3px; letter-spacing: .02em; }
+    html.disenio .pestana::before { width: 26px; height: 26px; background-size: 26px 26px; }
+  }
+  @media (max-width: 360px) {
+    html.disenio .pestana::before { display: none; }
+    html.disenio .pestana { justify-content: center; padding: 0 6px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html.disenio .festejo .dice { animation: none !important; transform: none; }
+  }
+  /*FIN-DISENIO*/
 </style>
 </head>
 <body>
@@ -680,6 +1018,9 @@
     </section>
 
     <div class="cifras revela" id="cifras" hidden></div>
+    <!-- (27/10, claridad) LO DE HOY: reemplaza a las cifras (que repetian el
+         arco, las zonas y los remedios). Solo lo que toca hacer hoy. -->
+    <div class="tu-dia revela" id="tu-dia" hidden aria-label="Lo de hoy"></div>
 
     <!-- (P3) HOY TE TOCA: las tomas de su planilla de la etapa en curso,
          por momento del dia. Los tildes quedan SOLO en el celular. -->
@@ -992,6 +1333,15 @@
   try { quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { quieto = false; }
   // Con JavaScript, las tarjetas esperan su turno para entrar (sin JS, se ven).
   try { document.documentElement.classList.add("js"); } catch (e) { /* se ve todo de una */ }
+  /*DISENIO*/
+  // EL DISENO DE CLAUDE DESIGN (27/10, Jose: "aplica el nuevo html a la
+  // revision"). La capa visual (botones de botica, medallones de cobre,
+  // fotos de cabecera) vive en el CSS bajo html.disenio: aca solo se
+  // prende. No cambia que se muestra ni el orden. Con DISENIO en false
+  // todo sale exactamente como antes (y ninguna imagen nueva se pide).
+  var DISENIO = true;
+  try { if (DISENIO === true) { document.documentElement.classList.add("disenio"); } } catch (e) { /* queda el de antes */ }
+  /*FIN-DISENIO*/
 
   /*ABRIR*/
   function b64(t) {
@@ -2059,10 +2409,14 @@
     if (n > TOPE_DIAS_ETAPA) { return {abierto: false, dias: null}; }
     return n <= 0 ? {abierto: true, dias: 0} : {abierto: false, dias: n};
   }
-  function textoCandado(n, c) {
+  function textoCandado(n, c, abre) {
     if (typeof n !== "number" || !c) { return ""; }
     if (c.abierto) { return "Ya podés pasar a la Etapa " + n + " cuando sientas: si querés terminar tus remedios o esperar unos días, está bien."; }
     if (c.dias === 1) { return "Se abre mañana, cuando se cumple tu etapa."; }
+    // (27/10, claridad) Con el dia en que se abre, el DIA ("el lunes 16/11"):
+    // la cuenta de dias ya la dice "La etapa termina en..." de arriba.
+    var dn = (abre && typeof diaConNombre === "function") ? diaConNombre(abre) : "";
+    if (typeof c.dias === "number" && c.dias > 1 && dn) { return "Se abre el " + dn + ", cuando se cumple tu etapa."; }
     if (typeof c.dias === "number" && c.dias > 1) { return "Se abre en " + c.dias + " días, cuando se cumple tu etapa."; }
     return "Se abre cuando se cumpla tu etapa.";
   }
@@ -2252,6 +2606,113 @@
   }
   /*FIN-V4*/
 
+  /*CLARIDAD*/
+  // LA AUDITORIA DE CLARIDAD (27/10, Jose: "¿le es de utilidad, le aclara al
+  // paciente el contenido del portal? ¿o lo satura de mas informacion?"),
+  // EN PURO (los tests la corren con node). Medida con 10 portales reales
+  // (solo lectura) y el de prueba, a 375 px: el Inicio media 3.900 a 4.300
+  // px (cinco pantallas) y repetia lo mismo dos y tres veces.
+  // Con CLARIDAD en false todo sale exactamente como antes.
+  var CLARIDAD = true;
+  // 1. LO DE HOY, en lugar de la fila de cifras. En los 10 portales reales
+  // la fila decia "N etapas / N zonas / N remedios": lo mismo que el arco,
+  // que "Lo que estamos trabajando" (justo abajo) y una cuenta de remedios
+  // que mezcla los de antes con los de ahora (12 en la fila, 8 en la
+  // planilla de hoy). Ninguna le decia que hacer. Ahora, en la primera
+  // pantalla, a lo sumo dos lineas que se tocan: las tomas que le faltan
+  // HOY (se actualiza al tildar) y, si el candado ya se abrio, que puede
+  // pasar a la etapa que viene. Sin nada de eso, no se ve. [{t, ir, listo}]
+  // (27/10, ataque) "sinTomas": la cuenta de tomas NO va cuando el remedio
+  // todavia no le llego (Python lo dice con tomas.espera, por el paso
+  // "preparando"/"despachado") ni cuando la etapa ya se cumplio (candado
+  // abierto): arriba decia "Remedio despachado, cuando lo tengas arrancas" o
+  // "Ya paso el mes de tu etapa" y justo abajo "Hoy te faltan 18 tomas" (8
+  // de 12 portales reales). Y "te quedan", no "te faltan": a las 8 de la
+  // mañana las de la noche no estan atrasadas.
+  function loDeHoy(pend, total, sig, sinTomas) {
+    var out = [];
+    if (sinTomas !== true && typeof total === "number" && total > 0 && total % 1 === 0 && typeof pend === "number" && pend >= 0 && pend <= total) {
+      if (pend === 0) { out.push({t: total === 1 ? "Listo por hoy: hiciste tu toma." : "Listo por hoy: hiciste tus " + total + " tomas.", ir: "sec-hoy", listo: true}); }
+      else { out.push({t: pend === 1 ? "Hoy te queda 1 toma" : "Hoy te quedan " + pend + " tomas", ir: "sec-hoy", listo: false}); }
+    }
+    if (sig && typeof sig.n === "number" && sig.n > 1 && sig.abierto === true) {
+      out.push({t: "Ya podés pasar a la Etapa " + sig.n, ir: "sec-siguiente", listo: false});
+    }
+    return out;
+  }
+  // 2. HOY TE TOCA, SIN LA LISTA ENTERA ABIERTA. Era el bloque mas largo del
+  // portal: 1.150 a 1.600 px (13 a 19 tomas por dia, todas a la vista). Va
+  // abierto lo de AHORA (por la hora del celular) y el momento anterior si
+  // quedo sin tildar; lo que viene, lo mas viejo y lo ya hecho, cerrado con
+  // su cuenta. Sin
+  // hora, todo abierto (como antes).
+  function momentoDeAhora(hora) {
+    if (typeof hora !== "number" || hora !== hora || hora < 0 || hora > 23) { return -1; }
+    if (hora < 11) { return 1; }
+    if (hora < 15) { return 2; }
+    if (hora < 19) { return 3; }
+    return 4;
+  }
+  // (27/10, ataque) Lo de antes sin tildar abre SOLO el momento inmediato
+  // anterior ("previo", el ultimo con tomas antes de ahora). Abrir todo lo
+  // de antes hacia que, de noche y sin tildar (los tildes son opcionales),
+  // la lista entera volviera a estar abierta: 1.163 a 1.681 px a las 21,
+  // lo mismo que medía antes del arreglo. Lo mas viejo queda cerrado con
+  // su cuenta ("0 de 3") y se abre con un toque.
+  function momentoAbierto(m, ahora, pendientes, previo) {
+    if (typeof pendientes !== "number" || pendientes <= 0) { return false; }
+    if (m === -1 || typeof ahora !== "number" || ahora < 0) { return true; }
+    if (typeof m !== "number") { return false; }
+    if (m === ahora) { return true; }
+    return typeof previo === "number" && previo >= 0 && previo < ahora && m === previo;
+  }
+  // (27/10, ataque) "YA PODES PASAR A LA ETAPA N" UNA SOLA VEZ. Con el
+  // candado abierto lo decian el hero ("Ya paso el mes..."), esta linea y,
+  // 100 px abajo, la tarjeta "Tu proxima etapa" (11 de 12 portales reales);
+  // y seguia diciendolo con el pago ya recibido. Arriba va solo si la
+  // tarjeta NO lo dice (enTarjeta) y si el pago de esa etapa no llego.
+  function invitaArriba(sig, enTarjeta, pago) {
+    if (!sig || typeof sig.n !== "number" || sig.abierto !== true || enTarjeta === true) { return null; }
+    if (pago && typeof pago === "object" && pago.n === sig.n && pago.ok === 1) { return null; }
+    return sig;
+  }
+  // El momento con tomas inmediatamente anterior al de ahora (-1 si no hay).
+  function momentoPrevio(ms, ahora) {
+    var p = -1;
+    if (typeof ahora !== "number" || ahora < 0) { return p; }
+    (Array.isArray(ms) ? ms : []).forEach(function (m) { if (typeof m === "number" && m >= 0 && m < ahora && m > p) { p = m; } });
+    return p;
+  }
+  // 3. LA ETAPA QUE VIENE, CON SU DIA. Arriba ya dice "La etapa termina en
+  // 20 dias"; la tarjeta decia otra vez "Se abre en 20 dias" y, encima, "Tu
+  // Etapa 1 esta programada para unas tres semanas": tres veces lo mismo.
+  // Ahora la tarjeta dice el DIA ("Se abre el lunes 16/11") y lo programado
+  // solo va cuando arriba no hay cuenta de dias.
+  var DIAS_SEMANA = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+  function diaConNombre(f) {
+    var a = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(f || ""));
+    if (!a) { return ""; }
+    var t = Date.UTC(+a[1], +a[2] - 1, +a[3]), d = new Date(t);
+    if (isNaN(t) || d.getUTCDate() !== +a[3] || d.getUTCMonth() !== +a[2] - 1) { return ""; }
+    return DIAS_SEMANA[d.getUTCDay()] + " " + (+a[3]) + "/" + (+a[2]);
+  }
+  // 4. LOS ACCESOS DE INICIO, SOLO A LO QUE LA BARRA DE ABAJO NO NOMBRA. "Tu
+  // cuerpo" y "Lo que se vio" repetian los botones Cuerpo y Estudio de la
+  // barra (y las zonas de "Lo que estamos trabajando" tambien llevan a Tu
+  // cuerpo). Flores y Comidas si suman: son pestañas adentro de Remedios y
+  // la barra no las nombra. Con una sola ya se ve.
+  function accesosQueSuman(acc) {
+    return (Array.isArray(acc) ? acc : []).filter(function (a) { return !!a && typeof a.tab === "string" && !!a.tab; });
+  }
+  // 5. LA PESTAÑA FLORES CON EL GOTERO PERO SIN LA LISTA: decia "Tu gotero: 4
+  // gotas..." y abajo "Tus flores aparecen acá cuando tu papel las trae"
+  // (4 de 10 portales reales). El gotero sale de SU planilla, que nombra las
+  // flores: se lo dice.
+  function textoFloresVacio(hayGotero) {
+    return hayGotero ? "Las flores de tu gotero están en tu planilla." : "Tus flores aparecen acá cuando tu papel las trae.";
+  }
+  /*FIN-CLARIDAD*/
+
   // LAS PANTALLAS: una a la vez en el celular (en la compu, todas).
   var pintarRielG = null;
   // LAS PESTAÑAS DE TU PLAN: Remedios, Flores, Comidas. Una a la vez.
@@ -2329,7 +2790,7 @@
       ["camino", "hebra-lineas", "etapas-puntos", "hebra-rotulos", "cifras", "zonas-inicio", "botones-zona", "vimos",
        "lista-remedios", "flores", "pedidos", "accesos", "comidas-suma", "comidas-pausa", "zona-remedios", "zona-vimos",
        "zona-laminas", "hoy-grupos", "hoy-cuenta", "candado-txt", "siguiente-dura", "flores-toma", "siguiente-pago",
-       "envio-texto", "envio-caja", "envio-form", "notas-lista", "nota-estado", "notas-llegaste", "motivo-fecha"].forEach(function (id) { var e = el(id); if (e) { e.textContent = ""; } });
+       "envio-texto", "envio-caja", "envio-form", "notas-lista", "nota-estado", "notas-llegaste", "motivo-fecha", "tu-dia"].forEach(function (id) { var e = el(id); if (e) { e.textContent = ""; } });
       ["sec-envio", "envio-form", "sec-notas", "notas-llegaste", "nota-estado", "motivo-fecha"].forEach(function (id) { var e = el(id); if (e) { e.hidden = true; } });
       texto("motivo-titulo", "Lo que me contaste");
       try { el("nota-campo").value = ""; } catch (e) { /* sigue */ }
@@ -2337,7 +2798,8 @@
        "panel-zona", "det-vimos", "det-motivo", "sec-mas", "det-flores", "sec-flores", "lista-remedios", "etapa-termina",
        "rem-termina", "comidas-temporada", "comidas-cols", "col-suma", "col-pausa", "comidas-detalle", "link-nuevo-caja",
        "zona-acompana", "zona-lo-que-vi", "leyenda-niveles", "nota-late", "nota-gris", "nota-titila", "zona-nivel",
-       "sec-hoy", "candado", "candado-txt", "siguiente-dura", "flores-toma", "siguiente-pago"].forEach(function (id) { var e = el(id); if (e) { e.hidden = true; } });
+       "sec-hoy", "candado", "candado-txt", "siguiente-dura", "flores-toma", "siguiente-pago", "tu-dia"].forEach(function (id) { var e = el(id); if (e) { e.hidden = true; } });
+      tuDiaG = {total: 0, pend: -1, sig: null, espera: false, vencida: false};
       el("candado").classList.remove("abierto");
       el("siguiente-precio").hidden = false;
       tomasG = null;
@@ -2543,6 +3005,43 @@
     return puestas;
   }
 
+  // (27/10, claridad) LO DE HOY: una o dos lineas en la primera pantalla
+  // (loDeHoy). Se repinta al tildar una toma. Si algo falla, no se ve.
+  var tuDiaG = {total: 0, pend: -1, sig: null, espera: false, vencida: false};
+  function irABloque(id) {
+    try {
+      var e = el(id);
+      if (e && !e.hidden) { e.scrollIntoView({block: "start", behavior: quieto ? "auto" : "smooth"}); }
+    } catch (x) { /* queda donde esta */ }
+  }
+  function pintarTuDia() {
+    try {
+      var caja = el("tu-dia");
+      if (!caja) { return; }
+      caja.textContent = "";
+      if (CLARIDAD !== true) { caja.hidden = true; return; }
+      var items = loDeHoy(tuDiaG.pend, tuDiaG.total, tuDiaG.sig, tuDiaG.espera === true || tuDiaG.vencida === true);
+      items.forEach(function (it) {
+        var b = nuevo("button", it.listo ? "listo" : null);
+        b.type = "button";
+        b.appendChild(nuevo("span", "t", it.t));
+        if (!it.listo) {
+          var f = document.createElementNS(SVG, "svg");
+          f.setAttribute("class", "flecha-d"); f.setAttribute("viewBox", "0 0 14 14"); f.setAttribute("aria-hidden", "true");
+          f.setAttribute("fill", "none"); f.setAttribute("stroke", "currentColor"); f.setAttribute("stroke-width", "1.4"); f.setAttribute("stroke-linecap", "round");
+          var fp = document.createElementNS(SVG, "path");
+          fp.setAttribute("d", "M5 2l5 5-5 5");
+          f.appendChild(fp);
+          b.appendChild(f);
+        }
+        b.addEventListener("click", function () { irABloque(it.ir); });
+        caja.appendChild(b);
+      });
+      var estaba = caja.hidden;
+      caja.hidden = !items.length;
+      if (items.length && estaba) { revelar(caja); }
+    } catch (e) { /* sin lo de hoy: el portal sigue */ }
+  }
   // (P3) HOY TE TOCA: las tomas de hoy por momento, con su tilde. El tilde
   // se guarda SOLO en el celular (por portal y por dia): nunca va al link
   // ni a Jose. Lo de un dia anterior se borra solo.
@@ -2554,14 +3053,39 @@
       var raw = guardado(k), marcadas = tildesDeHoy(raw, hoy);
       if (raw && !marcadas.length) { olvidar(k); }
       var grupos = gruposDeHoy(lista), caja = el("hoy-grupos"), botonesT = [], ids = [];
+      var cabezas = [];
       var cuenta = function () {
         var n = marcadas.filter(function (x) { return ids.indexOf(x) >= 0; }).length;
         texto("hoy-cuenta", n >= ids.length ? "Listo por hoy: " + n + " de " + ids.length + "." : n + " de " + ids.length + " hechas.");
+        // (27/10, claridad) la cuenta de cada momento cerrado, y lo de hoy
+        try {
+          cabezas.forEach(function (c) {
+            var hm = c.ids.filter(function (x) { return marcadas.indexOf(x) >= 0; }).length;
+            c.s.setAttribute("data-cuenta", hm >= c.ids.length ? "listo" : hm + " de " + c.ids.length);
+          });
+          if (CLARIDAD === true) { tuDiaG.total = ids.length; tuDiaG.pend = ids.length - n; pintarTuDia(); }
+        } catch (e) { /* sin cuenta por momento */ }
       };
+      var horaAhora = -1;
+      try { horaAhora = momentoDeAhora(new Date().getHours()); } catch (e) { horaAhora = -1; }
+      var mPrevio = -1;
+      try { mPrevio = momentoPrevio(grupos.map(function (g) { return g.m; }), horaAhora); } catch (e) { mPrevio = -1; }
       grupos.forEach(function (g) {
-        var div = nuevo("div", "momento");
-        div.appendChild(nuevo("p", "sub-rotulo", g.t));
-        var ul = nuevo("ul", "tomas");
+        var div, ul;
+        if (CLARIDAD === true) {
+          // (27/10, claridad) abierto lo de ahora y lo de antes sin tildar
+          var idsG = g.items.map(function (it) { return it.id; });
+          var pendG = idsG.filter(function (x) { return marcadas.indexOf(x) < 0; }).length;
+          div = nuevo("details", "momento");
+          div.open = momentoAbierto(g.m, horaAhora, pendG, mPrevio);
+          var sm = nuevo("summary", "sub-rotulo", g.t);
+          div.appendChild(sm);
+          cabezas.push({s: sm, ids: idsG});
+        } else {
+          div = nuevo("div", "momento");
+          div.appendChild(nuevo("p", "sub-rotulo", g.t));
+        }
+        ul = nuevo("ul", "tomas");
         g.items.forEach(function (it) {
           ids.push(it.id);
           var li = nuevo("li"), b = nuevo("button", "toma");
@@ -2730,7 +3254,9 @@
     el("sec-envio").hidden = true;
     if (!ev || typeof ev !== "object" || !ev.d || typeof ev.d !== "object" || Array.isArray(ev.d)) { return; }
     var linea = envioTexto(ev.d);
-    texto("envio-texto", linea ? "Acá te mando el frasquito: " + linea + "." : "Todavía no tengo tu dirección para mandarte el frasquito.");
+    // (27/10, ataque) Si el frasquito ya salio (ev.ya), no "todavia no tengo
+    // tu direccion" (fue en la etiqueta del correo): para el PROXIMO.
+    texto("envio-texto", linea ? "Acá te mando el frasquito: " + linea + "." : (ev.ya === 1 ? "Para el próximo frasquito, dejame acá tu dirección." : "Todavía no tengo tu dirección para mandarte el frasquito."));
     var firmaR = firmaRelay(d.pedir && d.pedir.r, kid);
     if (!(firmaR && relayValido(RELAY) && clave && typeof window.fetch === "function" && window.crypto && window.crypto.subtle)) {
       caja.appendChild(nuevo("p", "nota-chica", linea ? "Si cambió algo, escribime por WhatsApp y lo corrijo." : "Pasame tu dirección por WhatsApp y la anoto."));
@@ -2794,7 +3320,9 @@
     var nAct = (actual && actual.estado === "actual") ? actual.n : 0;
     texto("notas-titulo", tituloNotas(nAct, candAbierto));
     var ll = textoLlegaste(d.motivo, d.fechas && d.fechas.consulta);
-    if (ll) { texto("notas-llegaste", ll); el("notas-llegaste").hidden = false; }
+    // (27/10, claridad) En Inicio, "Con esto llegaste" va al CERRAR la etapa
+    // (Jose 26/10: "visible al cerrar etapas"); siempre esta en Tu estudio.
+    if (ll && (CLARIDAD !== true || candAbierto === true)) { texto("notas-llegaste", ll); el("notas-llegaste").hidden = false; }
     var k = NOTAS_GUARDADAS + kid, campo = el("nota-campo"), estado = el("nota-estado"), lista = el("notas-lista"), boton = el("nota-mandar");
     var notas = notasGuardadas(guardado(k));
     var pintarLista = function () {
@@ -2978,6 +3506,11 @@
       d.camino.forEach(function (e) { if (e && e.n === nSig && e.estado === "pendiente" && e.cd === 1) { sigCand = e; } });
       if (sigCand) { candSig = candado(sigCand.abre, hoyLocal()); }
     } catch (e) { sigCand = null; candSig = null; }
+    // (27/10, claridad) con el candado abierto, lo de hoy lo dice arriba
+    try { tuDiaG.sig = (sigCand && candSig && candSig.abierto) ? {n: sigCand.n, abierto: true} : null; } catch (e) { tuDiaG.sig = null; }
+    // (27/10, ataque) la etapa ya se cumplio: lo de hoy no cuenta tomas
+    try { tuDiaG.vencida = !!(sigCand && candSig && candSig.abierto); } catch (e) { tuDiaG.vencida = false; }
+    var precioArriba = false;
     try {
       var conPrecio = !!(d.precio && typeof d.precio.n === "number" && str(d.precio.texto));
       var conCand = !!(sigCand && (!conPrecio || d.precio.n === sigCand.n));
@@ -2991,8 +3524,11 @@
         el("siguiente-precio").hidden = !conPrecio;
         if (conCand) {
           var dt = textoDura(actual.n, actual.dura);
-          if (dt) { texto("siguiente-dura", dt); el("siguiente-dura").hidden = false; }
-          texto("candado-txt", textoCandado(sigCand.n, candSig));
+          // (27/10, claridad) lo programado solo si arriba no hay cuenta de dias
+          // (27/10, ataque) ni con el candado abierto: "programada para unas
+          // tres semanas" quedaba pegado a "ya podes pasar" y al "ya paso el mes"
+          if (dt && !(CLARIDAD === true && (tt || (candSig && candSig.abierto)))) { texto("siguiente-dura", dt); el("siguiente-dura").hidden = false; }
+          texto("candado-txt", textoCandado(sigCand.n, candSig, CLARIDAD === true ? sigCand.abre : undefined));
           el("candado-txt").hidden = false;
           el("candado").hidden = false;
         }
@@ -3016,6 +3552,9 @@
           }
         } catch (e) { /* sin boton de pago: como antes */ }
         el("sec-siguiente").hidden = false;
+        precioArriba = conPrecio;
+        // (27/10, ataque) la tarjeta ya dice "Ya podes pasar": arriba no se repite
+        try { if (CLARIDAD === true) { tuDiaG.sig = invitaArriba(tuDiaG.sig, conCand && !el("candado-txt").hidden, d.pago); } } catch (e) { /* queda como estaba */ }
         revelar(el("sec-siguiente"), function () {
           // Se ve cerrado y, si ya se cumplio la etapa, se abre.
           if (conCand && candSig && candSig.abierto) {
@@ -3051,7 +3590,9 @@
       li.appendChild(cual);
       li.appendChild(nuevo("div", "tit", str(e.titulo) || (est === "pendiente" ? "La armamos cuando llegues" : "")));
       if (str(e.el)) { li.appendChild(nuevo("div", "fecha", "La recibiste el " + e.el)); hechos++; }
-      if (d.precio && d.precio.n === e.n && str(d.precio.texto)) { li.appendChild(nuevo("div", "precio", d.precio.texto)); }
+      // (27/10, claridad) el precio una sola vez: si ya esta en "Tu proxima
+      // etapa", el camino no lo repite
+      if (d.precio && d.precio.n === e.n && str(d.precio.texto) && !(CLARIDAD === true && precioArriba)) { li.appendChild(nuevo("div", "precio", d.precio.texto)); }
       items.push(li);
       if (est === "actual") {
         iActual = items.length - 1;
@@ -3118,8 +3659,9 @@
     // con un remedio que ya recibio. Lo visto sin remedio, en Tu cuerpo.
     var enTrabajo = zonasEnTrabajo(ZONAS, porZona);
     // LAS CIFRAS (necesitan saber cuantas zonas hay en foco)
+    // (27/10, claridad) Ya no se pinta: la reemplaza LO DE HOY (loDeHoy).
     var cs = cifras(d, enTrabajo.filter(function (z) { return z !== "todo"; }).length);
-    if (cifrasValen(cs)) {
+    if (CLARIDAD !== true && cifrasValen(cs)) {
       var caja = el("cifras");
       cs = cifrasQueValen(cs);
       if (cs.length === 2) { caja.classList.add("dos"); }
@@ -3136,7 +3678,10 @@
     // (P3) HOY TE TOCA (solo con las tomas de la etapa en curso).
     var nActual = (actual && actual.estado === "actual") ? actual.n : 0;
     tomasG = d.tomas || null;
+    // (27/10, ataque) el remedio todavia no le llego: lo de hoy no cuenta tomas
+    try { tuDiaG.espera = !!(d.tomas && typeof d.tomas === "object" && d.tomas.espera === 1); } catch (e) { tuDiaG.espera = false; }
     pintarHoy(kid, d, nActual);
+    pintarTuDia();
 
     var figura = el("figura");
     try {
@@ -3157,6 +3702,8 @@
       });
       var info = porZona[z] || {};
       texto("zona-nombre", NOMBRES[z]);
+      // (27/10, diseno) el medallon de la zona al lado de su nombre
+      try { if (DISENIO === true) { el("panel-zona").setAttribute("data-z", z); } } catch (e) { /* sin medallon */ }
       // (P2) su tramo, con las palabras de la leyenda (solo con lamina)
       var tzp = tramoDeZona(info), zn = el("zona-nivel");
       zn.className = "nivel-zona" + (tzp ? " t" + tzp : "");
@@ -3251,7 +3798,7 @@
 
     // TU ESTUDIO
     var hayMas = false;
-    if (str(d.motivo)) { texto("motivo", d.motivo); el("det-motivo").hidden = false; hayMas = true; }
+    if (str(d.motivo)) { texto("motivo", d.motivo); el("motivo").hidden = false; el("det-motivo").hidden = false; hayMas = true; }
     // (26/10, decision 3) "Con esto llegaste", con la fecha de la consulta.
     // (26/10, ataque) La fecha se ve aunque no haya motivo cargado: Jose la
     // pidio "visible siempre".
@@ -3260,6 +3807,13 @@
       if (NOTAS === true && (str(d.motivo) || fc)) {
         texto("motivo-titulo", "Con esto llegaste");
         if (fc) { texto("motivo-fecha", "Tu primera consulta: " + fc); el("motivo-fecha").hidden = false; el("det-motivo").hidden = false; hayMas = true; }
+        // (27/10, claridad) Sin motivo cargado, "Con esto llegaste" y nada
+        // abajo no se entiende: va "Tu primera consulta" con su dia.
+        if (CLARIDAD === true && !str(d.motivo) && fc) {
+          texto("motivo-titulo", "Tu primera consulta");
+          texto("motivo-fecha", "Fue el " + fc + ".");
+          texto("motivo", ""); el("motivo").hidden = true;
+        }
       }
     } catch (e) { /* queda "Lo que me contaste" */ }
     if (Array.isArray(d.se_vio) && d.se_vio.length) {
@@ -3320,10 +3874,11 @@
         el("flores-toma").hidden = false;
       }
     } catch (e) { /* sin la toma del gotero */ }
+    if (CLARIDAD === true && !hayFlores) { try { texto("flores-vacio", textoFloresVacio(!el("flores-toma").hidden)); } catch (e) { /* queda el de siempre */ } }
     el("flores-vacio").hidden = hayFlores;
     // Comidas: la temporada, y lo que suma y lo que pausa (solo lo que esta
     // en el PDF del plan que tiene en la mano: lo decide Python).
-    var hayComidas = false;
+    var hayComidas = false, hayListaComidas = false;
     try {
       var ft = fraseTemporada(d.comidas), su = listaComidas(d.comidas, "suma"), pa = listaComidas(d.comidas, "pausa");
       if (ft) { texto("comidas-temporada", ft); el("comidas-temporada").hidden = false; hayComidas = true; }
@@ -3331,20 +3886,26 @@
       pa.forEach(function (x) { el("comidas-pausa").appendChild(nuevo("li", null, x)); });
       el("col-suma").hidden = !su.length;
       el("col-pausa").hidden = !pa.length;
-      if (su.length || pa.length) { el("comidas-cols").hidden = false; el("comidas-detalle").hidden = false; hayComidas = true; }
+      if (su.length || pa.length) { el("comidas-cols").hidden = false; el("comidas-detalle").hidden = false; hayComidas = true; hayListaComidas = true; }
     } catch (e) { /* sin comidas */ }
     el("comidas-vacio").hidden = hayComidas;
     elegirTab(tabActual);
 
     // LOS ACCESOS DE INICIO: a lo que tiene algo (con dos o mas, se ven).
     try {
-      var acc = accesosDe({cuerpo: conAlgo.length > 0, estudio: hayMas, flores: hayFlores, comidas: hayComidas});
-      if (acc.length >= 2) {
+      // (27/10, claridad) solo Flores y Comidas (la barra no las nombra), y
+      // Comidas solo con que sumar o pausar ("Que sumar, que pausar" sobre
+      // una pestana con una sola frase prometia de mas)
+      var acc = accesosDe({cuerpo: conAlgo.length > 0, estudio: hayMas, flores: hayFlores, comidas: CLARIDAD === true ? hayListaComidas : hayComidas});
+      if (CLARIDAD === true) { acc = accesosQueSuman(acc); }
+      if (acc.length >= (CLARIDAD === true ? 1 : 2)) {
         acc.forEach(function (a) {
           var b = nuevo("button", "acceso");
           b.type = "button";
           b.appendChild(nuevo("span", "t", a.t));
           b.appendChild(nuevo("span", "d", a.d));
+          // (27/10, diseno) el medallon de cada acceso
+          if (DISENIO === true) { b.setAttribute("data-a", a.tab || a.p); }
           b.addEventListener("click", function () { irA(a.p, a.tab); });
           el("accesos").appendChild(b);
         });
@@ -3519,6 +4080,8 @@
     } catch (e) { /* sin saludo */ }
     if (marca && !marca.getAttribute("src")) { marca.setAttribute("src", "imagenes/icono-192.png"); }
     nota.hidden = true;
+    // (27/10, diseno) la ilustracion de su telefono arriba de los pasos
+    try { if (DISENIO === true) { el("instalar").setAttribute("data-plat", String(plat || "")); } } catch (e) { /* sin ilustracion */ }
     if (plat === "ios") {
       // Sin manifiesto, el iPhone guarda en el icono el link de la pantalla
       // (con lo de despues del #): asi abre el portal de esta persona.

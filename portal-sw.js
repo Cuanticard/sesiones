@@ -10,7 +10,7 @@
    Solo atiende lo del propio portal (nada de otras paginas del sitio). */
 "use strict";
 var CAJA = "cuantica-portal-app2";
-var BASICO = ["portal.html", "portal.webmanifest", "fuentes/cormorant-garamond.woff", "fuentes/cormorant-sc-600.woff2", "fuentes/cormorant-sc-bold.woff", "fuentes/museomoderno-400.woff", "fuentes/museomoderno-500.woff", "fuentes/museomoderno-600.woff", "imagenes/cuerpo-hombre.webp", "imagenes/cuerpo-mujer.webp", "imagenes/logo-cuantica.webp", "imagenes/silueta-neutra.webp", "imagenes/simbolo-adn.webp", "imagenes/icono-180.png", "imagenes/icono-192.png", "imagenes/icono-512.png"];
+var BASICO = ["portal.html", "portal.webmanifest", "fuentes/cormorant-garamond.woff", "fuentes/cormorant-sc-600.woff2", "fuentes/cormorant-sc-bold.woff", "fuentes/museomoderno-400.woff", "fuentes/museomoderno-500.woff", "fuentes/museomoderno-600.woff", "imagenes/cuerpo-hombre.webp", "imagenes/cuerpo-mujer.webp", "imagenes/fondo-camino-tres-frascos.webp", "imagenes/fondo-comidas.webp", "imagenes/fondo-contacto-carta.webp", "imagenes/fondo-cuerpo-figura.webp", "imagenes/fondo-encuentro-manos.webp", "imagenes/fondo-estudio-pantalla.webp", "imagenes/fondo-flores.webp", "imagenes/fondo-notas-libreta.webp", "imagenes/frasco-banner-estudio-la-copa.webp", "imagenes/frasco-banner-remedios.webp", "imagenes/frasco-banner-tomas-la-gota.webp", "imagenes/frasco-banner-va-en-camino.webp", "imagenes/icono-01-inicio.webp", "imagenes/icono-02-cuerpo.webp", "imagenes/icono-03-estudio.webp", "imagenes/icono-04-remedios.webp", "imagenes/icono-05-contacto.webp", "imagenes/icono-06-tomas-de-hoy.webp", "imagenes/icono-07-encuentro.webp", "imagenes/icono-08-camino-etapas.webp", "imagenes/icono-09-pedir-otro-frasquito.webp", "imagenes/icono-10-envio.webp", "imagenes/icono-12-notas.webp", "imagenes/icono-13-con-esto-llegaste.webp", "imagenes/icono-14-flores.webp", "imagenes/icono-15-comidas.webp", "imagenes/icono-16-pago.webp", "imagenes/icono-17-lamina.webp", "imagenes/icono-20-zona-cabeza.webp", "imagenes/icono-21-zona-cuello-garganta.webp", "imagenes/icono-22-zona-pecho.webp", "imagenes/icono-23-zona-abdomen.webp", "imagenes/icono-24-zona-pelvis.webp", "imagenes/icono-25-zona-brazos-manos.webp", "imagenes/icono-26-zona-piernas-pies.webp", "imagenes/icono-27-zona-todo-el-cuerpo.webp", "imagenes/icono-28-mail.webp", "imagenes/icono-29-whatsapp.webp", "imagenes/icono-30-instalar-iphone.webp", "imagenes/icono-31-instalar-android.webp", "imagenes/logo-cuantica.webp", "imagenes/logo-icono-app.webp", "imagenes/que-es-flor.webp", "imagenes/silueta-neutra.webp", "imagenes/simbolo-adn.webp", "imagenes/icono-180.png", "imagenes/icono-192.png", "imagenes/icono-512.png"];
 
 function esBasico(url) {
   try {
@@ -23,7 +23,10 @@ function esBasico(url) {
 }
 
 self.addEventListener("install", function (ev) {
-  ev.waitUntil(caches.open(CAJA).then(function (c) { return c.addAll(BASICO); }).catch(function () { return null; }));
+  // (27/10, diseno) de a uno: si un dibujo no baja, el resto queda guardado igual
+  ev.waitUntil(caches.open(CAJA).then(function (c) {
+    return Promise.all(BASICO.map(function (u) { return c.add(u).catch(function () { return null; }); }));
+  }).catch(function () { return null; }));
   self.skipWaiting();
 });
 

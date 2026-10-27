@@ -972,7 +972,7 @@ section[id], #cierre { scroll-margin-top: 92px; }
         <figcaption style="font-size: clamp(15px, 1.3vw, 19px); line-height: 1.62; color: rgb(245, 237, 224);"><span class="sc-interp">El oscilador Tesla del equipo con el que hago tu estudio.</span></figcaption>
       </figure>
       <p style="font-size: clamp(16px, 1.4vw, 20px); line-height: 1.68; color: rgb(245, 237, 224); max-width: 66ch; margin: clamp(24px, 3vw, 34px) 0px 0px;"><span class="sc-interp">No hace falta que estés presente ni que el escaneo sea en vivo. Con tu firma biológica alcanza — sin agujas, sin radiación, sin que tengas que viajar ni pedirte el día.</span></p>
-      <p style="font-family: Cormorant, serif; font-style: italic; font-size: clamp(19px, 1.8vw, 26px); line-height: 1.32; color: rgb(60, 231, 225); max-width: 52ch; margin: clamp(22px, 2.8vw, 32px) 0px 0px;"><span class="sc-interp">Las últimas consultas llegaron de Panamá, Galicia y Estados Unidos. La distancia dejó de ser el problema.</span></p>
+      <p style="font-family: Cormorant, serif; font-style: italic; font-size: clamp(19px, 1.8vw, 26px); line-height: 1.32; color: rgb(60, 231, 225); max-width: 52ch; margin: clamp(22px, 2.8vw, 32px) 0px 0px;"><span class="sc-interp">Las últimas consultas llegaron de Panamá, Galicia y Estados Unidos. La distancia dejó de ser el problema.</span></p><p style="margin: 14px 0px 0px;"><a href="#distancia" style="font-family: MuseoModerno, sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.08em; color: rgb(196, 122, 53); text-decoration: none; border-bottom: 1px solid rgba(196, 122, 53, 0.5);">¿Cómo funciona a distancia? Te lo explico paso a paso ↓</a></p>
     </div>
   </section>
 
@@ -1666,6 +1666,47 @@ section[id], #cierre { scroll-margin-top: 92px; }
     </div>
   </section>
 
+  <style id="dist-css">
+#distancia{border-top:1px solid rgba(60,231,225,.12);background:rgb(8,12,12);position:relative;scroll-margin-top:96px}
+#distancia .dz{max-width:1180px;margin:0 auto;padding:clamp(56px,7vw,104px) clamp(20px,5vw,64px)}
+#distancia .dz-ceja{font-family:MuseoModerno,sans-serif;font-weight:600;font-size:12px;letter-spacing:.4em;text-transform:uppercase;color:rgb(60,231,225);margin-bottom:18px}
+#distancia h2{font-family:"Cormorant SC",serif;font-style:italic;font-weight:500;font-size:clamp(36px,4.8vw,68px);line-height:1;margin:0 0 clamp(18px,2.4vw,28px);color:#fff;text-wrap:balance}
+#distancia .dz-lead{font-family:Cormorant,serif;font-style:italic;font-size:clamp(19px,1.8vw,26px);line-height:1.35;color:rgb(245,237,224);max-width:60ch;margin:0 0 clamp(30px,4vw,48px)}
+#distancia .dz-banner{margin:0 0 clamp(34px,4.4vw,56px);border-radius:14px;overflow:hidden;border:1px solid rgba(60,231,225,.14)}
+#distancia .dz-banner video,#distancia .dz-banner img{display:block;width:100%;height:auto}
+#distancia .dz-pasos{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(18px,2.4vw,28px);counter-reset:none}
+#distancia .dz-paso{border:1px solid rgba(196,122,53,.28);border-radius:14px;padding:clamp(20px,2.4vw,28px);background:rgba(10,15,15,.7)}
+#distancia .dz-num{font-family:MuseoModerno,sans-serif;font-weight:700;font-size:13px;letter-spacing:.2em;color:rgb(196,122,53);margin-bottom:10px}
+#distancia h3{font-family:"Cormorant SC",serif;font-style:italic;font-weight:500;font-size:clamp(22px,2vw,28px);line-height:1.1;margin:0 0 12px;color:#fff}
+#distancia p{font-size:clamp(15px,1.2vw,17px);line-height:1.62;color:rgb(245,237,224);margin:0 0 12px}
+#distancia p:last-child{margin-bottom:0}
+#distancia .dz-dato{display:block;border-left:2px solid rgb(60,231,225);padding:4px 0 4px 14px;color:rgb(60,231,225);font-style:italic}
+#distancia .dz-faq{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(18px,2.6vw,32px) clamp(32px,5vw,64px);margin-top:clamp(40px,5vw,64px)}
+#distancia .dz-faq>div{border-top:1px solid rgba(60,231,225,.14);padding-top:clamp(16px,2vw,22px)}
+#distancia .dz-media{margin:-4px -4px 16px;border-radius:10px;overflow:hidden;background:transparent}
+#distancia .dz-vid{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;-webkit-mask-image:radial-gradient(ellipse 92% 88% at 50% 50%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 92% 88% at 50% 50%,#000 62%,transparent 100%)}
+#distancia .dz-banner{background:transparent;border:0}
+#distancia .dz-mundo{margin:clamp(40px,5vw,64px) 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(18px,3vw,40px);align-items:center}
+#distancia .dz-mundo .dz-media{margin:0}
+#distancia .dz-cta{display:inline-flex;margin-top:clamp(34px,4vw,48px);font-family:MuseoModerno,sans-serif;font-weight:700;font-size:13px;letter-spacing:.08em;color:rgb(10,15,15);background:rgb(60,231,225);border-radius:999px;padding:13px 26px;text-decoration:none}
+#distancia .dz-cta:hover,#distancia .dz-cta:focus-visible{background:#fff}
+</style>
+<section id="distancia">
+<div class="dz">
+<div class="dz-ceja"><span class="sc-interp">La pregunta que más me hacen</span></div>
+<h2><span class="sc-interp">¿Cómo funciona a distancia?</span></h2>
+<p class="dz-lead"><span class="sc-interp">Es lógico preguntarlo: ¿cómo puedo leer tu cuerpo si estás en otra ciudad, o en otro país? Te lo explico en cuatro pasos.</span></p>
+<div class="dz-banner"><video class="dz-vid" src="imagenes/distancia/2-firma.mp4" poster="imagenes/distancia/2-firma.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Una firma escrita a mano que se convierte en una onda de frecuencia"></video></div>
+<div class="dz-pasos">
+<div class="dz-paso"><div class="dz-media"><video class="dz-vid" src="imagenes/distancia/1-dos-luces.mp4" poster="imagenes/distancia/1-dos-luces.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Dos luces unidas por un hilo que laten al mismo tiempo"></video></div><div class="dz-num">01</div><h3><span class="sc-interp">Dos partículas que no se olvidan</span></h3><p><span class="sc-interp">Uso el entrelazamiento cuántico. Es un fenómeno de la física subatómica: cuando dos partículas interactúan, sus estados quedan íntimamente vinculados —entrelazados—, sin importar la distancia física que las separe.</span></p><p><span class="sc-interp">Si se mide o se altera el estado de una de ellas, como su espín o su polarización, la otra cambia al instante para reflejar ese cambio. Aunque una esté en una punta del universo y la otra en la otra. Albert Einstein lo llamó «acción fantasmal».</span></p><p><span class="dz-dato">No es una idea mía: los experimentos que demostraron el entrelazamiento ganaron el Premio Nobel de Física en 2022.</span></p></div>
+<div class="dz-paso"><div class="dz-num">02</div><h3><span class="sc-interp">Tu firma biológica</span></h3><p><span class="sc-interp">Tu nombre y apellido junto a tu fecha de nacimiento son tu firma biológica. Contienen partículas —fotones y electrones— que estuvieron originalmente unidas a tu organismo, y por eso mantienen un estado de entrelazamiento cuántico permanente con tu cuerpo real.</span></p><p><span class="sc-interp">Por eso no necesito que vengas: con tu nombre completo, como figura en tu documento, y tu fecha de nacimiento exacta, el equipo sabe dónde buscar tus frecuencias.</span></p></div>
+<div class="dz-paso"><div class="dz-media"><video class="dz-vid" src="imagenes/distancia/4-placa.mp4" poster="imagenes/distancia/4-placa.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Una tarjeta con una firma sobre una placa que emite anillos de luz, y una silueta lejana que los recibe"></video></div><div class="dz-num">03</div><h3><span class="sc-interp">El equipo lee tus frecuencias</span></h3><p><span class="sc-interp">Coloco tu firma, como muestra o testigo, en la placa de prueba del equipo, y la máquina interactúa bioeléctricamente con ella. En el campo cuántico no hay espacio ni tiempo: el equipo accede a tus frecuencias, las baja al hardware, y en el software las analiza y las compara con los patrones de referencia.</span></p><p><span class="sc-interp">Así recorro tu información por dentro —del órgano al tejido, la célula, los cromosomas y el ADN—, igual que si estuvieras sentado enfrente mío.</span></p></div>
+<div class="dz-paso"><div class="dz-num">04</div><h3><span class="sc-interp">La terapia vuelve por el mismo camino</span></h3><p><span class="sc-interp">Después de ver qué está fuera de su frecuencia, emito las frecuencias correctoras sobre tu firma. Por el entrelazamiento, cualquier cambio o estímulo electromagnético que se aplica a la muestra resuena de forma instantánea en tu campo bioenergético real, estés donde estés.</span></p><p><span class="sc-interp">Todo lo que se lee y todo lo que se emite queda registrado en tu informe.</span></p></div>
+</div><div class="dz-mundo"><div class="dz-media"><video class="dz-vid" src="imagenes/distancia/3-planeta.mp4" poster="imagenes/distancia/3-planeta.jpg" autoplay muted loop playsinline preload="metadata" aria-label="El planeta de noche con un arco de luz entre Argentina y México"></video></div><div><h3><span class="sc-interp">Argentina y México, en el mismo instante</span></h3><p><span class="sc-interp">Atendí a una persona de México estando yo en Argentina. Para el entrelazamiento, nueve mil kilómetros son lo mismo que un metro.</span></p></div></div><div class="dz-faq">
+<div><h3><span class="sc-interp">¿Es lo mismo que presencial?</span></h3><p><span class="sc-interp">Sí. La misma lectura, la misma terapia, el mismo informe y el mismo plan. Lo único que cambia es dónde estás vos.</span></p></div>
+<div><h3><span class="sc-interp">¿Tengo que estar conectado ese día?</span></h3><p><span class="sc-interp">No. No coordinamos horario ni hace falta que estés presente: cuando llega tu turno, hago tu estudio. Vos seguís con tu día.</span></p></div>
+<div><h3><span class="sc-interp">¿Sirve desde cualquier país?</span></h3><p><span class="sc-interp">Sí. Las últimas consultas llegaron de México, Panamá, Galicia y Estados Unidos. Desde donde estés, se hace igual.</span></p></div>
+</div><script>try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)document.querySelectorAll("#distancia video").forEach(function(v){v.removeAttribute("autoplay");v.pause()})}catch(e){}</script><a class="dz-cta" href="#cierre">Quiero mi sesión a distancia</a></div></section>
   <section id="preguntas" style="border-top: 1px solid rgba(60, 231, 225, 0.12); position: relative;">
     <div style="max-width: 1180px; margin: 0px auto; padding: clamp(56px, 7vw, 104px) clamp(20px, 5vw, 64px);">
       <div style="font-family: MuseoModerno, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.4em; text-transform: uppercase; color: rgb(60, 231, 225); margin-bottom: 18px;"><span class="sc-interp">Antes de reservar</span></div>

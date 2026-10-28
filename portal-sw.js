@@ -37,8 +37,48 @@ self.addEventListener("activate", function (ev) {
   }).then(function () { return self.clients.claim(); }));
 });
 
+// (28/10) EL LINK CORTO: el archivo cifrado de cada portal (portal-d/<id>.json)
+// va SIEMPRE primero a la red (asi lo nuevo llega al toque, y un portal
+// apagado se apaga); solo si no hay senal se usa el ultimo guardado. Si la red
+// contesta que no esta (404/410), se borra lo guardado. (28/10, ataque) Un
+// error pasajero del sitio (5xx) NO borra nada: se usa lo guardado. Va en su
+// propia caja: cambiar la version de la pagina no lo borra.
+var DATOS = "cuantica-datos-portal";
+
+function esDatos(url) {
+  try {
+    var u = new URL(url);
+    if (u.origin !== self.location.origin) { return false; }
+    var base = new URL("./", self.location.href).pathname;
+    var rel = u.pathname.indexOf(base) === 0 ? u.pathname.slice(base.length) : "";
+    return /^portal-d\/[A-Za-z0-9_-]{16}\.json$/.test(rel);
+  } catch (e) { return false; }
+}
+
 self.addEventListener("fetch", function (ev) {
   var r = ev.request;
+  if (r.method === "GET" && esDatos(r.url)) {
+    var llave = r.url.split("#")[0].split("?")[0];
+    ev.respondWith(fetch(r).then(function (resp) {
+      if (resp && resp.ok) {
+        var copia = resp.clone();
+        caches.open(DATOS).then(function (c) { return c.put(llave, copia); })
+          .catch(function () { return null; });
+        return resp;
+      }
+      if (resp && (resp.status === 404 || resp.status === 410)) {
+        caches.open(DATOS).then(function (c) { return c.delete(llave); })
+          .catch(function () { return null; });
+        return resp;
+      }
+      return caches.open(DATOS).then(function (c) { return c.match(llave); })
+        .then(function (x) { return x || resp; }, function () { return resp; });
+    }).catch(function () {
+      return caches.open(DATOS).then(function (c) { return c.match(llave); })
+        .then(function (x) { return x || Response.error(); });
+    }));
+    return;
+  }
   if (r.method !== "GET" || !esBasico(r.url)) { return; }
   // Primero la red (asi la pagina nueva llega al toque); sin senal, lo guardado.
   ev.respondWith(fetch(r).then(function (resp) {

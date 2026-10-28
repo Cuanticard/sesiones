@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-LKxVwKVolJ2Q0WWiAlIZ505gGiygHZgX305sCRQ1dEU='; style-src 'sha256-SMWsICk5dfq6M7O/U9A+zvxHKCpT0gFjKS/fqLVv+U0=' 'sha256-LNFFEjYU6Ef9fdCUO2qY9qmmbzs/mZmshQHNC51eWBA='; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-BqrcU/uKC2gIQnn53Hi+5grrE1ihH1U+tSXyWgaucdQ='; style-src 'sha256-SMWsICk5dfq6M7O/U9A+zvxHKCpT0gFjKS/fqLVv+U0=' 'sha256-LNFFEjYU6Ef9fdCUO2qY9qmmbzs/mZmshQHNC51eWBA='; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
 <meta name="theme-color" content="#050606">
 <meta name="color-scheme" content="dark">
 <title>Tu portal · CUÁNTICA</title>
@@ -1299,7 +1299,16 @@
   var ACTIVIDAD = true;
   // El pago del frasquito con Mercado Pago (pago_frasquito_portal.py).
   var PAGO_FRASQUITO = true;
+  // (28/10, Jose: "no se puede acortar el link?") EL LINK CORTO
+  // (portal_link_corto.py): c1.<id>.<clave>; lo de adentro, cifrado, vive en
+  // portal-d/<id>.json del mismo sitio. Con la llave apagada queda en false
+  // y solo abren los links largos, como antes.
+  var CORTO = true;
+  var LIMITE_CORTO = 12000;
   var NO_ACTIVO = "Este link no está activo. Escribime y te paso uno nuevo.";
+  // (28/10, ataque) El link corto necesita bajar su archivo: si no se pudo
+  // (sin señal, lento, un error del sitio) NO es "link apagado".
+  var SIN_BAJAR_TXT = "No pude bajar tu portal. Revisá tu conexión y volvé a tocar el link en un ratito.";
   var DEMORA = "Se está demorando más de lo normal. Cerrá y volvé a abrir tu link.";
   var VIEJO = "Tu teléfono necesita una versión más nueva del navegador para abrir tu portal. Actualizalo y volvé a tocar el link.";
   var ZONAS = ["cabeza", "cuello", "pecho", "abdomen", "pelvis", "brazos", "piernas", "todo"];
@@ -1400,6 +1409,42 @@
       return h.slice(0, 32);
     });
   }
+  // (28/10) EL LINK CORTO, EL MISMO CAMINO QUE portal_link_corto.largo_del_corto:
+  // con la clave del link se abre el archivo publicado y sale el link largo
+  // de siempre (que despues pasa por abrirPaquete: firma, descifrado, lista
+  // cerrada). "apagado" si el archivo es el de un portal apagado; null si
+  // algo no cierra (otro archivo, otra clave, un byte cambiado).
+  function esCorto(s) { return /^c1\.[A-Za-z0-9_-]{16}\.[A-Za-z0-9_-]{43}$/.test(String(s || "")); }
+  function archivoCorto(s) { return esCorto(s) ? "portal-d/" + String(s).split(".")[1] + ".json" : ""; }
+  // (28/10, ataque) Bajar el archivo del corto. Devuelve el sobre (un objeto)
+  // o SIN_BAJAR si no se pudo bajar: sin red, error del sitio (5xx), o 404
+  // (el minuto que tarda en aparecer algo recien subido). "No se pudo bajar"
+  // no es "apagado": el link guardado NO se olvida y se pide reintentar.
+  // Apagado es solo el archivo que dice apagado, o uno que no abre.
+  var SIN_BAJAR = "sin_bajar";
+  function bajarCorto(f, traer) {
+    return Promise.resolve().then(function () { return traer(archivoCorto(f)); })
+      .then(function (x) { return (x && x.ok) ? x.json() : SIN_BAJAR; })
+      .then(function (s) { return (s && typeof s === "object") ? s : SIN_BAJAR; })
+      .catch(function () { return SIN_BAJAR; });
+  }
+  function abrirCorto(corto, sobre, cripto) {
+    if (!esCorto(corto) || !sobre || typeof sobre !== "object" || Array.isArray(sobre) || sobre.v !== "c1") { return Promise.resolve(null); }
+    if (sobre.x === 1 || typeof sobre.s !== "string") { return Promise.resolve("apagado"); }
+    var p = String(corto).split("."), sub = cripto.subtle, crudo;
+    try { crudo = b64(sobre.s); } catch (e) { return Promise.resolve(null); }
+    if (crudo.length < 29) { return Promise.resolve(null); }
+    return sub.importKey("raw", b64(p[2]), {name: "AES-GCM"}, false, ["decrypt"])
+      .then(function (k) {
+        return sub.decrypt({name: "AES-GCM", iv: crudo.slice(0, 12), additionalData: enc("c1." + p[1])}, k, crudo.slice(12));
+      })
+      .then(function (pt) {
+        var t = new TextDecoder().decode(new Uint8Array(pt)).split(".");
+        if (t.length !== 3 || !/^[A-Za-z0-9_-]{16}$/.test(t[0]) || !/^[A-Za-z0-9_-]+$/.test(t[1]) || !/^[A-Za-z0-9_-]+$/.test(t[2])) { return null; }
+        return "p1." + t[0] + "." + p[2] + "." + t[1] + "." + t[2];
+      })
+      .catch(function () { return null; });
+  }
   /*FIN-ABRIR*/
 
   /*APP*/
@@ -1443,7 +1488,7 @@
   function candidatosLink(hash, local, recordado, comoApp, plat) {
     var h = String(hash || "").replace(/^#/, "");
     var rec = (recuerdaEn(comoApp, plat) && typeof recordado === "string" &&
-               /^p1\.[A-Za-z0-9_-]{16}\./.test(recordado)) ? recordado : "";
+               /^(p1\.[A-Za-z0-9_-]{16}\.|c1\.[A-Za-z0-9_-]{16}\.[A-Za-z0-9_-]{43}$)/.test(recordado)) ? recordado : "";
     var loc = (typeof local === "string" && local) ? local : "";
     if (plat !== "app") { var x = h || loc || rec; return x ? [x] : []; }
     var out = [];
@@ -1458,7 +1503,9 @@
     var s = String(t || "").replace(/\s+/g, "");
     var i = s.indexOf("#");
     if (i >= 0) { s = s.slice(i + 1); }
-    return /^p1\.[A-Za-z0-9_-]{16}\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(s) ? s : "";
+    // (28/10) o el corto (c1.<id>.<clave>)
+    return (/^p1\.[A-Za-z0-9_-]{16}\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(s) ||
+            /^c1\.[A-Za-z0-9_-]{16}\.[A-Za-z0-9_-]{43}$/.test(s)) ? s : "";
   }
   // El link del control de etapa solo vale si es una pagina del mismo sitio.
   function controlValido(u) {
@@ -4066,7 +4113,7 @@
     } catch (e) { /* queda como estaba */ }
   }
   // LA PUERTA DE INSTALAR: la marca y UN boton. No deja pasar al portal.
-  function pantallaInstalar(plat, frag, np) {
+  function pantallaInstalar(plat, frag, np, kidL) {
     listo();
     el("puerta").hidden = true; el("aviso").hidden = true; el("portal").hidden = true; el("sin-link").hidden = true;
     var link = location.href.split("#")[0] + "#" + frag;
@@ -4074,7 +4121,7 @@
     // (14/10, P1b) La bienvenida saluda con el nombre que dejo en SU celular
     // (26/10: o con el que vino firmado en el link, con su llave).
     try {
-      var nh = ((NOMBRE_LINK === true) ? nombreDelLink(np) : "") || nombreLimpio(guardado(claveNombre(String(frag || "").split(".")[1] || "")));
+      var nh = ((NOMBRE_LINK === true) ? nombreDelLink(np) : "") || nombreLimpio(guardado(claveNombre(kidL || String(frag || "").split(".")[1] || "")));
       texto("instalar-hola", nh ? "Hola, " + nh : "");
       el("instalar-hola").hidden = !nh;
     } catch (e) { /* sin saludo */ }
@@ -4170,7 +4217,42 @@
     if (!frag) { if (COMO_APP && plat === "app") { pantallaSinLink(); return; } avisar(NO_ACTIVO); return; }
     var cripto = window.crypto;
     if (!cripto || !cripto.subtle || typeof TextDecoder === "undefined") { avisar(VIEJO); return; }
-    abrirPaquete(frag, CLAVE, cripto).then(function (r) {
+    // (28/10) El link corto: primero se baja su archivo del mismo sitio (el
+    // service worker, si no hay senal, da el ultimo guardado) y se vuelve el
+    // link largo de siempre. Con la llave apagada, un corto no abre.
+    var aLargo = function (f) {
+      if (!esCorto(f)) { return Promise.resolve(f); }
+      if (CORTO !== true || typeof window.fetch !== "function" ||
+          !(location.protocol === "http:" || location.protocol === "https:")) { return Promise.resolve(""); }
+      var traer = function (u) {
+        return fetch(u, {cache: "no-store", credentials: "omit"}).then(function (x) {
+          // Instalada: una copia para abrir sin señal, aunque el service
+          // worker todavia no este a cargo (la primera vez).
+          try {
+            if (COMO_APP && x && x.ok && window.caches) {
+              var c = x.clone(), llave = new URL(u, location.href).href;
+              window.caches.open("cuantica-datos-portal").then(function (k) { return k.put(llave, c); }).catch(function () { return null; });
+            }
+          } catch (e) { /* sin copia: abre igual */ }
+          return x;
+        });
+      };
+      return conLimite(bajarCorto(f, traer), LIMITE_CORTO)
+        .then(function (s) { return (!s || s === SIN_BAJAR) ? SIN_BAJAR : abrirCorto(f, s, cripto); });
+    };
+    // No se pudo bajar el archivo del corto: si hay otro link para probar,
+    // se prueba; si no, se pide reintentar. El link guardado NO se olvida.
+    var sinBajar = function () {
+      if (lista.length > 1) { arrancar(pegado, lista.slice(1)); return; }
+      avisar(SIN_BAJAR_TXT);
+    };
+    aLargo(frag).then(function (largo) {
+      if (largo === SIN_BAJAR) { return {sinBajar: true}; }
+      if (largo === "apagado") { return {apagado: true}; }
+      return largo ? abrirPaquete(largo, CLAVE, cripto) : null;
+    }).then(function (r) {
+      if (r && r.sinBajar) { sinBajar(); return; }
+      if (r && r.apagado) { noAbre("apagado"); return; }
       if (!r) { noAbre("firma"); return; }
       verificado = true;
       // Los links apagados desde la ficha: la lista vive en el mismo sitio
@@ -4189,7 +4271,7 @@
         if (COMO_APP) {
           if (frag !== LOCAL && recuerdaEn(COMO_APP, plat)) { guardar(LINK_GUARDADO, frag); }
           var pant = queMostrar(COMO_APP, plat);
-          if (pant !== "portal") { pantallaInstalar(pant, frag, r.d && r.d.np); return; }
+          if (pant !== "portal") { pantallaInstalar(pant, frag, r.d && r.d.np, r.kid); return; }
           if (plat === "app") { guardar(INSTALADA, "1"); }
         }
         var entrar = function () { el("puerta").hidden = true; pintar(r.kid, r.d, r.k); };
@@ -4205,7 +4287,7 @@
   // (21/10) Un link NUEVO pegado en la misma pestaña cambia solo lo de
   // después del #: el navegador no recarga y quedaba el portal viejo (o
   // "este link no está activo"). Con un link de portal, se abre entero.
-  try { window.addEventListener("hashchange", function () { if (/^#p1\./.test(location.hash)) { location.reload(); } }); } catch (e) { /* queda como estaba */ }
+  try { window.addEventListener("hashchange", function () { if (/^#(p1|c1)\./.test(location.hash)) { location.reload(); } }); } catch (e) { /* queda como estaba */ }
   arrancar();
   // Si en 15 segundos nada se pinto, el cartel de "Abriendo" no queda
   // girando para siempre.

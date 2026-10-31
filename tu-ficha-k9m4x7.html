@@ -2323,6 +2323,18 @@ function vozMime() {
   } catch (e) { }
   return '';
 }
+function vozPlano(t) {
+  return String(t || '').toLowerCase().replace(/[^a-z0-9\u00c0-\u024f\s]/g, '').replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '');
+}
+function vozSumarSinRepetir(acc, t) {
+  t = String(t || '').replace(/^\s+|\s+$/g, '');
+  if (!t) return acc;
+  var n = vozPlano(t), u = acc.length ? vozPlano(acc[acc.length - 1]) : '';
+  if (u && n.indexOf(u) === 0) { acc[acc.length - 1] = t; return acc; }
+  if (u && u.indexOf(n) === 0) return acc;
+  acc.push(t);
+  return acc;
+}
 function vozJuntar(base, nuevo) {
   var b = String(base || ''), n = String(nuevo || '').replace(/^\s+/, '');
   if (!n) return b;
@@ -2354,14 +2366,13 @@ function vozDictar(v) {
   try { r.lang = 'es-AR'; r.continuous = true; r.interimResults = true; } catch (e) { }
   r.onresult = function (ev) {
     try {
-      var prov = '';
-      for (var i = ev.resultIndex || 0; i < ev.results.length; i++) {
+      var acc = [];
+      for (var i = 0; i < ev.results.length; i++) {
         var x = ev.results[i], t = (x && x[0]) ? String(x[0].transcript || '') : '';
-        if (x && x.isFinal) v.finales = vozJuntar(v.finales, t);
-        else prov = vozJuntar(prov, t);
+        acc = vozSumarSinRepetir(acc, t);
       }
       v.vueltas = 0;
-      v.campo.value = vozJuntar(v.base, vozJuntar(v.finales, prov));
+      v.campo.value = vozJuntar(v.base, acc.join(' '));
       vozTocado(v);
     } catch (e) { }
   };

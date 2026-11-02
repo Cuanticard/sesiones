@@ -224,8 +224,8 @@ gap: 10px; }
        poniendo queda guardado en este mismo telefono: podes cerrarlo,
        seguir manana y no perdes nada. Reci&eacute;n al final, con el boton
        verde, <span id="relay-intro-boton">tu ficha me llega directo.</span></p>
-    <p id="relay-intro-red">Tus respuestas no salen de este telefono hasta que apretas el boton
-       verde. Ahi viajan directo a mi casilla de mail, por mi cuenta de Google.</p>
+    <p id="relay-intro-red">Lo que vas contestando se guarda en este telefono y tambien en mi cuenta de Google, para que puedas seguir desde otro aparato. Al apretar el boton
+       verde, tu ficha viaja directo a mi casilla de mail, por mi cuenta de Google.</p>
   </div>
 
   <div id="retomado">Retomaste donde habias dejado: esta todo lo que ya
@@ -3999,6 +3999,380 @@ try {
     try { if (d > 0) ctMandar(false); } catch (e) {}
     return r;
   };
+} catch (e) {}
+
+var BN = { espera: 8000, tope: 200000, desf: 0, reloj: null, enCurso: false, tocado: false,
+           listo: false, apagado: false, sucio: false, srv: null, cuelga: null,
+           re: /^[a-z]{1,8}_[A-Za-z0-9_.-]{1,64}\.[0-9a-f]{32}$/,
+           traen: ['op', 'p', 'l', 'prueba'],
+           cortan: ['firma', 'apagado', 'borrador_apagado', 'pago', 'pago_apagado',
+                    'tamanio', 'no_es_borrador', 'no_es_ficha', 'ya_llego'] };
+function bnTiene(o, k) { return !!o && Object.prototype.hasOwnProperty.call(o, k); }
+function bnObj(v) { return !!v && typeof v === 'object' && !(v instanceof Array); }
+function bnVacio(v) {
+  if (v === undefined || v === null || v === false) return true;
+  if (v instanceof Array) return v.length === 0;
+  if (typeof v === 'string') return v.replace(/^\s+|\s+$/g, '') === '';
+  return false;
+}
+function bnNorm(d) {
+  var o = bnObj(d) ? d : {}, b = bnObj(o.b) ? o.b : {};
+  return { t: Number(o.t) || 0,
+           b: { campos: bnObj(b.campos) ? b.campos : {}, chips: bnObj(b.chips) ? b.chips : {},
+                rangos: b.rangos instanceof Array ? b.rangos : [] },
+           tc: bnObj(o.tc) ? o.tc : {}, x: bnObj(o.x) ? o.x : {} };
+}
+function bnElegir(out, caja, pref, k, A, B) {
+  var va = bnTiene(A.b[caja], k) ? A.b[caja][k] : null;
+  var vb = bnTiene(B.b[caja], k) ? B.b[caja][k] : null;
+  var ta = Number(A.tc[pref + k]) || 0, tb = Number(B.tc[pref + k]) || 0;
+  var ea = ta || A.t, eb = tb || B.t, aV = bnVacio(va), bV = bnVacio(vb), usarA;
+  if (aV !== bV) usarA = aV ? (ta > 0 && ea > eb) : !(tb > 0 && eb > ea);
+  else usarA = ea >= eb;
+  var v = usarA ? va : vb;
+  if (!bnVacio(v)) out.b[caja][k] = v;
+  if (ta > 0 || tb > 0) out.tc[pref + k] = Math.max(ta, tb);
+}
+function bnFusion(a, b) {
+  var A = bnNorm(a), B = bnNorm(b), cajas = [['campos', 'c:'], ['chips', 'h:']];
+  var out = { v: 1, t: Math.max(A.t, B.t), b: { campos: {}, chips: {}, rangos: [] }, tc: {}, x: {} };
+  var c, i, j, k, ks, fs, caja, pref, lados, N;
+  for (c = 0; c < cajas.length; c++) {
+    caja = cajas[c][0]; pref = cajas[c][1]; ks = [];
+    fs = [A.b[caja], B.b[caja]];
+    for (j = 0; j < 2; j++) {
+      for (k in fs[j]) { if (bnTiene(fs[j], k) && ks.indexOf(k) < 0) ks.push(k); }
+    }
+    fs = [A.tc, B.tc];
+    for (j = 0; j < 2; j++) {
+      for (k in fs[j]) {
+        if (bnTiene(fs[j], k) && k.slice(0, 2) === pref && ks.indexOf(k.slice(2)) < 0) ks.push(k.slice(2));
+      }
+    }
+    for (i = 0; i < ks.length; i++) bnElegir(out, caja, pref, ks[i], A, B);
+  }
+  lados = A.b.rangos.concat(B.b.rangos);
+  for (i = 0; i < lados.length; i++) {
+    if (typeof lados[i] === 'string' && out.b.rangos.indexOf(lados[i]) < 0) out.b.rangos.push(lados[i]);
+  }
+  N = A.t >= B.t ? [A, B] : [B, A];
+  for (i = 0; i < 2; i++) {
+    for (k in N[i].x) {
+      if (bnTiene(N[i].x, k) && !bnTiene(out.x, k) && !bnVacio(N[i].x[k])) out.x[k] = N[i].x[k];
+    }
+  }
+  return out;
+}
+function bnNombreOk(n) { return typeof n === 'string' && n !== '__proto__' && /^[A-Za-z0-9_.:-]{1,80}$/.test(n); }
+function bnSaneo(d, tope) {
+  var A = bnNorm(d), cs = ['campos', 'chips'], c, i, k, v, n = 0, m = 0;
+  var out = { v: 1, t: Math.min(A.t, tope), b: { campos: {}, chips: {}, rangos: [] }, tc: {}, x: {} };
+  for (c = 0; c < 2; c++) {
+    for (k in A.b[cs[c]]) {
+      if (bnTiene(A.b[cs[c]], k) && n < 2000 && bnNombreOk(k)) { out.b[cs[c]][k] = A.b[cs[c]][k]; n++; }
+    }
+  }
+  for (k in A.tc) {
+    v = A.tc[k];
+    if (bnTiene(A.tc, k) && m < 4000 && typeof v === 'number' && isFinite(v) && v > 0
+        && /^[ch]:/.test(k) && bnNombreOk(k.slice(2))) { out.tc[k] = Math.min(v, tope); m++; }
+  }
+  for (i = 0; i < A.b.rangos.length && out.b.rangos.length < 500; i++) {
+    if (bnNombreOk(A.b.rangos[i])) out.b.rangos.push(A.b.rangos[i]);
+  }
+  n = 0;
+  for (k in A.x) {
+    v = A.x[k];
+    if (bnTiene(A.x, k) && n < 20 && bnNombreOk(k) && (typeof v === 'string' || (typeof v === 'number' && isFinite(v)))) { out.x[k] = v; n++; }
+  }
+  return out;
+}
+function bnClave(s) { return CLAVE + '_bn' + s; }
+function bnAhora() { return Date.now() + (Number(BN.desf) || 0); }
+function bnNotar(j) {
+  try {
+    if (j && typeof j.ahora === 'number' && isFinite(j.ahora)) {
+      BN.desf = j.ahora - Date.now();
+      window.localStorage.setItem(bnClave('_desf'), String(BN.desf));
+    }
+  } catch (e) {}
+}
+function bnLs(k, v) {
+  try {
+    if (v === undefined) return String(window.localStorage.getItem(k) || '');
+    if (v === null) window.localStorage.removeItem(k);
+    else window.localStorage.setItem(k, v);
+  } catch (e) {}
+  return '';
+}
+function bnMeta() {
+  try { var m = JSON.parse(bnLs(bnClave('')) || 'null'); return bnObj(m) ? m : {}; }
+  catch (e) { return {}; }
+}
+function bnAudios() {
+  try {
+    if (typeof vozClave !== 'function') return 0;
+    var a = JSON.parse(window.localStorage.getItem(vozClave()) || 'null'), n = 0, k;
+    if (!bnObj(a)) return 0;
+    for (k in a) { if (bnTiene(a, k) && a[k] && a[k].b64) n++; }
+    return n;
+  } catch (e) { return 0; }
+}
+function bnLocal() {
+  var m = bnMeta(), e = instantanea(), i, rs = [];
+  try { rs = form().querySelectorAll('input[type=range]'); } catch (x) { rs = []; }
+  for (i = 0; i < rs.length; i++) {
+    if (rs[i].name && (e.rangos || []).indexOf(rs[i].name) < 0) delete e.campos[rs[i].name];
+  }
+  return bnSaneo({ v: 1, t: Number(m.t) || 0, b: e, tc: bnObj(m.tc) ? m.tc : {},
+           x: { nomape: bnLs(CLAVE + '_nomape'), edad_auto: bnLs(CLAVE + '_edad_auto'),
+                audios: bnAudios() } }, bnAhora() + 60000);
+}
+function bnFirmaRes(d) {
+  var D = bnNorm(d), s = [], c, k, cs = ['campos', 'chips'];
+  for (c = 0; c < 2; c++) {
+    for (k in D.b[cs[c]]) {
+      if (bnTiene(D.b[cs[c]], k) && !bnVacio(D.b[cs[c]][k])) s.push(cs[c] + ':' + k + '=' + JSON.stringify(D.b[cs[c]][k]));
+    }
+  }
+  s.sort();
+  return s.join('|');
+}
+function bnSuma(a, b) { return bnFirmaRes(a) !== bnFirmaRes(b); }
+function bnCred() {
+  var f = '', p = '', o;
+  try { f = relayFirma(); } catch (e) { f = ''; }
+  if (BN.re.test(f)) return { firma: f, traer: BN.traen.indexOf(f.split('_')[0]) >= 0 };
+  f = bnLs(ENVIO_CLAVE + '_bn_firma');
+  if (BN.re.test(f)) return { firma: f, traer: false };
+  try { p = relayPago(); } catch (e) { p = ''; }
+  if (!p) return null;
+  o = { traer: false };
+  o[relay.pago[0]] = p;
+  return o;
+}
+function bnCuerpo(accion, cred, borrador) {
+  var m = { origen: 'borrador_v1', accion: accion }, d;
+  if (cred.firma) m.firma = cred.firma;
+  else if (cred.pago_mp) m.pago_mp = cred.pago_mp;
+  else m.pago_pp = cred.pago_pp;
+  d = { meta: m };
+  if (borrador) d.borrador = borrador;
+  return JSON.stringify(d);
+}
+function bnBytes(t) { try { return unescape(encodeURIComponent(t)).length; } catch (e) { return t.length * 3; } }
+function bnPedir(txt, alIrse) {
+  var op = { method: 'POST', body: txt, credentials: 'omit', referrerPolicy: 'no-referrer' };
+  if (alIrse && txt.length < 60000) op.keepalive = true;
+  return fetch(RELAY_URL, op)
+    .then(function (r) { return r.text(); })
+    .then(function (t) { try { return JSON.parse(t); } catch (e) { return null; } })
+    .catch(function () { return null; });
+}
+function bnCorta(j) { return !!(j && j.ok !== true && BN.cortan.indexOf(String(j.motivo)) >= 0); }
+function bnTerminada() {
+  try { return !!window.localStorage.getItem(relayClave()) || !!relay.enCurso; }
+  catch (e) { return false; }
+}
+function bnSePuede() {
+  try { return relaySePuede() && typeof JSON === 'object' && !!window.localStorage; }
+  catch (e) { return false; }
+}
+function bnSoltar() { BN.enCurso = false; try { clearTimeout(BN.cuelga); } catch (e) {} }
+function bnColgado() { try { clearTimeout(BN.cuelga); } catch (e) {} BN.cuelga = setTimeout(bnSoltar, 30000); }
+function bnMandar(alIrse) {
+  try {
+    if (BN.apagado || !BN.listo || BN.enCurso || bnTerminada() || !bnSePuede()) return false;
+    var cred = bnCred();
+    if (!cred) return false;
+    var loc = bnLocal();
+    if (!bnFirmaRes(loc)) { BN.sucio = false; return false; }
+    var h = relayHuella(JSON.stringify(loc.b) + JSON.stringify(loc.tc) + JSON.stringify(loc.x));
+    if (h === bnLs(bnClave('_ok'))) { BN.sucio = false; return false; }
+    var txt = bnCuerpo('guardar', cred, loc);
+    if (bnBytes(txt) > BN.tope) { BN.apagado = true; return false; }
+    BN.enCurso = true;
+    BN.sucio = false;
+    bnColgado();
+    bnPedir(txt, alIrse).then(function (j) {
+      bnSoltar();
+      if (j && j.ok === true) {
+        bnNotar(j);
+        bnLs(bnClave('_ok'), h);
+        if (!cred.firma && typeof j.firma === 'string' && BN.re.test(j.firma)) {
+          bnLs(ENVIO_CLAVE + '_bn_firma', j.firma);
+        }
+      } else {
+        BN.sucio = true;
+        if (bnCorta(j)) BN.apagado = true;
+      }
+    });
+    return true;
+  } catch (e) { bnSoltar(); return false; }
+}
+function bnProgramar() {
+  try { clearTimeout(BN.reloj); } catch (e) {}
+  BN.reloj = setTimeout(function () { bnMandar(false); }, BN.espera);
+}
+function bnSiSucio() { if (BN.sucio && !BN.apagado) bnProgramar(); }
+function bnNombre(t) {
+  var n = 0, el = t, campo;
+  if (t.name) return 'c:' + t.name;
+  if (t.id && String(t.id).indexOf('__') > 0) return 'c:' + String(t.id).split('__')[0];
+  while (el && n < 5) {
+    campo = el.getAttribute ? el.getAttribute('data-campo') : null;
+    if (campo) return 'h:' + campo;
+    el = el.parentNode;
+    n++;
+  }
+  return '';
+}
+function bnAlTocar(ev) {
+  try {
+    if (!ev || ev.isTrusted === false || !ev.target) return;
+    var k = bnNombre(ev.target);
+    if (!k) return;
+    var m = bnMeta(), ahora = bnAhora();
+    if (!bnObj(m.tc)) m.tc = {};
+    m.tc[k] = ahora;
+    m.t = ahora;
+    bnLs(bnClave(''), JSON.stringify(m));
+    BN.tocado = true;
+    BN.sucio = true;
+    if (BN.listo) bnProgramar();
+  } catch (e) {}
+}
+function bnSinLoBorrado(srv) {
+  var cero = Number(bnLs(bnClave('_cero'))) || 0, S = bnNorm(srv), c, k, cs, t;
+  if (!cero) return srv;
+  cs = [['campos', 'c:'], ['chips', 'h:']];
+  for (c = 0; c < 2; c++) {
+    for (k in S.b[cs[c][0]]) {
+      if (!bnTiene(S.b[cs[c][0]], k)) continue;
+      t = Number(S.tc[cs[c][1] + k]) || S.t;
+      if (t <= cero) delete S.b[cs[c][0]][k];
+    }
+  }
+  return S;
+}
+function bnAplicar(fu) {
+  try {
+    var h = relayHuella(bnFirmaRes(fu));
+    if (bnLs(bnClave('_rec')) === h) return false;
+    var falta = (Number(((BN.srv || {}).x || {}).audios) || 0) - bnAudios();
+    window.localStorage.setItem(CLAVE, JSON.stringify(fu.b));
+    bnLs(bnClave(''), JSON.stringify({ t: fu.t, tc: fu.tc }));
+    if (fu.x.nomape) bnLs(CLAVE + '_nomape', String(fu.x.nomape));
+    if (fu.x.edad_auto) bnLs(CLAVE + '_edad_auto', String(fu.x.edad_auto));
+    bnLs(bnClave('_rec'), h);
+    bnLs(bnClave('_traido'), String(falta > 0 ? falta : 0));
+    window.location.reload();
+    return true;
+  } catch (e) { return false; }
+}
+function bnOfrecer() {
+  try {
+    if (document.getElementById('bn-traer')) return;
+    var caja = document.createElement('div'), p = document.createElement('p');
+    var si = document.createElement('button'), no = document.createElement('button');
+    caja.id = 'bn-traer';
+    caja.setAttribute('style', 'margin:0 0 18px;padding:14px 16px;border:2px solid #C47A35;'
+      + 'border-radius:10px;background:rgba(196,122,53,.12)');
+    p.setAttribute('style', 'margin:0 0 10px;color:#EAE3D2;line-height:1.5');
+    p.textContent = 'Tenes respuestas guardadas desde otro aparato. Las traigo y las junto '
+      + 'con lo que pusiste aca (no se pierde nada).';
+    si.type = 'button';
+    no.type = 'button';
+    si.setAttribute('style', 'margin-right:10px;padding:10px 16px;border:0;border-radius:8px;'
+      + 'background:#C47A35;color:#00201E;font-weight:700;cursor:pointer');
+    no.setAttribute('style', 'padding:10px 16px;border:1px solid #EAE3D2;border-radius:8px;'
+      + 'background:transparent;color:#EAE3D2;cursor:pointer');
+    si.textContent = 'Traerlas';
+    no.textContent = 'Ahora no';
+    si.onclick = function () {
+      try { bnLs(bnClave('_rec'), null); bnAplicar(bnFusion(bnLocal(), bnSinLoBorrado(BN.srv))); } catch (e) {}
+    };
+    no.onclick = function () { try { caja.parentNode.removeChild(caja); } catch (e) {} };
+    si.addEventListener('click', si.onclick);
+    no.addEventListener('click', no.onclick);
+    caja.appendChild(p);
+    caja.appendChild(si);
+    caja.appendChild(no);
+    var f = form();
+    if (f && f.parentNode) f.parentNode.insertBefore(caja, f);
+  } catch (e) {}
+}
+function bnTraer() {
+  try {
+    var cred = bnCred();
+    if (!cred || !cred.traer || BN.apagado) { BN.listo = true; bnSiSucio(); return; }
+    BN.enCurso = true;
+    bnColgado();
+    bnPedir(bnCuerpo('traer', cred), false).then(function (j) {
+      bnSoltar();
+      BN.listo = true;
+      try {
+        if (bnCorta(j)) BN.apagado = true;
+        bnNotar(j);
+        if (j && j.ok === true && bnObj(j.borrador)) {
+          BN.srv = bnSaneo(j.borrador, bnAhora() + 60000);
+          var loc = bnLocal(), srv = bnSinLoBorrado(BN.srv), fu = bnFusion(loc, srv);
+          BN.sucio = BN.tocado || bnSuma(fu, srv);
+          if (bnSuma(fu, loc)) {
+            if (!BN.tocado) { if (bnAplicar(fu)) return; }
+            else bnOfrecer();
+          }
+        }
+      } catch (e) {}
+      bnSiSucio();
+    });
+  } catch (e) { bnSoltar(); BN.listo = true; }
+}
+function bnContarTraido() {
+  try {
+    var tr = bnLs(bnClave('_traido')), el;
+    if (tr === '') return;
+    bnLs(bnClave('_traido'), null);
+    el = document.getElementById('retomado');
+    if (!el) return;
+    el.textContent = 'Trajimos lo que habias completado en otro aparato: segui desde donde '
+      + 'lo dejaste.' + (Number(tr) > 0 ? ' Los audios que grabaste en el otro aparato no '
+      + 'viajan: grabalos de nuevo aca o escribilo.' : '');
+    el.style.display = 'block';
+  } catch (e) {}
+}
+try {
+  if (RELAY_URL && bnSePuede()) {
+    BN.desf = Number(bnLs(bnClave('_desf'))) || 0;
+    bnContarTraido();
+    document.addEventListener('input', bnAlTocar);
+    document.addEventListener('change', bnAlTocar);
+    window.addEventListener('pagehide', function () { if (BN.sucio) bnMandar(true); });
+    document.addEventListener('visibilitychange', function () {
+      try { if (document.visibilityState === 'hidden' && BN.sucio) bnMandar(true); } catch (e) {}
+    });
+    var _borrarSinNube = borrar;
+    borrar = function () {
+      var dijo = false, c0 = window.confirm;
+      try {
+        window.confirm = function (t) { dijo = c0.call(window, t); return dijo; };
+      } catch (e) { dijo = true; }
+      try { _borrarSinNube(); } finally {
+        try { window.confirm = c0; } catch (e) {}
+      }
+      try {
+        if (!dijo) return;
+        bnLs(bnClave(''), null);
+        bnLs(bnClave('_rec'), null);
+        bnLs(bnClave('_ok'), null);
+        bnLs(bnClave('_cero'), String(bnAhora()));
+        var cred = bnCred();
+        if (cred && cred.traer && !BN.apagado) bnPedir(bnCuerpo('borrar', cred), true);
+      } catch (e) {}
+    };
+    BN.sucio = !!bnFirmaRes(bnLocal());
+    setTimeout(bnTraer, 0);
+  }
 } catch (e) {}
 </script>
 </body>

@@ -1326,6 +1326,26 @@ function guardar() {
   } catch (e) { }
   try {
     var bio = biotipoCuenta();
+    try {
+      if (bio.faltan.length && bio.faltan.length <= 3
+          && window.confirm((bio.faltan.length === 1 ? 'Te falta 1 pregunta'
+            : 'Te faltan ' + bio.faltan.length + ' preguntas')
+            + ' de tu tipo de cuerpo.' + String.fromCharCode(10, 10)
+            + 'Apreta Aceptar y la marco como "Esta no aplica" y te mando la '
+            + 'ficha ahora. Apreta Cancelar si preferis contestarla.')) {
+        var naVal = 'no_aplica';
+        for (var q = 0; q < bio.faltan.length; q++) {
+          var rsq = form().querySelectorAll('[name="' + bio.faltan[q] + '"]');
+          var marcada = false;
+          for (var w = 0; w < rsq.length && !marcada; w++) {
+            if (String(rsq[w].value) === naVal) { rsq[w].checked = true; marcada = true; }
+          }
+          if (!marcada && rsq.length) { rsq[rsq.length - 1].checked = true; }
+        }
+        try { if (typeof guardarLocal === 'function') guardarLocal(); } catch (e5) {}
+        bio = biotipoCuenta();
+      }
+    } catch (e4) { }
     if (bio.faltan.length) {
       var nf = (bio.faltan.length === 1) ? 'Te falta 1'
         : ('Te faltan ' + bio.faltan.length);

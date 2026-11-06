@@ -85,6 +85,8 @@
   output { min-width: 30px; text-align: center; font-weight: bold;
            color: #3CE7E1; font-size: 17px; }
   .pregunta { margin: 20px 0; }
+  .pregunta.bio-falta { outline: 2px solid #C47A35; outline-offset: 6px;
+                        border-radius: 10px; background: rgba(196,122,53,.12); }
   .enunciado { font-weight: bold; font-size: 15px; margin: 0 0 8px; }
   .num { color: #3CE7E1; }
   .opciones { display: flex; flex-direction: column; gap: 8px; }
@@ -809,9 +811,21 @@ function recolectar() {
     for (var m = 0; m < marcados.length; m++) lista.push(marcados[m].value);
     if (lista.length) out[b2[0]][b2[1]] = lista;
   }
-  return { meta: META, contacto: out.contacto, anamnesis: out.anamnesis,
+  var metaSal = META;
+  try {
+    if (typeof FICHA_INCOMPLETA === 'string' && FICHA_INCOMPLETA) {
+      metaSal = {};
+      for (var km in META) {
+        if (Object.prototype.hasOwnProperty.call(META, km)) metaSal[km] = META[km];
+      }
+      metaSal.incompleta = FICHA_INCOMPLETA;
+    }
+  } catch (eM) { metaSal = META; }
+  return { meta: metaSal, contacto: out.contacto, anamnesis: out.anamnesis,
            dosha: out.dosha };
 }
+var FICHA_INCOMPLETA = '';
+var biotipoIntentosEnvio = 0;
 
 function cuantas(datos) {
   var n = 0, cajas = ['contacto', 'anamnesis', 'dosha'];
@@ -1247,6 +1261,27 @@ function biotipoIrA(nombre) {
   } catch (e) { return -1; }
 }
 
+var biotipoResaltado = false;
+function biotipoResaltar(nombres) {
+  try {
+    for (var i = 0; i < nombres.length; i++) {
+      var el = form().querySelector('[name="' + nombres[i] + '"]');
+      var caja = el && el.closest ? el.closest('.pregunta') : null;
+      if (caja && caja.classList) caja.classList.add('bio-falta');
+    }
+    if (!biotipoResaltado) {
+      biotipoResaltado = true;
+      form().addEventListener('change', function (ev) {
+        try {
+          var c = ev.target && ev.target.closest
+            ? ev.target.closest('.pregunta.bio-falta') : null;
+          if (c) c.classList.remove('bio-falta');
+        } catch (e2) { }
+      });
+    }
+  } catch (e) { }
+}
+
 var biotipoInsistio = {};
 function biotipoPuedeSeguir(desde) {
   try {
@@ -1346,20 +1381,44 @@ function guardar() {
         bio = biotipoCuenta();
       }
     } catch (e4) { }
+    if (!bio.faltan.length) FICHA_INCOMPLETA = '';
     if (bio.faltan.length) {
-      var nf = (bio.faltan.length === 1) ? 'Te falta 1'
-        : ('Te faltan ' + bio.faltan.length);
-      try {
-        window.alert(nf + ' de las ' + bio.total + ' preguntas de tu tipo de '
-          + 'cuerpo.' + String.fromCharCode(10, 10) + 'Van todas: si alguna '
-          + 'no va con vos, marca "Esta no aplica". Te llevo a la primera '
-          + 'que falta.');
-      } catch (e) { }
-      biotipoIrA(bio.faltan[0]);
-      document.getElementById('estado').textContent = nf + ' de las '
-        + bio.total + ' preguntas de tu tipo de cuerpo. Marca una opcion o '
-        + '"Esta no aplica" y volve al boton verde del final.';
-      return;
+      biotipoIntentosEnvio++;
+      if (biotipoIntentosEnvio > 2) {
+        FICHA_INCOMPLETA = 'tipo_de_cuerpo: faltaron ' + bio.faltan.length
+          + ' de ' + bio.total;
+        datos = conTestigo(recolectar());
+        try {
+          document.getElementById('estado').textContent = 'Te la mando asi, '
+            + 'con ' + bio.faltan.length + ' preguntas del tipo de cuerpo sin '
+            + 'contestar. Despues lo charlamos.';
+        } catch (e6) { }
+      } else {
+        var nf = (bio.faltan.length === 1) ? 'Te falta 1'
+          : ('Te faltan ' + bio.faltan.length);
+        biotipoResaltar(bio.faltan);
+        try {
+          window.alert(nf + ' de las ' + bio.total + ' preguntas de tu tipo de '
+            + 'cuerpo.' + String.fromCharCode(10, 10) + 'Van todas: si alguna '
+            + 'no va con vos, marca "Esta no aplica". Te llevo a la primera '
+            + 'que falta.' + (biotipoIntentosEnvio === 2 ? String.fromCharCode(10, 10)
+            + 'Si apretas "Mandarmela ahora" otra vez, te la mando igual asi.' : ''));
+        } catch (e) { }
+        biotipoIrA(bio.faltan[0]);
+        try {
+          setTimeout(function () {
+            var e8 = form().querySelector('[name="' + bio.faltan[0] + '"]');
+            var c8 = e8 && e8.closest ? e8.closest('.pregunta') : e8;
+            if (c8) c8.scrollIntoView({ block: 'center' });
+          }, 150);
+        } catch (e7) { }
+        document.getElementById('estado').textContent = nf + ' de las '
+          + bio.total + ' preguntas de tu tipo de cuerpo (las que faltan estan en '
+          + 'naranja). Marca una opcion o "Esta no aplica" y volve al boton verde '
+          + 'del final.' + (biotipoIntentosEnvio >= 2 ? ' Si lo apretas otra vez, '
+          + 'te la mando igual.' : '');
+        return;
+      }
     }
   } catch (e) { }
   try {

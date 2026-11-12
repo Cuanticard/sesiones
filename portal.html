@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-BqrcU/uKC2gIQnn53Hi+5grrE1ihH1U+tSXyWgaucdQ='; style-src 'sha256-SMWsICk5dfq6M7O/U9A+zvxHKCpT0gFjKS/fqLVv+U0=' 'sha256-LNFFEjYU6Ef9fdCUO2qY9qmmbzs/mZmshQHNC51eWBA='; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-wfS4Hw364eibfEKn2Cnq44Jw9OnOn5U56Jp1zRrgAJU='; style-src 'sha256-nbvdCqrw6pnH8SQR/AxVQwb7FxyzyqfuboybzpxImTQ=' 'sha256-LNFFEjYU6Ef9fdCUO2qY9qmmbzs/mZmshQHNC51eWBA='; font-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
 <meta name="theme-color" content="#050606">
 <meta name="color-scheme" content="dark">
 <title>Tu portal · CUÁNTICA</title>
@@ -462,6 +462,20 @@
   .festejo .dice.se-va { animation: sale 250ms var(--sale) forwards; }
 
   /* (14/10, fase P1b) LAS PANTALLAS QUE FALTABAN, con el mismo look. */
+  /* (05/11) LA CINTA: en que paso va todo lo tuyo, con su dia. Mobile primero. */
+  .cinta { list-style: none; margin: 14px 0 0; padding: 0; position: relative; }
+  .cinta::before { content: ""; position: absolute; left: 11px; top: 14px; bottom: 14px; width: 1px; background: var(--linea-fuerte); }
+  .cinta li { position: relative; display: grid; grid-template-columns: 24px 1fr auto; gap: 0 12px; align-items: start; padding: 9px 0; }
+  .cinta .pt { position: relative; z-index: 1; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--linea-fuerte); background: var(--fondo); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--blanco); }
+  .cinta li.hecho .pt { background: var(--teal); border-color: var(--teal); color: var(--blanco); }
+  .cinta li.actual .pt { border: 2px solid var(--cyan); box-shadow: 0 0 0 4px rgba(60, 231, 225, .14); }
+  .cinta li.pendiente { opacity: .55; }
+  .cinta .tx { font-family: var(--texto); font-size: 18px; line-height: 1.3; color: var(--crema); }
+  .cinta li.actual .tx { color: var(--blanco); font-weight: 600; }
+  .cinta .sub { display: block; font-family: var(--dato); font-size: 12.5px; color: var(--tenue); margin-top: 2px; }
+  .cinta .dd { font-family: var(--dato); font-size: 12.5px; color: var(--tenue); white-space: nowrap; padding-top: 3px; }
+  .cinta .seg { display: inline-block; margin-top: 6px; font-family: var(--dato); font-size: 14px; letter-spacing: .06em; color: var(--blanco); padding: 4px 10px; border: 1px solid var(--linea-fuerte); border-radius: 10px; }
+  .cinta-trabado { margin: 12px 0 0; padding: 10px 14px; border-left: 2px solid var(--cobre); font-family: var(--texto); font-size: 17px; line-height: 1.4; color: var(--crema); }
   /* LA ETAPA TERMINA EN X DIAS: una linea, guiada por la etapa (no por el frasquito). */
   .termina { text-align: center; margin: 16px 0 0; font-family: var(--dato); font-weight: 500; font-size: 13.5px; letter-spacing: .02em; color: var(--crema); }
   .termina.izq { text-align: left; margin: 0 0 18px; }
@@ -1017,6 +1031,15 @@
       <p class="termina" id="etapa-termina" hidden></p>
     </section>
 
+    <!-- (05/11) LA CINTA: en que paso va todo lo tuyo. Solo con la llave
+         portal_cinta.PORTAL_CINTA (si el paquete no trae "cinta", no se ve). -->
+    <section class="bloque revela" id="sec-cinta" hidden aria-labelledby="cinta-titulo">
+      <p class="rotulo">Tu proceso, paso a paso</p>
+      <h2 id="cinta-titulo">En qué va lo tuyo</h2>
+      <ol class="cinta" id="cinta"></ol>
+      <p class="cinta-trabado" id="cinta-trabado" hidden></p>
+    </section>
+
     <div class="cifras revela" id="cifras" hidden></div>
     <!-- (27/10, claridad) LO DE HOY: reemplaza a las cifras (que repetian el
          arco, las zonas y los remedios). Solo lo que toca hacer hoy. -->
@@ -1272,6 +1295,14 @@
   // COMO_APP es false y MAIL vacio: todo sigue como antes.
   var COMO_APP = true;
   var MAIL = "tarjetacuantica0@gmail.com";
+  // (12/11) El WhatsApp de Jose (portal_paciente.contacto), para pedir el
+  // frasquito por WhatsApp con el pedido ya escrito. El link entero: el
+  // unico WhatsApp de la pagina es el de Jose.
+  var WA = "https://wa.me/5493434518981";
+  // (12/11) Lo que salio arriba del pago de la etapa que viene ("boton",
+  // "confirmando", "ok" o "") y su numero: "Lo que necesites" no repite
+  // la accion con otro boton.
+  var PAGO_ETAPA_MODO = "", ETAPA_SIG_N = 0;
   // (15/10, P6) EL PAGO DE LA ETAPA DESDE EL PORTAL (pago_etapa_portal.py).
   // Con la llave apagada queda en false: la vuelta del pago no se lee.
   var PAGO_ETAPA = true;
@@ -1314,7 +1345,10 @@
   var ZONAS = ["cabeza", "cuello", "pecho", "abdomen", "pelvis", "brazos", "piernas", "todo"];
   var NOMBRES = {cabeza: "Cabeza", cuello: "Cuello y garganta", pecho: "Pecho", abdomen: "Abdomen",
                  pelvis: "Pelvis", brazos: "Brazos y manos", piernas: "Piernas y pies", todo: "Todo el cuerpo"};
-  var CLAVES = ["v", "ahora", "camino", "encuentro", "comidas", "precio", "zonas", "se_vio", "motivo", "fechas", "exterior", "act", "flores", "pedir", "sx", "tomas", "pago", "envio", "np"];
+  var CLAVES = ["v", "ahora", "camino", "encuentro", "comidas", "precio", "zonas", "se_vio", "motivo", "fechas", "exterior", "act", "flores", "pedir", "sx", "tomas", "pago", "envio", "cinta", "np"];
+  // (05/11) LA VERSION DEL CODIGO (portal_version.py): con la llave apagada
+  // queda "" y la pagina no se fija en nada.
+  var VERSION_PORTAL = /*VERSION-PORTAL*/"";
   var SVG = "http://www.w3.org/2000/svg";
   // (14/10, portal v3) Las pantallas de la barra de abajo, la figura de Tu
   // cuerpo segun la ficha, el nombre que escribe el paciente (queda en SU
@@ -1861,6 +1895,85 @@
   }
   /*FIN-CAMINO*/
 
+  /*CINTA*/
+  // (05/11) LA CINTA DEL PACIENTE. El paquete trae SOLO claves de una lista
+  // cerrada y dias: los textos son estos (nadie le hace decir otra cosa).
+  // El remedio frecuencial y su envio solo vienen para el que vive en
+  // Argentina: si el paquete no los trae, no aparecen.
+  var PASOS_CINTA = ["pago", "ficha", "fila", "escaneo", "terapia", "remedio", "informe", "rotulo",
+                     "seguimiento", "despachado", "entregado", "preguntas", "etapa"];
+  var SUBS_CINTA = {ficha: ["a_medias", "entregada", "recibida"], fila: ["pocos"], escaneo: ["en_curso"],
+                    informe: ["procesando", "listo"]};
+  var ESTADOS_CINTA = ["hecho", "actual", "pendiente"];
+  var TEXTOS_CINTA = {
+    pago: {hecho: "Tu pago entró", otro: "Tu pago"},
+    ficha: {a_medias: "Tu ficha quedó a medias", entregada: "Ficha entregada", recibida: "Recibí tu ficha", otro: "Tu ficha"},
+    fila: {pocos: "En fila: faltan pocos, pronto te toca", otro: "En fila"},
+    escaneo: {en_curso: "Te estoy escaneando", hecho: "Escaneo hecho", otro: "Tu escaneo"},
+    terapia: {hecho: "Terapia enviada", otro: "Tu terapia"},
+    remedio: {hecho: "Remedio frecuencial grabado", otro: "Tu remedio frecuencial"},
+    informe: {procesando: "Tu informe se está procesando", listo: "Tu informe está listo", otro: "Tu informe"},
+    rotulo: {hecho: "Rótulo de tu envío impreso", otro: "Preparando tu envío"},
+    seguimiento: {hecho: "Tu número de seguimiento", otro: "Tu número de seguimiento"},
+    despachado: {hecho: "Despachado por correo", otro: "Sale por correo"},
+    entregado: {hecho: "Informe entregado: revisá tu mail", otro: "La entrega de tu informe"},
+    preguntas: {hecho: "Recibí tus preguntas", otro: "Tus preguntas"},
+    etapa: {otro: "Tu etapa"}
+  };
+  var TEXTO_TRABADO = "Este paso viene más lento de lo normal. Ya lo tengo anotado y te escribo apenas avance.";
+  var RX_DIA_CINTA = /^\d{4}-\d{2}-\d{2}$/;
+  var RX_SEG_CINTA = /^[A-Z]{2}\d{9}[A-Z]{2}$/;
+  function pasosCinta(c) {
+    if (!c || typeof c !== "object" || !Array.isArray(c.p)) { return []; }
+    var out = [], vistos = {};
+    c.p.forEach(function (e) {
+      if (!e || typeof e !== "object" || PASOS_CINTA.indexOf(e.k) < 0 || vistos[e.k]) { return; }
+      if (ESTADOS_CINTA.indexOf(e.e) < 0) { return; }
+      var x = {k: e.k, e: e.e};
+      if (typeof e.s === "string" && (SUBS_CINTA[e.k] || []).indexOf(e.s) >= 0) { x.s = e.s; }
+      if (typeof e.d === "string" && RX_DIA_CINTA.test(e.d)) { x.d = e.d; }
+      vistos[e.k] = true;
+      out.push(x);
+    });
+    out.sort(function (a, b) { return PASOS_CINTA.indexOf(a.k) - PASOS_CINTA.indexOf(b.k); });
+    return out;
+  }
+  function textoPasoCinta(x, et) {
+    var t = TEXTOS_CINTA[x.k] || {};
+    if (x.k === "etapa" && Array.isArray(et) && et[0] > 0) {
+      return "Etapa " + et[0] + (et[1] > 0 ? " de " + et[1] : "");
+    }
+    if (x.s && t[x.s]) { return t[x.s]; }
+    if (x.e === "hecho" && t.hecho) { return t.hecho; }
+    if (x.k === "escaneo" && x.e === "actual") { return t.otro; }
+    return t.otro || "";
+  }
+  function diaCorto(d) {
+    return (typeof d === "string" && RX_DIA_CINTA.test(d)) ? d.slice(8, 10) + "/" + d.slice(5, 7) : "";
+  }
+  function segCinta(c) {
+    return c && typeof c.seg === "string" && RX_SEG_CINTA.test(c.seg) ? c.seg : "";
+  }
+  function trabadoCinta(c) { return !!(c && c.t === 1); }
+  function hayQueActualizar(local, remoto, yaProbada) {
+    if (!local || typeof remoto !== "string" || !/^[a-f0-9]{12}$/.test(remoto)) { return false; }
+    return remoto !== local && remoto !== yaProbada;
+  }
+  // (05/11, ataque 10) Si el paciente esta escribiendo (o dejo algo escrito)
+  // NO se recarga: perderia el texto. Se prueba la proxima vez que abra.
+  function hayAlgoEscrito(doc) {
+    try {
+      var a = doc.activeElement;
+      if (a && /^(TEXTAREA|INPUT|SELECT)$/.test(a.tagName || "")) { return true; }
+      var cs = doc.querySelectorAll("textarea, input");
+      for (var i = 0; i < cs.length; i++) {
+        var t = (cs[i].type || "text").toLowerCase();
+        if ((t === "text" || t === "textarea" || t === "email" || t === "tel" || t === "search" || t === "number") && cs[i].value) { return true; }
+      }
+      return false;
+    } catch (e) { return true; }
+  }
+  /*FIN-CINTA*/
   function el(id) { return document.getElementById(id); }
   // (P2) las 4 rayitas del tramo (se llenan por CSS segun la clase tN)
   function medidor() {
@@ -2312,6 +2425,68 @@
     var n = Math.round((fa - fb) / 86400000);
     return (n > TOPE_DIAS_ETAPA || n < 0) ? null : n;
   }
+  // (05/11) LA CINTA EN PANTALLA. Sin cinta en el paquete, la seccion no se
+  // ve (la pagina queda como hoy).
+  function pintarCinta(c, camino) {
+    var sec = el("sec-cinta"), ol = el("cinta"), tr = el("cinta-trabado");
+    if (!sec || !ol) { return; }
+    ol.textContent = "";
+    if (tr) { tr.hidden = true; tr.textContent = ""; }
+    var pasos = pasosCinta(c);
+    if (!pasos.length) { sec.hidden = true; return; }
+    var fin = "";
+    (Array.isArray(camino) ? camino : []).forEach(function (e) { if (e && e.estado === "actual" && typeof e.fin === "string") { fin = e.fin; } });
+    var seg = segCinta(c);
+    pasos.forEach(function (x) {
+      var li = nuevo("li", x.e);
+      li.appendChild(nuevo("span", "pt", x.e === "hecho" ? "✓" : ""));
+      var tx = nuevo("div", "tx", textoPasoCinta(x, c.et));
+      if (x.k === "seguimiento" && seg) {
+        var s = nuevo("span", "seg", seg);
+        tx.appendChild(document.createElement("br"));
+        tx.appendChild(s);
+        // (Sin link a otro sitio: el portal no sale de su casa.)
+        tx.appendChild(nuevo("span", "sub", "Copialo y pegalo en el seguimiento de envíos de Correo Argentino."));
+      }
+      if (x.k === "etapa" && x.e === "actual" && fin) {
+        var n = diasDeEtapa(fin, hoyLocal(new Date()));
+        var t = textoTermina(n);
+        if (t) { tx.appendChild(nuevo("span", "sub", t)); }
+      }
+      li.appendChild(tx);
+      li.appendChild(nuevo("span", "dd", diaCorto(x.d)));
+      if (x.e === "actual") { li.setAttribute("aria-current", "step"); }
+      ol.appendChild(li);
+    });
+    if (tr && trabadoCinta(c)) { tr.textContent = TEXTO_TRABADO; tr.hidden = false; }
+    sec.hidden = false;
+    revelar(sec);
+  }
+  // (05/11) SE ACTUALIZA SOLA, COMO UNA APP: si arriba hay una version mas
+  // nueva del portal, actualiza el service worker y recarga UNA vez (el
+  // link, con lo de despues del #, queda igual). Sin senal, no hace nada.
+  var VERSION_PROBADA = "cuantica-portal-version-probada";
+  function chequearVersion() {
+    try {
+      if (!VERSION_PORTAL || !window.fetch || location.protocol === "file:") { return; }
+      fetch("portal-version.json", {cache: "no-store"})
+        .then(function (r) { return r && r.ok ? r.json() : null; })
+        .then(function (j) {
+          var remoto = j && typeof j.v === "string" ? j.v : "";
+          var ya = "";
+          try { ya = window.sessionStorage.getItem(VERSION_PROBADA) || ""; } catch (e) { ya = ""; }
+          if (!hayQueActualizar(VERSION_PORTAL, remoto, ya)) { return; }
+          if (hayAlgoEscrito(document)) { return; }
+          try { window.sessionStorage.setItem(VERSION_PROBADA, remoto); } catch (e) { return; }
+          var recargar = function () { try { location.reload(); } catch (e) { /* queda la de hoy */ } };
+          if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.getRegistration().then(function (reg) {
+              return reg ? reg.update() : null;
+            }).then(recargar, recargar);
+          } else { recargar(); }
+        }).catch(function () { /* sin senal: la de hoy */ });
+    } catch (e) { /* la de hoy */ }
+  }
   function textoTermina(n) {
     if (typeof n !== "number" || n !== n) { return ""; }
     if (n > 1) { return "La etapa termina en " + n + " días"; }
@@ -2653,6 +2828,63 @@
   }
   /*FIN-V4*/
 
+  /*UNA-ACCION*/
+  // (12/11, la prueba con un paciente inventado) UNA SOLA ACCION POR COSA,
+  // EN PURO (los tests la corren con node). Con UNA_ACCION en false todo
+  // sale exactamente como antes.
+  var UNA_ACCION = true;
+  // El precio de "La Etapa 2 sale $20.000." -> "$20.000" ("" si no hay).
+  function precioDelTexto(t) {
+    var m = /(\$\s?\d{1,3}(?:\.\d{3})+|\$\s?\d{1,7}|USD\s?\d{1,6})/.exec(String(t || ""));
+    return m ? m[1].replace(/\s+/g, " ") : "";
+  }
+  // El boton de la etapa que viene: "Seguir con la Etapa 2 · $20.000".
+  function textoSeguirEtapa(n, precioTexto) {
+    if (typeof n !== "number" || n < 2) { return ""; }
+    var p = precioDelTexto(precioTexto);
+    return "Seguir con la Etapa " + n + (p ? " · " + p : "");
+  }
+  // "Pasar a la etapa siguiente" (el mail de antes) en "Lo que necesites":
+  // solo si arriba NO salio nada del pago (ni el boton, ni "lo estoy
+  // confirmando", ni "ya me llego"). Es el respaldo: sin pago, como antes.
+  function pedirEtapaVisible(modoPago) {
+    if (UNA_ACCION !== true) { return true; }
+    return !modoPago;
+  }
+  // El link de pago SIMULADO del modo de prueba de Jose (portal_de_prueba,
+  // PAGO_SIMULADO_EN_LA_PRUEBA): Mercado Pago con la preferencia en ceros,
+  // o PayPal con el boton PRUEBA0000. No existen: no cobran ni crean nada.
+  function esPagoDePrueba(u) {
+    return typeof u === "string" && u.length < 200 &&
+      (/^https:\/\/www\.mercadopago\.com(?:\.ar)?\/checkout\/v1\/redirect\?pref_id=0-00000000-0000-0000-0000-000000000000$/.test(u) ||
+       /^https:\/\/www\.paypal\.com\/ncp\/payment\/PRUEBA0000$/.test(u));
+  }
+  var NOTA_PAGO_PRUEBA = "Esto es la prueba: acá el paciente pasa a pagar. No se cobra nada.";
+  // El boton del frasquito: "Pagar otro frasquito · $15.000".
+  function textoPagarFrasquito(ft) {
+    var p = (typeof ft === "string" && /^\$[\d.]{1,12}$/.test(ft)) ? ft : "";
+    return "Pagar otro frasquito" + (p ? " · " + p : "");
+  }
+  // El pedido por WhatsApp: el link de Jose (wa.me/<numero>) con el pedido
+  // escrito.
+  function waPedido(wa, que) {
+    if (!/^https:\/\/wa\.me\/\d{8,15}$/.test(String(wa || "")) || que !== "f") { return ""; }
+    return wa + "?text=" + encodeURIComponent("Hola José, quiero pedirte otro frasquito de mi remedio.");
+  }
+  // Las opciones del frasquito, en orden: pagarlo (si vino el link firmado
+  // y vigente), pedirlo por WhatsApp, y despues el camino de siempre (mail
+  // o el relay). [{que: "pago"|"wa", texto, u}]
+  function opcionesFrasquito(p, hoy, wa) {
+    var out = [];
+    if (UNA_ACCION !== true || !p || typeof p !== "object" || p.f !== 1) { return out; }
+    var b = botonPagoFrasquito(p, hoy);
+    if (b) { out.push({que: "pago", texto: textoPagarFrasquito(p.ft) + (esPagoDePrueba(b.u) ? " (prueba)" : ""), u: b.u}); }
+    var w = waPedido(wa, "f");
+    if (w) { out.push({que: "wa", texto: "Pedirlo por WhatsApp", u: w}); }
+    return out;
+  }
+  /*FIN-UNA-ACCION*/
+
   /*CLARIDAD*/
   // LA AUDITORIA DE CLARIDAD (27/10, Jose: "¿le es de utilidad, le aclara al
   // paciente el contenido del portal? ¿o lo satura de mas informacion?"),
@@ -2839,6 +3071,8 @@
        "zona-laminas", "hoy-grupos", "hoy-cuenta", "candado-txt", "siguiente-dura", "flores-toma", "siguiente-pago",
        "envio-texto", "envio-caja", "envio-form", "notas-lista", "nota-estado", "notas-llegaste", "motivo-fecha", "tu-dia"].forEach(function (id) { var e = el(id); if (e) { e.textContent = ""; } });
       ["sec-envio", "envio-form", "sec-notas", "notas-llegaste", "nota-estado", "motivo-fecha"].forEach(function (id) { var e = el(id); if (e) { e.hidden = true; } });
+      ["sec-cinta", "cinta-trabado"].forEach(function (id) { var e = el(id); if (e) { e.hidden = true; } });
+      ["cinta", "cinta-trabado"].forEach(function (id) { var e = el(id); if (e) { e.textContent = ""; } });
       texto("motivo-titulo", "Lo que me contaste");
       try { el("nota-campo").value = ""; } catch (e) { /* sigue */ }
       ["cifras", "sec-encuentro", "enc-ar", "sec-siguiente", "siguiente-que", "sec-zonas", "sec-accesos", "sec-pedir",
@@ -3427,7 +3661,9 @@
   // vino FIRMADO en "pedir" (fp), despues de pedirlo; y la nota de la vuelta
   // ("lo estoy confirmando"). Con la llave apagada, nada.
   var PAGO_F_AVISADO = "cuantica-portal-pago-frasquito-";
-  function pintarPagoFrasquito(caja, p, kid) {
+  // (12/11) `arriba`: el boton va ANTES de pedirlo ("Pagar otro frasquito ·
+  // $15.000"), con alPagar(ev, u) que manda el pedido antes de ir a pagar.
+  function pintarPagoFrasquito(caja, p, kid, arriba) {
     if (PAGO_FRASQUITO !== true || !caja || caja.querySelector(".pago-frasquito")) { return; }
     var hoy = hoyLocal();
     if (VUELTA_FRASQUITO) { guardar(PAGO_F_AVISADO + kid, JSON.stringify({d: hoy})); }
@@ -3440,8 +3676,23 @@
     } else {
       var b = botonPagoFrasquito(p, hoy);
       if (!b) { return; }
-      var a = nuevo("a", "boton-2", b.texto);
+      var txF = b.texto;
+      try {
+        if (arriba && UNA_ACCION === true) { txF = textoPagarFrasquito(p.ft); }
+        if (esPagoDePrueba(b.u)) { txF += " (prueba)"; }
+      } catch (e) { txF = b.texto; }
+      var a = nuevo("a", "boton-2", txF);
       a.href = b.u; a.rel = "noopener noreferrer";
+      try {
+        if (esPagoDePrueba(b.u)) {
+          a.onclick = function (ev) {
+            ev.preventDefault();
+            if (!div.querySelector(".nota-prueba")) { div.appendChild(nuevo("p", "nota-pago nota-prueba", NOTA_PAGO_PRUEBA)); }
+          };
+        } else if (arriba && typeof arriba.alPagar === "function") {
+          a.onclick = function (ev) { arriba.alPagar(ev, b.u); };
+        }
+      } catch (e) { /* el boton queda como esta */ }
       div.appendChild(a);
     }
     caja.appendChild(div);
@@ -3533,6 +3784,8 @@
       }, quieto ? 0 : 120);
     });
     pintarHebra(d.camino.filter(function (e) { return e && typeof e.n === "number"; }).slice(0, TOPE_ETAPAS));
+    // (05/11) LA CINTA: en que paso va todo lo suyo. Si algo falla, sin cinta.
+    try { pintarCinta(d.cinta, d.camino); } catch (e) { try { el("sec-cinta").hidden = true; } catch (e2) { /* sigue */ } }
     pintarEncuentro(d.encuentro);
     // (14/10, P1b) LA ETAPA TERMINA EN X DIAS: solo la de ahora, y solo si
     // el link trae el dia en que se cumple. En Inicio y en Tus remedios.
@@ -3563,6 +3816,7 @@
       var conCand = !!(sigCand && (!conPrecio || d.precio.n === sigCand.n));
       if (conPrecio || conCand) {
         var nT = conPrecio ? d.precio.n : sigCand.n;
+        ETAPA_SIG_N = nT;
         texto("siguiente-titulo", "Etapa " + nT);
         d.camino.forEach(function (e) {
           if (e && e.n === nT && str(e.titulo)) { texto("siguiente-que", e.titulo); el("siguiente-que").hidden = false; }
@@ -3590,11 +3844,27 @@
             if (pv.modo) {
               var cajaP = el("siguiente-pago");
               if (pv.modo === "boton") {
-                var aP = nuevo("a", "boton-2", pv.texto);
+                // (12/11) UNA SOLA ACCION: "Seguir con la Etapa 2 · $20.000"
+                // (y, en la prueba de Jose, marcado "prueba" y sin salir).
+                var txP = pv.texto;
+                try {
+                  if (UNA_ACCION === true) { txP = textoSeguirEtapa(nT, d.precio && d.precio.texto) || pv.texto; }
+                  if (esPagoDePrueba(pv.u)) { txP += " (prueba)"; }
+                } catch (e) { txP = pv.texto; }
+                var aP = nuevo("a", "boton-2", txP);
                 aP.href = pv.u; aP.rel = "noopener noreferrer";
+                try {
+                  if (esPagoDePrueba(pv.u)) {
+                    aP.onclick = function (ev) {
+                      ev.preventDefault();
+                      if (!cajaP.querySelector(".nota-prueba")) { cajaP.appendChild(nuevo("p", "nota-pago nota-prueba", NOTA_PAGO_PRUEBA)); }
+                    };
+                  }
+                } catch (e) { /* el boton queda como esta */ }
                 cajaP.appendChild(aP);
               } else { cajaP.appendChild(nuevo("p", "nota-pago", pv.texto)); }
               cajaP.hidden = false;
+              PAGO_ETAPA_MODO = pv.modo;
             }
           }
         } catch (e) { /* sin boton de pago: como antes */ }
@@ -3973,10 +4243,57 @@
           bs.forEach(function (b) {
             var href = b.u || mailPedido(MAIL, b.que, cod);
             if (!href) { return; }
+            // (12/11) UNA SOLA ACCION PARA SEGUIR: con el pago de la etapa
+            // arriba ("Seguir con la Etapa 2 · $20.000"), el "Pasar a la
+            // etapa siguiente" por mail de aca no sale. Sin pago, sale como
+            // antes (es el respaldo), con el nombre de la etapa.
+            if (b.que === "e" && !b.u) {
+              try {
+                if (!pedirEtapaVisible(PAGO_ETAPA_MODO)) { return; }
+                if (UNA_ACCION === true && ETAPA_SIG_N >= 2) { b = {que: b.que, u: b.u, texto: "Seguir con la Etapa " + ETAPA_SIG_N}; }
+              } catch (e) { /* como antes */ }
+            }
+            // (12/11) EL FRASQUITO: primero pagarlo ($15.000, el link
+            // firmado) y pedirlo por WhatsApp; el camino de siempre (relay o
+            // mail) queda tercero. Si algo falla, como antes.
+            var hayPagoF = false, hayOpcF = false;
+            if (b.que === "f") {
+              try {
+                var opsF = opcionesFrasquito(d.pedir, hoyLocal(), WA);
+                hayOpcF = opsF.length > 0;
+                opsF.forEach(function (o) {
+                  if (o.que === "pago") {
+                    hayPagoF = true;
+                    pintarPagoFrasquito(caja, d.pedir, kid, {alPagar: function (ev) {
+                      // pagar = pedirlo: el pedido sale por el relay y, un
+                      // momento despues, el mismo boton lleva a pagar
+                      try {
+                        var ln = ev.currentTarget;
+                        if (!ln || ln.__pedido === true) { return; }
+                        var yaP = null;
+                        try { yaP = JSON.parse(window.localStorage.getItem("cuantica-portal-pedido-frasquito-" + kid) || "null"); } catch (e) { yaP = null; }
+                        if ((yaP && yaP.ok === true) || !(firmaR && relayValido(RELAY) && clave && typeof window.fetch === "function")) { return; }
+                        ev.preventDefault();
+                        ln.__pedido = true;
+                        pedirPorRelay(document.createElement("button"), "frasquito", {}, kid, clave, firmaR, "");
+                        window.setTimeout(function () { try { ln.click(); } catch (e) { /* queda el boton */ } }, 1500);
+                      } catch (e) { /* va a pagar igual */ }
+                    }});
+                    porRelay++;
+                  } else if (o.que === "wa") {
+                    var aw = nuevo("a", "boton-2", o.texto);
+                    aw.href = o.u; aw.target = "_blank"; aw.rel = "noopener noreferrer";
+                    caja.appendChild(aw);
+                    porRelay++;
+                  }
+                  puestos++;
+                });
+              } catch (e) { hayPagoF = false; hayOpcF = false; }
+            }
             // (15/10, P4) El frasquito va por el relay si se puede; si el
             // relay no contesta ok, el mail de hoy.
             if (b.que === "f" && firmaR && relayValido(RELAY) && clave && typeof window.fetch === "function") {
-              var bt = nuevo("button", "boton-2", b.texto);
+              var bt = nuevo("button", "boton-2", hayPagoF ? "Pedirlo desde acá y pagarlo después" : b.texto);
               bt.type = "button";
               bt.onclick = function () {
                 pedirPorRelay(bt, "frasquito", {}, kid, clave, firmaR, href);
@@ -4015,6 +4332,8 @@
               porRelay++;
               return;
             }
+            // (12/11) con el pago o el WhatsApp arriba, el mail va tercero y lo dice
+            if (b.que === "f" && hayOpcF && !b.u) { b = {que: b.que, u: b.u, texto: "Pedirlo por mail"}; }
             var a = nuevo("a", "boton-2", b.texto);
             a.href = href;
             if (b.u) { a.target = "_blank"; a.rel = "noopener noreferrer"; porRelay++; } else { porMail++; }
@@ -4089,6 +4408,12 @@
       }
     } catch (e) { /* sin app: el portal anda igual */ }
   }
+  // (05/11) La version: al abrir y cada vez que el portal vuelve a primer
+  // plano. Con la llave apagada VERSION_PORTAL es "" y no hace nada.
+  try {
+    chequearVersion();
+    document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") { chequearVersion(); } });
+  } catch (e) { /* la de hoy */ }
   function copiar(link) {
     var nota = el("instalar-nota");
     var ok = function () { nota.textContent = "Copiado. Abrí el ícono CUÁNTICA y, si ya lo tenías, tocá «¿Te mandé un link nuevo?», abajo de todo, y pegalo ahí."; nota.hidden = false; };
